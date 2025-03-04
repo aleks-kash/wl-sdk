@@ -2,7 +2,7 @@
 
 namespace WellnessLiving\Wl\Purchase\Share;
 
-use WellnessLiving\Core\a\ASocialSid;
+use WellnessLiving\Core\ASocialSid;
 use WellnessLiving\WlModelAbstract;
 
 /**

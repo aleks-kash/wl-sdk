@@ -1,10 +1,10 @@
 openapi: 3.1.0
 info:
   title: 'WellnessLiving public API'
-  version: 1.1.20250220155415
+  version: 1.1.20250304161344
   description: |
     WellnessLiving API is a RESTful way to access and manage your business data.
-    Last updated at: 2025-02-20 15:54:15
+    Last updated at: 2025-03-04 16:13:44
 servers:
   - url: https://us.wellnessliving.com
     description: 'WellnessLiving server for businesses served from the United States data center'
@@ -4992,7 +4992,7 @@ paths:
                     description: 'Keys are dates of the days inside requested date range, when there is at least one class in the business. If, locations are sent as a parameter, then at least one class in the given locations. Values are empty arrays for now. This is done to make possible to add some information about certain dates, if we need this.'
                   a_session:
                     type: array[]
-                    description: 'A list of classes sessions starting with the date {@link ClassListApi::$dt_date} and in the 62 days ahead (or up to {@link ClassListApi::$dt_end}). Every element has the following keys: <dl> <dt> string[] <var>a_class_tab</var> </dt> <dd> Keys of class tab. Primary keys in {@link \Wl\Classes\Tab\Sql\ClassTab\Sql} table. </dd> <dt> string[] <var>a_staff</var> </dt> <dd> The list of staff keys for the staff member conducting the session. Primary keys in {@link \RsStaffSql} table. </dd> <dt> string[] <var>a_virtual_location</var> </dt> <dd> The list of virtual locations keys. Each value is a location key. Primary keys in {@link \RsLocationSql} table. </dd> <dt> string <var>dt_date</var> </dt> <dd> The date/time of the session start in UTC. </dd> <dt> string <var>dt_time</var> </dt> <dd> The time of the session start in the local time zone. </dd> <dt> string <var>dtl_date</var> </dt> <dd> The date/time of session start in the location''s time zone. </dd> <dt> bool <var>hide_application</var> </dt> <dd> Specifies whether the class will be hidden in the White Label Achieve Client App. If `true`, it means that the class won''t be displayed. Otherwise, this will be `false` to indicate that the class will be displayed. </dd> <dt> int <var>i_day</var> </dt> <dd> The day of the week when session is occurred. Constant from {@link \ADateWeekSid}. </dd> <dt> int <var>i_duration</var> </dt> <dd> The duration of the session in minutes. </dd> <dt> bool <var>is_cancel</var> </dt> <dd> If `true`, this class period was canceled. Otherwise, this will be `false`. </dd> <dt> bool <var>is_event</var> </dt> <dd> If `true`, this is an event. Otherwise, this will be `false`. </dd> <dt> bool <var>is_virtual</var> </dt> <dd> If `true`, this class is virtual. Otherwise, this will be `false`. </dd> <dt> string <var>k_class</var> </dt> <dd> The class key. Primary key in {@link \RsClassSql} table. </dd> <dt> string <var>k_class_period</var> </dt> <dd> The class period key. Primary key in {@link \RsClassPeriodSql} table. </dd> <dt> string <var>k_location</var> </dt> <dd> The key of the session''s location. Primary key in {@link \RsLocationSql} table. </dd> <dt> string <var>s_title</var> </dt> <dd> The title of the session. </dd> <dt> string <var>url_book</var> </dt> <dd> The direct link to start booking on the WellnessLiving website. </dd> </dl>'
+                    description: 'A list of classes sessions starting with the date {@link ClassListApi::$dt_date} and in the 62 days ahead (or up to {@link ClassListApi::$dt_end}). Every element has the following keys: <dl> <dt> string[] <var>a_class_tab</var> </dt> <dd> Keys of class tab. Primary keys in {@link \Wl\Classes\Tab\Sql\ClassTab\Sql} table. </dd> <dt> string[] <var>a_image</var> </dt> <dd> The class image. Empty array if there is no image. </dd> <dt> string[] <var>a_search_tag</var> </dt> <dd> Tags associated with an individual class. </dd> <dt> string[] <var>a_staff</var> </dt> <dd> The list of staff keys for the staff member conducting the session. Primary keys in {@link \RsStaffSql} table. </dd> <dt> string[] <var>a_virtual_location</var> </dt> <dd> The list of virtual locations keys. Each value is a location key. Primary keys in {@link \RsLocationSql} table. </dd> <dt> string <var>dt_date</var> </dt> <dd> The date/time of the session start in UTC. </dd> <dt> string <var>dt_time</var> </dt> <dd> The time of the session start in the local time zone. </dd> <dt> string <var>dtl_date</var> </dt> <dd> The date/time of session start in the location''s time zone. </dd> <dt> bool <var>hide_application</var> </dt> <dd> Specifies whether the class will be hidden in the White Label Achieve Client App. If `true`, it means that the class won''t be displayed. Otherwise, this will be `false` to indicate that the class will be displayed. </dd> <dt> string <var>html_description</var> </dt> <dd> The class description. </dd> <dt> int <var>i_book</var> </dt> <dd> Count of visits on this class. </dd> <dt> int|null <var>i_capacity</var> </dt> <dd> The capacity of the service. ''null'' indicates that the capacity is not set. </dd> <dt> int <var>i_day</var> </dt> <dd> The day of the week when session is occurred. Constant from {@link \ADateWeekSid}. </dd> <dt> int <var>i_duration</var> </dt> <dd> The duration of the session in minutes. </dd> <dt> int <var>i_wait</var> </dt> <dd> Number of clients in wait list. </dd> <dt> bool <var>is_cancel</var> </dt> <dd> If `true`, this class period was canceled. Otherwise, this will be `false`. </dd> <dt> bool <var>is_event</var> </dt> <dd> If `true`, this is an event. Otherwise, this will be `false`. </dd> <dt> bool <var>is_virtual</var> </dt> <dd> If `true`, this class is virtual. Otherwise, this will be `false`. </dd> <dt> bool <var>is_wait_list_enabled</var> </dt> <dd> This will be `true` if user is only on the wait-list. Otherwise, this will be `false`. </dd> <dt> string <var>k_class</var> </dt> <dd> The class key. Primary key in {@link \RsClassSql} table. </dd> <dt> string <var>k_class_period</var> </dt> <dd> The class period key. Primary key in {@link \RsClassPeriodSql} table. </dd> <dt> string <var>k_location</var> </dt> <dd> The key of the session''s location. Primary key in {@link \RsLocationSql} table. </dd> <dt> string <var>s_title</var> </dt> <dd> The title of the session. </dd> <dt> string <var>url_book</var> </dt> <dd> The direct link to start booking on the WellnessLiving website. </dd> </dl>'
                   is_timezone_different:
                     type: boolean
                     description: 'If `true`, the list of sessions contains sessions from different time zones. Otherwise, this will be `false`.'
@@ -9199,6 +9199,473 @@ paths:
           description: 'Successful response. Full description is not available yet.'
       tags:
         - Otp-PhoneOtp
+  '/Wl/Quiz/Response/Response.json':
+    delete:
+      summary: ''
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                a_quiz_response_key:
+                  type: string[]
+                  description: 'Quiz response key list.'
+                id_mode:
+                  type: number
+                  format: int32
+                  description: 'The mode type. One of the {@link ModeSid} constants.'
+                json_quiz_response_key:
+                  type: string[]
+                  description: 'Quiz response key list.'
+                k_business:
+                  type: string
+                  description: 'Business key within which quiz is managed.'
+                k_quiz:
+                  type: string
+                  description: 'Quiz key.'
+                k_quiz_response:
+                  type: string|null
+                  description: 'Quiz response key. `null` in a case of response creation or removing set of responses in {@link \Core\Quiz\QuizResponseApi::$a_quiz_response_key}.'
+      responses:
+        200:
+          description: 'Successful response. Full description is not available yet.'
+      tags:
+        - Response-Response
+    get:
+      summary: ''
+      parameters:
+        - name: can_anonymous
+          in: query
+          description: 'Checks whether unauthorized user should be permitted to operate with form and make a response. In general all quizzes should have users in response but it some cases such as registration process user might not exist yet, and we need ability to ignore check for user existence. `true` - add possibility load form and accept response for non-registered user, `false` otherwise.'
+          schema:
+            type: boolean
+        - name: is_answer
+          in: query
+          description: '`true` for load answers for response, `false` otherwise.'
+          schema:
+            type: boolean
+        - name: is_simple
+          in: query
+          description: 'Whether quiz response received by kiosk or direct mode link. `true` quiz response received by kiosk mode. `false` quiz response received by direct or direct mode.'
+          schema:
+            type: boolean
+        - name: k_business
+          in: query
+          description: 'Business key within which quiz is managed.'
+          schema:
+            type: string
+        - name: k_quiz_response
+          in: query
+          description: 'Quiz response key. `null` in a case of response creation or removing set of responses in {@link \Core\Quiz\QuizResponseApi::$a_quiz_response_key}.'
+          schema:
+            type: string|null
+      responses:
+        200:
+          description: 'Successful response'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  a_access_log:
+                    type: array[]
+                    description: 'Access log data.'
+                  a_element:
+                    type: array[]
+                    description: 'List of quiz questions with responses.'
+                  a_quiz_setting:
+                    type: array
+                    description: 'Quiz settings. Array representation of {@link \Wl\Quiz\QuizElementApi::$o_setting}.'
+                  a_service_info:
+                    type: array
+                    description: 'Information about service if response connected to visit.'
+                  can_amend:
+                    type: boolean
+                    description: 'Whether response can be amended by current user.'
+                  dtu_response:
+                    type: string
+                    description: 'Date when response was submitted.'
+                  id_source:
+                    type: number
+                    format: int32
+                    description: 'Response source. One of {@link SourceSid} constants.'
+                  id_status:
+                    type: number
+                    format: int32
+                    description: 'Response status ID.'
+                  show_numbering:
+                    type: boolean
+                    description: 'Whether to show numbering of the form elements that supports numbering. `true` to show numbering on the form for elements that supports numbering. `false` to not show numbering.'
+                  text_add_date:
+                    type: string
+                    description: 'Date when response added.'
+                  text_amend_date:
+                    type: string
+                    description: 'Date when response amended.'
+                  text_amend_user:
+                    type: string
+                    description: 'Name of the user who amend the response.'
+                  text_complete_date:
+                    type: string
+                    description: 'Date when response completed.'
+                  text_complete_user:
+                    type: string
+                    description: 'Name of the user who complete the response.'
+                  text_response_by:
+                    type: string
+                    description: 'Name of the user who owned the response.'
+                  text_title:
+                    type: string|null
+                    description: 'Title of the filled form. `null` in case when not filled yet.'
+      tags:
+        - Response-Response
+    post:
+      summary: ''
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                a_purchase_item:
+                  type: string[]
+                  description: 'List of purchase items for which this form is loaded. The list of purchase items. Each element has the format `[id_purchase_item]::[k_id]`, where: <dl> <dt>int <var>id_purchase_item</var></dt> <dd>The ID of the purchase item. One of the {@link \RsPurchaseItemSid} constants.</dd> <dt>string <var>k_id</var></dt> <dd>The item key. This depends on <var>id_purchase_item</var> of this array.</dd> </dl> Empty in case when purchase item not specified or form loaded from direct link.'
+                a_quick_config:
+                  type: array
+                  description: 'Data for Quick Buy. Structure of this array is described in {@link \RsCatalogCart::__construct()}.'
+                can_anonymous:
+                  type: boolean
+                  description: 'Checks whether unauthorized user should be permitted to operate with form and make a response. In general all quizzes should have users in response but it some cases such as registration process user might not exist yet, and we need ability to ignore check for user existence. `true` - add possibility load form and accept response for non-registered user, `false` otherwise.'
+                is_backend:
+                  type: boolean
+                  description: '`true` if API is being used from backend, `false` otherwise.'
+                is_draft:
+                  type: boolean
+                  description: '`true` if need to save response in draft mode, `false` otherwise.'
+                is_simple:
+                  type: boolean
+                  description: 'Whether quiz response received by kiosk or direct mode link. `true` quiz response received by kiosk mode. `false` quiz response received by direct or direct mode.'
+                is_skip:
+                  type: boolean
+                  description: 'Whether the quiz needs to be skipped.'
+                is_validate_only:
+                  type: boolean
+                  description: '`true` if need make only validation, `false` need make validation and saving response.'
+                json_element:
+                  type: string
+                  description: 'List of quiz questions with responses in JSON format.'
+                k_business:
+                  type: string
+                  description: 'Business key within which quiz is managed.'
+                k_quiz:
+                  type: string
+                  description: 'Quiz key.'
+                k_quiz_login:
+                  type: string
+                  description: 'Quiz login key.'
+                k_quiz_response:
+                  type: string|null
+                  description: 'Quiz response key. `null` in a case of response creation or removing set of responses in {@link \Core\Quiz\QuizResponseApi::$a_quiz_response_key}.'
+                s_secret:
+                  type: string
+                  description: 'Secret key for access to quiz request.'
+                text_appointment_wizard_id:
+                  type: string|null
+                  description: 'Booking appointment wizard ID. Not `null` if quiz response was sent during booking appointment process.'
+                text_class_wizard_id:
+                  type: string|null
+                  description: 'Booking class wizard ID. Not `null` if quiz response was sent during booking class process.'
+                uid_response:
+                  type: string|null
+                  description: 'UID of the user who makes response for quiz.'
+      responses:
+        200:
+          description: 'Successful response'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  a_element:
+                    type: array[]
+                    description: 'List of quiz questions with responses.'
+                  id_source:
+                    type: number
+                    format: int32
+                    description: 'Response source. One of {@link SourceSid} constants.'
+      tags:
+        - Response-Response
+    put:
+      summary: 'Validates, updates and reindex response information for associated user.'
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                a_quiz_response_key:
+                  type: string[]
+                  description: 'Quiz response key list.'
+                json_quiz_response_key:
+                  type: string[]
+                  description: 'Quiz response key list.'
+                k_business:
+                  type: string
+                  description: 'Business key within which quiz is managed.'
+                k_quiz:
+                  type: string
+                  description: 'Quiz key.'
+                k_quiz_response:
+                  type: string|null
+                  description: 'Quiz response key. `null` in a case of response creation or removing set of responses in {@link \Core\Quiz\QuizResponseApi::$a_quiz_response_key}.'
+                uid_link:
+                  type: string|null
+                  description: 'User''s key for the response association.'
+      responses:
+        200:
+          description: 'Successful response. Full description is not available yet.'
+      tags:
+        - Response-Response
+  '/Wl/Quiz/Response/Response65.json':
+    delete:
+      summary: ''
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                a_quiz_response_key:
+                  type: string[]
+                  description: 'Quiz response key list.'
+                id_mode:
+                  type: number
+                  format: int32
+                  description: 'The mode type. One of the {@link ModeSid} constants.'
+                json_quiz_response_key:
+                  type: string[]
+                  description: 'Quiz response key list.'
+                k_business:
+                  type: string
+                  description: 'Business key within which quiz is managed.'
+                k_quiz:
+                  type: string
+                  description: 'Quiz key.'
+                k_quiz_response:
+                  type: string|null
+                  description: 'Quiz response key. `null` in a case of response creation or removing set of responses in {@link \Core\Quiz\QuizResponseApi::$a_quiz_response_key}.'
+      responses:
+        200:
+          description: 'Successful response. Full description is not available yet.'
+      tags:
+        - Response-Response65
+    get:
+      summary: ''
+      parameters:
+        - name: can_anonymous
+          in: query
+          description: 'Checks whether unauthorized user should be permitted to operate with form and make a response. In general all quizzes should have users in response but it some cases such as registration process user might not exist yet, and we need ability to ignore check for user existence. `true` - add possibility load form and accept response for non-registered user, `false` otherwise.'
+          schema:
+            type: boolean
+        - name: is_answer
+          in: query
+          description: '`true` for load answers for response, `false` otherwise.'
+          schema:
+            type: boolean
+        - name: is_backend
+          in: query
+          description: ''
+          schema:
+            type: boolean
+        - name: is_simple
+          in: query
+          description: 'Whether quiz response received by kiosk or direct mode link. `true` quiz response received by kiosk mode. `false` quiz response received by direct or direct mode.'
+          schema:
+            type: boolean
+        - name: k_business
+          in: query
+          description: 'Business key within which quiz is managed.'
+          schema:
+            type: string
+        - name: k_quiz_response
+          in: query
+          description: 'Quiz response key. `null` in a case of response creation or removing set of responses in {@link \Core\Quiz\QuizResponseApi::$a_quiz_response_key}.'
+          schema:
+            type: string|null
+      responses:
+        200:
+          description: 'Successful response'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  a_access_log:
+                    type: array[]
+                    description: 'Access log data.'
+                  a_element:
+                    type: array[]
+                    description: 'List of quiz questions with responses.'
+                  a_quiz_setting:
+                    type: array
+                    description: 'Quiz settings. Array representation of {@link \Wl\Quiz\QuizElementApi::$o_setting}.'
+                  a_service_info:
+                    type: array
+                    description: 'Information about service if response connected to visit.'
+                  can_amend:
+                    type: boolean
+                    description: 'Whether response can be amended by current user.'
+                  dtu_response:
+                    type: string
+                    description: 'Date when response was submitted.'
+                  id_source:
+                    type: number
+                    format: int32
+                    description: 'Response source. One of {@link SourceSid} constants.'
+                  id_status:
+                    type: number
+                    format: int32
+                    description: 'Response status ID.'
+                  show_numbering:
+                    type: boolean
+                    description: 'Whether to show numbering of the form elements that supports numbering. `true` to show numbering on the form for elements that supports numbering. `false` to not show numbering.'
+                  text_add_date:
+                    type: string
+                    description: 'Date when response added.'
+                  text_amend_date:
+                    type: string
+                    description: 'Date when response amended.'
+                  text_amend_user:
+                    type: string
+                    description: 'Name of the user who amend the response.'
+                  text_complete_date:
+                    type: string
+                    description: 'Date when response completed.'
+                  text_complete_user:
+                    type: string
+                    description: 'Name of the user who complete the response.'
+                  text_response_by:
+                    type: string
+                    description: 'Name of the user who owned the response.'
+                  text_title:
+                    type: string|null
+                    description: 'Title of the filled form. `null` in case when not filled yet.'
+      tags:
+        - Response-Response65
+    post:
+      summary: ''
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                a_purchase_item:
+                  type: string[]
+                  description: 'List of purchase items for which this form is loaded. The list of purchase items. Each element has the format `[id_purchase_item]::[k_id]`, where: <dl> <dt>int <var>id_purchase_item</var></dt> <dd>The ID of the purchase item. One of the {@link \RsPurchaseItemSid} constants.</dd> <dt>string <var>k_id</var></dt> <dd>The item key. This depends on <var>id_purchase_item</var> of this array.</dd> </dl> Empty in case when purchase item not specified or form loaded from direct link.'
+                a_quick_config:
+                  type: array
+                  description: 'Data for Quick Buy. Structure of this array is described in {@link \RsCatalogCart::__construct()}.'
+                can_anonymous:
+                  type: boolean
+                  description: 'Checks whether unauthorized user should be permitted to operate with form and make a response. In general all quizzes should have users in response but it some cases such as registration process user might not exist yet, and we need ability to ignore check for user existence. `true` - add possibility load form and accept response for non-registered user, `false` otherwise.'
+                is_backend:
+                  type: boolean
+                  description: ''
+                is_draft:
+                  type: boolean
+                  description: '`true` if need to save response in draft mode, `false` otherwise.'
+                is_simple:
+                  type: boolean
+                  description: 'Whether quiz response received by kiosk or direct mode link. `true` quiz response received by kiosk mode. `false` quiz response received by direct or direct mode.'
+                is_skip:
+                  type: boolean
+                  description: 'Whether the quiz needs to be skipped.'
+                is_validate_only:
+                  type: boolean
+                  description: '`true` if need make only validation, `false` need make validation and saving response.'
+                json_element:
+                  type: string
+                  description: 'List of quiz questions with responses in JSON format.'
+                k_business:
+                  type: string
+                  description: 'Business key within which quiz is managed.'
+                k_quiz:
+                  type: string
+                  description: 'Quiz key.'
+                k_quiz_login:
+                  type: string
+                  description: 'Quiz login key.'
+                k_quiz_response:
+                  type: string|null
+                  description: 'Quiz response key. `null` in a case of response creation or removing set of responses in {@link \Core\Quiz\QuizResponseApi::$a_quiz_response_key}.'
+                s_secret:
+                  type: string
+                  description: 'Secret key for access to quiz request.'
+                text_appointment_wizard_id:
+                  type: string|null
+                  description: 'Booking appointment wizard ID. Not `null` if quiz response was sent during booking appointment process.'
+                text_class_wizard_id:
+                  type: string|null
+                  description: 'Booking class wizard ID. Not `null` if quiz response was sent during booking class process.'
+                uid_response:
+                  type: string|null
+                  description: 'UID of the user who makes response for quiz.'
+      responses:
+        200:
+          description: 'Successful response'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  a_element:
+                    type: array[]
+                    description: 'List of quiz questions with responses.'
+                  id_source:
+                    type: number
+                    format: int32
+                    description: 'Response source. One of {@link SourceSid} constants.'
+      tags:
+        - Response-Response65
+    put:
+      summary: 'Validates, updates and reindex response information for associated user.'
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                a_quiz_response_key:
+                  type: string[]
+                  description: 'Quiz response key list.'
+                json_quiz_response_key:
+                  type: string[]
+                  description: 'Quiz response key list.'
+                k_business:
+                  type: string
+                  description: 'Business key within which quiz is managed.'
+                k_quiz:
+                  type: string
+                  description: 'Quiz key.'
+                k_quiz_response:
+                  type: string|null
+                  description: 'Quiz response key. `null` in a case of response creation or removing set of responses in {@link \Core\Quiz\QuizResponseApi::$a_quiz_response_key}.'
+                uid_link:
+                  type: string|null
+                  description: 'User''s key for the response association.'
+      responses:
+        200:
+          description: 'Successful response. Full description is not available yet.'
+      tags:
+        - Response-Response65
   '/Wl/Reception/Roster/AttendanceListNotAttend.json':
     post:
       summary: ''
@@ -10961,6 +11428,46 @@ paths:
                     description: 'Url to the business catalog with items that can be used to pay for the visit.'
       tags:
         - Visit-VisitAdd
+  '/Wl/Social/Share/SocialShare.json':
+    post:
+      summary: ''
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                a_key:
+                  type: string[]
+                  description: 'The primary keys of the shared objects.'
+                id_share_destination:
+                  type: number
+                  format: int32
+                  description: 'The id of the social network. One of {@link \ASocialSid} constants.'
+                id_share_object:
+                  type: number
+                  format: int32
+                  description: 'The id of type object for share post to social network. One of {@link \Wl\Social\Share\ShareObjectSid} constants.'
+                k_business:
+                  type: string
+                  description: 'Business key. Primary key in the {@link \RsBusinessSql} table.'
+                uid:
+                  type: string
+                  description: 'User key. Primary key {@link \PassportLoginSql} table.'
+      responses:
+        200:
+          description: 'Successful response'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  s_secret:
+                    type: string
+                    description: 'Secret code shared object.'
+      tags:
+        - Share-SocialShare
   '/Wl/Facebook/Login/FacebookLogin.json':
     post:
       summary: ''
@@ -12396,6 +12903,9 @@ paths:
                 a_book_data:
                   type: array
                   description: 'All data from the provider model `Wl_Appointment_Book_ProviderModel`: <dl> <dt> array [<var>a_product</var>] </dt> <dd> Add-ons to the appointment. Specified for appointment bookings only. The old format used array keys. Primary keys in {@link \RsShopProductOptionSql} table. While the new format has each element as an array: <dl> <dt>int <var>i_count</var></dt><dd>The add-on buy count.</dd> <dt>int [<var>i_count_use</var>]</dt><dd>The add-on use count. If not set, then use count is equals to buy count.</dd> <dt>string <var>k_shop_product_option</var></dt><dd>The add-on key. Primary key in {@link \RsShopProductOptionSql} table.</dd> </dl> </dd> <dt> array [<var>a_repeat</var>] </dt> <dd> Information for the recurring booking: <dl> <dt> int[] [<var>a_week</var>] </dt> <dd> The days of the week when the appointment repeats. One of the constants of the {@link \ADateWeekSid} class. This will be empty if the appointment doesn''t repeat weekly. </dd> <dt> string [<var>dl_end</var>] </dt> <dd> The date when the appointment''s repeat cycle stops. This will be empty if the repeat cycle doesn''t stop at a certain date. </dd> <dt> int [<var>i_occurrence</var>] </dt> <dd> The number of occurrences after which the appointment''s repeat cycle stops. This will be empty if the repeat cycle doesn''t stop after a certain number of occurrences. </dd> <dt> int <var>i_period</var> </dt> <dd> The frequency at which the appointment repeats. </dd> <dt> int <var>id_period</var> </dt> <dd> The measurement unit of `i_period`. One of the {@link \ADurationSid} constants. </dd> <dt> bool [<var>is_month</var>] </dt> <dd> <tt>true</tt> if the appointment repeats monthly on the same date. <tt>false</tt> if the appointment repeats monthly on the same day of the week. <tt>null</tt> if the appointment doesn''t repeat monthly. </dd> </dl> This will be empty if the appointment isn''t booked recurringly. </dd> <dt> array [<var>a_resource</var>] </dt> <dd> The list of assets for the appointment booking. Keys refer to asset categories. Primary keys in {@link \RsResourceTypeSql} table. Values are arrays with the next keys: <dl> <dt>int [<var>i_index</var>]</dt> <dd>The asset index on the layout. This is only specified if the asset category has a layout.</dd> <dt>string <var>k_resource</var></dt> <dd>The asset. Primary key in {@link \RsResourceSql} table.</dd> </dl> Specify this only for an appointment booking. </dd> <dt> string <var>dt_date</var> </dt> <dd> The date/time for the booking in MySQL format in the location''s time zone. </dd> <dt> int [<var>i_duration</var>] </dt> <dd> The duration for the asset booking in minutes. Specify this for separate asset bookings only. </dd> <dt> int [<var>i_index</var>] </dt> <dd> The asset index on the layout. Specify this for separate asset bookings only and for cases when the asset category only has the layout. </dd> <dt> int <var>id_class_tab</var> </dt> <dd> The booking service type. One of the {@link \Wl\Classes\Tab\TabSid} constants. </dd> <dt> int [<var>id_gender_staff</var>] </dt> <dd> The gender of the staff member conducting the appointment. One of the {@link \AGenderSid} constants. Specify this for appointment bookings only. </dd> <dt> string [<var>k_login_promotion</var>] </dt> <dd> The user''s Purchase Option. Specify this if you want to use a specific Purchase Option to pay for the booking. Primary key in {@link \RsLoginPromotionSql} table. </dd> <dt> string [<var>k_resource</var>] </dt> <dd> The asset booking. Specify this for separate asset bookings only. Primary key in {@link \RsResourceSql} table. </dd> <dt> string [<var>k_service</var>] </dt> <dd> The appointment booking. Specify this for appointment bookings only. Primary key in {@link \RsServiceSql} table. </dd> <dt> string [<var>k_staff</var>] </dt> <dd> The staff member conducting the appointment. Specify this for appointment bookings only. Primary key in {@link \RsStaffSql} table. </dd> <dt> string [<var>k_staff_date</var>] </dt> <dd> The staff member conducting the appointment. The difference between this and <var>k_staff</var> is that this value must be set only in cases when you want to add customer to an appointment that already exists. Specify this for appointment bookings only. Primary key in {@link \RsStaffSql} table. </dd> <dt>string [<var>m_tip_appointment</var>]</dt> <dd>The amount of selected tips.</dd> <dt>sting <var>k_timezone</var></dt> <dd>The time zone key. This will be ''null'' if the time zone used matches the time zone of the location.</dd> </dl>'
+                a_notification:
+                  type: array
+                  description: 'Information for sending an appointment notification. <dl> <dt>bool [<var>is_mail</var>]</dt> <dd>`true` to send mail; `false` to not send.</dd> <dt>bool [<var>is_sms</var>]</dt> <dd>`true` to send SMS; `false` to not send.</dd> <dt>bool [<var>is_push</var>]</dt> <dd>`true` to send push notification; `false` to not send.</dd> </dl>'
                 a_paid:
                   type: array
                   description: 'The sum paid.'
@@ -12488,7 +12998,10 @@ paths:
                   description: 'A list of answers for the questions from {@link \Wl\Appointment\Book\Question\QuestionApi::$a_question}. Keys refer to hashes of the questions. Values refer to answers for the questions.'
                 a_book_data:
                   type: array
-                  description: 'All data from the provider model <tt>Wl_Appointment_Book_ProviderModel</tt>: <dl> <dt> array [<var>a_product</var>] </dt> <dd> Add-ons to the appointment. Specify this for appointment bookings only. Old format: array keys refer to primary keys. See table {@link \RsShopProductOptionSql}. New format: each element is an array: <dt>int <var>i_count</var></dt><dd>The add-on count</dd> <dt>string <var>k_shop_product_option</var></dt><dd>The key of add-on. Primary key in {@link \RsShopProductOptionSql} table.</dd> </dd> <dt> array [<var>a_repeat</var>] </dt> <dd> Recurring booking information: <dl> <dt> int[] [<var>a_week</var>] </dt> <dd> The days of week when appointment repeats. One of the {@link \ADateWeekSid} constants. This will be empty if the appointment doesn''t repeat weekly. </dd> <dt> string [<var>dl_end</var>] </dt> <dd> The date when the appointment''s repeat cycle stops. This will be empty if the repeat cycle doesn''t stop at a certain date. </dd> <dt> int [<var>i_occurrence</var>] </dt> <dd> The number of occurrences after which the appointment''s repeat cycle must stop. This will be empty if the repeat cycle doesn''t stop after a certain number of occurrences. </dd> <dt> int <var>i_period</var> </dt> <dd> The frequency of the appointment''s repeat cycle. </dd> <dt> int <var>id_period</var> </dt> <dd> The measurement unit of <tt>i_period</tt>. One of the {@link \ADurationSid} constants. </dd> <dt> bool [<var>is_month</var>] </dt> <dd> <tt>true</tt> if the appointment repeats monthly on the same date. <tt>false</tt> if the appointment repeats monthly on the same day of the week. <tt>null</tt> if the appointment doesn''t repeat monthly. </dd> </dl> This will be empty if the appointment isn''t recurring. </dd> <dt> array [<var>a_resource</var>] </dt> <dd> A list of assets for the appointment booking. Keys refer to asset categories. Primary keys in {@link \RsResourceTypeSql} table. Values refer to arrays with the next keys: <dl> <dt>int [<var>i_index</var>]</dt> <dd>The asset index on the layout. Specify this only if the asset category has a layout.</dd> <dt>string <var>k_resource</var></dt> <dd>The asset. Primary key in {@link \RsResourceSql} table.</dd> </dl> Specify this only for the appointment booking. </dd> <dt> string <var>dt_date</var> </dt> <dd> The date/time for the booking in MySQL format in the location''s time zone. </dd> <dt> int [<var>i_duration</var>] </dt> <dd> The duration of asset booking in minutes. Specify this for separate asset bookings only. </dd> <dt> int [<var>i_index</var>] </dt> <dd> The asset index on the layout. Specify this for separate asset bookings only and for cases when the asset category only has a layout. </dd> <dt> int <var>id_class_tab</var> </dt> <dd> The booking service type. One of the {@link \Wl\Classes\Tab\TabSid} constants. </dd> <dt> int [<var>id_gender_staff</var>] </dt> <dd> The gender of the staff member conducting the appointment. One of the {@link \AGenderSid} constants. Specify this for appointment bookings only. </dd> <dt> string [<var>k_login_promotion</var>] </dt> <dd> The user''s pass (for example, a membership or a package). Primary key in {@link \RsLoginPromotionSql} table. Specify this if you want to set the pass to use to pay for the booking. </dd> <dt> string [<var>k_resource</var>] </dt> <dd> The asset booking. Specify this for separate asset bookings only. Primary key in {@link \RsResourceSql} table. </dd> <dt> string [<var>k_service</var>] </dt> <dd> The appointment booking. Specify this for appointment bookings only. Primary key in {@link \RsServiceSql} table. </dd> <dt> string [<var>k_staff</var>] </dt> <dd> The staff member conducting the appointment. Specify this for appointment bookings only. Primary key in {@link \RsStaffSql} table. </dd> <dt> string [<var>k_staff_date</var>] </dt> <dd> The staff member conducting the appointment. The difference between this an <var>k_staff</var> is that this value must be set only in cases when you want to add a customer to an appointment that already exists. Specify this for appointment bookings only. Primary key in {@link \RsStaffSql} table. </dd> <dt>string [<var>m_tip_appointment</var>]</dt> <dd>The amount of selected tips.</dd> </dl>'
+                  description: 'All data from the provider model <tt>Wl_Appointment_Book_ProviderModel</tt>: <dl> <dt> array [<var>a_product</var>] </dt> <dd> Add-ons to the appointment. Specify this for appointment bookings only. Old format: array keys refer to primary keys. See table {@link \RsShopProductOptionSql}. New format: each element is an array: <dt>int <var>i_count</var></dt><dd>The add-on count</dd> <dt>string <var>k_shop_product_option</var></dt><dd>The key of add-on. Primary key in {@link \RsShopProductOptionSql} table.</dd> </dd> <dt> array [<var>a_repeat</var>] </dt> <dd> Recurring booking information: <dl> <dt> int[] [<var>a_week</var>] </dt> <dd> The days of week when appointment repeats. One of the {@link \ADateWeekSid} constants. This will be empty if the appointment doesn''t repeat weekly. </dd> <dt> string [<var>dl_end</var>] </dt> <dd> The date when the appointment''s repeat cycle stops. This will be empty if the repeat cycle doesn''t stop at a certain date. </dd> <dt> int [<var>i_occurrence</var>] </dt> <dd> The number of occurrences after which the appointment''s repeat cycle must stop. This will be empty if the repeat cycle doesn''t stop after a certain number of occurrences. </dd> <dt> int <var>i_period</var> </dt> <dd> The frequency of the appointment''s repeat cycle. </dd> <dt> int <var>id_period</var> </dt> <dd> The measurement unit of <tt>i_period</tt>. One of the {@link \ADurationSid} constants. </dd> <dt> bool [<var>is_month</var>] </dt> <dd> <tt>true</tt> if the appointment repeats monthly on the same date. <tt>false</tt> if the appointment repeats monthly on the same day of the week. <tt>null</tt> if the appointment doesn''t repeat monthly. </dd> </dl> This will be empty if the appointment isn''t recurring. </dd> <dt> array [<var>a_resource</var>] </dt> <dd> A list of assets for the appointment booking. Keys refer to asset categories. Primary keys in {@link \RsResourceTypeSql} table. Values refer to arrays with the next keys: <dl> <dt>int [<var>i_index</var>]</dt> <dd>The asset index on the layout. Specify this only if the asset category has a layout.</dd> <dt>string <var>k_resource</var></dt> <dd>The asset. Primary key in {@link \RsResourceSql} table.</dd> </dl> Specify this only for the appointment booking. </dd> <dt> string <var>dt_date</var> </dt> <dd> The date/time for the booking in MySQL format in the location''s time zone. </dd> <dt> int [<var>i_duration</var>] </dt> <dd> The duration of asset booking in minutes. Specify this for separate asset bookings only. </dd> <dt> int [<var>i_index</var>] </dt> <dd> The asset index on the layout. Specify this for separate asset bookings only and for cases when the asset category only has a layout. </dd> <dt> int <var>id_class_tab</var> </dt> <dd> The booking service type. One of the {@link \Wl\Classes\Tab\TabSid} constants. </dd> <dt> int [<var>id_gender_staff</var>] </dt> <dd> The gender of the staff member conducting the appointment. One of the {@link \AGenderSid} constants. Specify this for appointment bookings only. </dd> <dt> string [<var>k_login_promotion</var>] </dt> <dd> The user''s pass (for example, a membership or a package). Primary key in {@link \RsLoginPromotionSql} table. Specify this if you want to set the pass to use to pay for the booking. </dd> <dt> string [<var>k_resource</var>] </dt> <dd> The asset booking. Specify this for separate asset bookings only. Primary key in {@link \RsResourceSql} table. </dd> <dt> string [<var>k_service</var>] </dt> <dd> The appointment booking. Specify this for appointment bookings only. Primary key in {@link \RsServiceSql} table. </dd> <dt> string [<var>k_staff</var>] </dt> <dd> The staff member conducting the appointment. Specify this for appointment bookings only. Primary key in {@link \RsStaffSql} table. </dd> <dt> string [<var>k_staff_date</var>] </dt> <dd> The staff member conducting the appointment. The difference between this an <var>k_staff</var> is that this value must be set only in cases when you want to add a customer to an appointment that already exists. Specify this for appointment bookings only. Primary key in {@link \RsStaffSql} table. </dd> <dt>string [<var>m_tip_appointment</var>]</dt> <dd>The amount of selected tips.</dd> <dt> string [<var>uid_staff</var>] </dt> <dd> User ID staff member conducting the appointment. Specify this for appointment bookings only. Primary key in {@link \PassportLoginSql} table. </dd> <dt> string [<var>uid_staff_date</var>] </dt> <dd> User ID staff member conducting the appointment. The difference between this an <var>uid_staff</var> is that this value must be set only in cases when you want to add a customer to an appointment that already exists. Specify this for appointment bookings only. Primary key in {@link \PassportLoginSql} table. </dd> </dl>'
+                a_notification:
+                  type: array
+                  description: 'Information for sending an appointment notification. <dl> <dt>bool [<var>is_mail</var>]</dt> <dd>`true` to send mail; `false` to not send.</dd> <dt>bool [<var>is_sms</var>]</dt> <dd>`true` to send SMS; `false` to not send.</dd> <dt>bool [<var>is_push</var>]</dt> <dd>`true` to send push notification; `false` to not send.</dd> </dl>'
                 a_pay_form:
                   type: array[]
                   description: 'A list of payment sources to pay with. Structure of this array corresponds structure of {@link \RsPayForm::$a_pay_source}.'
@@ -12583,6 +13096,9 @@ paths:
                 a_book_data:
                   type: array
                   description: 'The documentation is the same as in {@link FinishApi::$a_book_data}.'
+                a_notification:
+                  type: array
+                  description: 'Information for sending an appointment notification. <dl> <dt>bool [<var>is_mail</var>]</dt> <dd>`true` to send mail; `false` to not send.</dd> <dt>bool [<var>is_sms</var>]</dt> <dd>`true` to send SMS; `false` to not send.</dd> <dt>bool [<var>is_push</var>]</dt> <dd>`true` to send push notification; `false` to not send.</dd> </dl>'
                 a_pay_form:
                   type: array[]
                   description: 'A list of payment sources to pay with. Structure of this array corresponds structure of {@link \RsPayForm::$a_pay_source}.'
@@ -15772,6 +16288,9 @@ paths:
                   k_session_pass:
                     type: string
                     description: 'The key of a session pass that can be used for a single session payment. If no such payment is available, `0` will be returned.'
+                  m_account:
+                    type: string
+                    description: 'Account balance.'
                   m_price:
                     type: string|null
                     description: 'The price of the session, including any taxes and discounts. If `null`, the price of the session hasn''t been loaded yet.'
@@ -17625,6 +18144,9 @@ tags:
     name: Response-Response
     description: 'An endpoint to request entrance into a business location. This endpoint is similar to {@link AuthorizePartnerApi} but not identical. To grant a user access the SDK sign-in account, the Manage Business permission is required. The associated accounts will receive an email regarding when they are given access and when that access expires. Access will be granted for 24 hours.'
   -
+    name: Response-Response65
+    description: 'Endpoint to work with quiz responses.'
+  -
     name: Response-ResponseList
     description: 'Retrieves a list of a user''s quiz responses.'
   -
@@ -17702,6 +18224,9 @@ tags:
   -
     name: Share-PurchaseShare
     description: 'Shares a purchase to a specified social network.'
+  -
+    name: Share-SocialShare
+    description: 'Saves data about share post to database.'
   -
     name: SignOut-SignOut
     description: 'Signs user out.'

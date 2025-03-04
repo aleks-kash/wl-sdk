@@ -1,6 +1,6 @@
 <?php
 
-namespace WellnessLiving\Core\a;
+namespace WellnessLiving\Core;
 
 /**
  * A list of supported social networks.

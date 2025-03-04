@@ -198,6 +198,24 @@ class FinishModel extends WlModelAbstract
    *   </dd>
    *   <dt>string [<var>m_tip_appointment</var>]</dt>
    *   <dd>The amount of selected tips.</dd>
+   *   <dt>
+   *     string [<var>uid_staff</var>]
+   *   </dt>
+   *   <dd>
+   *     User ID staff member conducting the appointment.
+   *     Specify this for appointment bookings only.
+   *
+   *   </dd>
+   *   <dt>
+   *     string [<var>uid_staff_date</var>]
+   *   </dt>
+   *   <dd>
+   *     User ID staff member conducting the appointment.
+   *     The difference between this an <var>uid_staff</var> is that this value must be set only in cases
+   *     when you want to add a customer to an appointment that already exists.
+   *     Specify this for appointment bookings only.
+   *
+   *   </dd>
    * </dl>
    *
    * @post get
@@ -212,6 +230,22 @@ class FinishModel extends WlModelAbstract
    * @var string[]
    */
   public $a_login_activity_visit;
+
+  /**
+   * Information for sending an appointment notification.
+   * <dl>
+   *    <dt>bool [<var>is_mail</var>]</dt>
+   *    <dd>`true` to send mail; `false` to not send.</dd>
+   *    <dt>bool [<var>is_sms</var>]</dt>
+   *    <dd>`true` to send SMS; `false` to not send.</dd>
+   *    <dt>bool [<var>is_push</var>]</dt>
+   *    <dd>`true` to send push notification; `false` to not send.</dd>
+   *  </dl>
+   *
+   * @post post
+   * @var array
+   */
+  public $a_notification = [];
 
   /**
    * A list of payment sources to pay with.

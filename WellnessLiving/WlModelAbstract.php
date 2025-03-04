@@ -319,6 +319,7 @@ class WlModelAbstract
    * Returns the last request object with was performed with this API model.
    *
    * @return WlModelRequest|null The last request object with was performed with this API model.
+   * `null` if there were no requests performed with this model.
    */
   public function lastRequest()
   {
@@ -329,6 +330,7 @@ class WlModelAbstract
    * Sets name of the microservice to which this request must be directed.
    *
    * @param string|null $s_microservice Microservice name.
+   * `null` if the model is not connected to any microservice.
    */
   public function microserviceSet($s_microservice)
   {

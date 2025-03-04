@@ -43,6 +43,18 @@ class ClassListModel extends WlModelAbstract
    *     Keys of class tab.
    *   </dd>
    *   <dt>
+   *     string[] <var>a_image</var>
+   *    </dt>
+   *    <dd>
+   *     The class image. Empty array if there is no image.
+   *   </dd>
+   *   <dt>
+   *     string[] <var>a_search_tag</var>
+   *   </dt>
+   *   <dd>
+   *     Tags associated with an individual class.
+   *   </dd>
+   *   <dt>
    *     string[] <var>a_staff</var>
    *   </dt>
    *   <dd>
@@ -82,6 +94,24 @@ class ClassListModel extends WlModelAbstract
    *      class won't be displayed. Otherwise, this will be `false` to indicate that the class will be displayed.
    *   </dd>
    *   <dt>
+   *     string <var>html_description</var>
+   *   </dt>
+   *   <dd>
+   *     The class description.
+   *   </dd>
+   *   <dt>
+   *     int <var>i_book</var>
+   *   </dt>
+   *   <dd>
+   *     Count of visits on this class.
+   *   </dd>
+   *   <dt>
+   *     int|null <var>i_capacity</var>
+   *   </dt>
+   *   <dd>
+   *     The capacity of the service. 'null' indicates that the capacity is not set.
+   *    </dd>
+   *   <dt>
    *     int <var>i_day</var>
    *   </dt>
    *   <dd>
@@ -92,6 +122,12 @@ class ClassListModel extends WlModelAbstract
    *   </dt>
    *   <dd>
    *     The duration of the session in minutes.
+   *   </dd>
+   *   <dt>
+   *     int <var>i_wait</var>
+   *   </dt>
+   *   <dd>
+   *     Number of clients in wait list.
    *   </dd>
    *   <dt>
    *     bool <var>is_cancel</var>
@@ -110,6 +146,12 @@ class ClassListModel extends WlModelAbstract
    *   </dt>
    *   <dd>
    *     If `true`, this class is virtual. Otherwise, this will be `false`.
+   *   </dd>
+   *   <dt>
+   *     bool <var>is_wait_list_enabled</var>
+   *   </dt>
+   *   <dd>
+   *     This will be `true` if user is only on the wait-list. Otherwise, this will be `false`.
    *   </dd>
    *   <dt>
    *     string <var>k_class</var>

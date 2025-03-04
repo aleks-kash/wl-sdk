@@ -56,6 +56,22 @@ class Finish47Model extends WlModelAbstract
   public $a_login_activity_visit = null;
 
   /**
+   * Information for sending an appointment notification.
+   * <dl>
+   *    <dt>bool [<var>is_mail</var>]</dt>
+   *    <dd>`true` to send mail; `false` to not send.</dd>
+   *    <dt>bool [<var>is_sms</var>]</dt>
+   *    <dd>`true` to send SMS; `false` to not send.</dd>
+   *    <dt>bool [<var>is_push</var>]</dt>
+   *    <dd>`true` to send push notification; `false` to not send.</dd>
+   *  </dl>
+   *
+   * @post post
+   * @var array
+   */
+  public $a_notification = [];
+
+  /**
    * A list of payment sources to pay with.
    *
    * @post post

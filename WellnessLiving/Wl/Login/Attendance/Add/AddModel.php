@@ -176,6 +176,14 @@ class AddModel extends WlModelAbstract
   public $k_visit;
 
   /**
+   * Account balance.
+   *
+   * @get result
+   * @var string
+   */
+  public $m_account;
+
+  /**
    * The price of the session, including any taxes and discounts.
    *
    * If `null`, the price of the session hasn't been loaded yet.
