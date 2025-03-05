@@ -1,10 +1,10 @@
 openapi: 3.1.0
 info:
   title: 'WellnessLiving public API'
-  version: 1.1.20250304161344
+  version: 1.1.20250305131009
   description: |
     WellnessLiving API is a RESTful way to access and manage your business data.
-    Last updated at: 2025-03-04 16:13:44
+    Last updated at: 2025-03-05 13:10:09
 servers:
   - url: https://us.wellnessliving.com
     description: 'WellnessLiving server for businesses served from the United States data center'
@@ -11440,7 +11440,7 @@ paths:
               properties:
                 a_key:
                   type: string[]
-                  description: 'The primary keys of the shared objects.'
+                  description: 'The primary keys of the shared objects. Depends on {@link SocialShareApi::$id_share_object}. If {@link SocialShareApi::$id_share_object} is: * {@link ShareObjectSid::BOOK} - each value is key of the visit. Primary key in {@link \RsVisitSql} table. * {@link ShareObjectSid::LOCATION} - each value is key of the location. Primary key in {@link \RsLocationSql} table. * {@link ShareObjectSid::PURCHASE} - each value is key of the purchase. Primary key in {@link \RsPurchaseSql} table. * {@link ShareObjectSid::REVIEW} - each value is key of the review. Primary key in {@link \RsReviewSql} table.'
                 id_share_destination:
                   type: number
                   format: int32
@@ -11448,7 +11448,7 @@ paths:
                 id_share_object:
                   type: number
                   format: int32
-                  description: 'The id of type object for share post to social network. One of {@link \Wl\Social\Share\ShareObjectSid} constants.'
+                  description: 'The id of type object for share post to social network. One of {@link ShareObjectSid} constants.'
                 k_business:
                   type: string
                   description: 'Business key. Primary key in the {@link \RsBusinessSql} table.'
@@ -11465,7 +11465,7 @@ paths:
                 properties:
                   s_secret:
                     type: string
-                    description: 'Secret code shared object.'
+                    description: 'Secret key for access shared object.'
       tags:
         - Share-SocialShare
   '/Wl/Facebook/Login/FacebookLogin.json':
@@ -18226,7 +18226,7 @@ tags:
     description: 'Shares a purchase to a specified social network.'
   -
     name: Share-SocialShare
-    description: 'Saves data about share post to database.'
+    description: 'Saves data about share post to database. Api usage example: <code> $o_api = new SocialShareApi(); $o_api->id_share_object = \Wl\Social\Share\ShareObjectSid::PURCHASE; // Key of the purchase because id_share_object is \Wl\Social\Share\ShareObjectSid::PURCHASE $o_api->a_key = [$k_purchase_a, $k_purchase_b]; $o_api->id_share_destination = \ASocialSid::FACEBOOK; $o_api->k_business = $k_business; $o_api->uid = $uid; $o_api->post(); $url_link = ''''; // Example: Wl_Profile_Activity_ElementModel.url_link // s_secret points specifically to your object that you want to share, so add it to the url. // In this case url_link stores all purchases for the business, // and by using s_secret we will get a link to only those purchases we want to share. $url_facebook_share = ''https://www.facebook.com/sharer/sharer.php?u='' . urlencode($url_link . ''&s_secret='' . $o_api->s_secret); </code>'
   -
     name: SignOut-SignOut
     description: 'Signs user out.'
