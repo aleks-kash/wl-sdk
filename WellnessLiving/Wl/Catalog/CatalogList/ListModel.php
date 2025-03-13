@@ -29,6 +29,16 @@ class ListModel extends WlModelAbstract
   public $a_product_duplicate;
 
   /**
+   * `true` to consider the requirement to have a credit card for booking
+   * (this requirement can be set in business settings)
+   * `false` to ignore it.
+   *
+   * @get get
+   * @var bool
+   */
+  public $is_credit_card_check = true;
+
+  /**
    * The business key.
    *
    * @get get

@@ -242,6 +242,7 @@ class FinishModel extends WlModelAbstract
    *    <dd>`true` to send push notification; `false` to not send.</dd>
    *  </dl>
    *
+   * @get result
    * @post post
    * @var array
    */
@@ -388,6 +389,7 @@ class FinishModel extends WlModelAbstract
   /**
    * The business key.
    *
+   * @get get
    * @post get
    * @var string
    */

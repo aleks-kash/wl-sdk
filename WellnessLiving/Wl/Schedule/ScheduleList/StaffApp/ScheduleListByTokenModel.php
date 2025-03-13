@@ -14,6 +14,38 @@ use WellnessLiving\Wl\WlServiceSid;
 class ScheduleListByTokenModel extends WlModelAbstract
 {
   /**
+   * Configuration options for schedule.
+   * Key is option name, value is boolean.
+   *
+   * May contain the following keys:
+   *
+   * <dl>
+   *   <dt>
+   *     bool <var>is_appointment_cancel_recurring</var>
+   *   </dt>
+   *   <dd>
+   *     If needed to show recurring canceled appointments on schedule.
+   *   </dd>
+   *   <dt>
+   *     bool <var>is_appointment_cancel_single</var>
+   *   </dt>
+   *   <dd>
+   *     If needed to show single canceled appointments on schedule.
+   *   </dd>
+   *   <dt>
+   *     bool <var>is_class_cancel</var>
+   *   </dt>
+   *   <dd>
+   *     If needed to show canceled classes on schedule.
+   *   </dd>
+   * </dl>
+   *
+   * @get get
+   * @var array
+   */
+  public $a_config = [];
+
+  /**
    * The sessions present on the business schedule. These are sorted chronologically in ascending order.
    * Every element has the following keys:
    *

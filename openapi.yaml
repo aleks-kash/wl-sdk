@@ -1,10 +1,10 @@
 openapi: 3.1.0
 info:
   title: 'WellnessLiving public API'
-  version: 1.1.20250306195251
+  version: 1.1.20250313025626
   description: |
     WellnessLiving API is a RESTful way to access and manage your business data.
-    Last updated at: 2025-03-06 19:52:51
+    Last updated at: 2025-03-13 02:56:26
 servers:
   - url: https://us.wellnessliving.com
     description: 'WellnessLiving server for businesses served from the United States data center'
@@ -2698,6 +2698,202 @@ paths:
                     description: 'Text of an error message that occurred during generation of the report. An empty string in no error messages have occurred.'
       tags:
         - Generator-Query
+  '/Thoth/DriveMs/Api/DriveCopy.json':
+    get:
+      summary: ''
+      parameters:
+        - name: a_param
+          in: query
+          description: 'Additional parameters for the copy operation.'
+          schema:
+            type: array
+        - name: s_link_destination
+          in: query
+          description: 'Link to the destination file.'
+          schema:
+            type: string
+        - name: s_link_source
+          in: query
+          description: 'Link to the source file.'
+          schema:
+            type: string
+      responses:
+        200:
+          description: 'Successful response. Full description is not available yet.'
+      tags:
+        - Api-DriveCopy
+  '/Thoth/DriveMs/Api/DriveDelete.json':
+    get:
+      summary: ''
+      parameters:
+        - name: s_link
+          in: query
+          description: 'Link to the file.'
+          schema:
+            type: string
+      responses:
+        200:
+          description: 'Successful response. Full description is not available yet.'
+      tags:
+        - Api-DriveDelete
+  '/Thoth/DriveMs/Api/DriveDownload.json':
+    get:
+      summary: ''
+      parameters:
+        - name: s_link
+          in: query
+          description: 'Link to the file.'
+          schema:
+            type: string
+      responses:
+        200:
+          description: 'Successful response'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  s_content:
+                    type: string|bool
+                    description: 'The contents of a specified file. Encoded in base64 and compressed with gzip. `false` if a file is not found, otherwise - content file.'
+      tags:
+        - Api-DriveDownload
+  '/Thoth/DriveMs/Api/DriveFile.json':
+    post:
+      summary: ''
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                a_link:
+                  type: string[]
+                  description: 'List of links to the files.'
+                is_cache:
+                  type: boolean
+                  description: 'Whether use cache. `true` to use cache, `false` otherwise.'
+      responses:
+        200:
+          description: 'Successful response'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  a_file:
+                    type: string[][]
+                    description: 'List of information about files. Structure of this array corresponds to the result of the {@link Drive::files()} method.'
+      tags:
+        - Api-DriveFile
+  '/Thoth/DriveMs/Api/DriveGenericInfo.json':
+    post:
+      summary: ''
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                a_link:
+                  type: array
+                  description: 'Link list to the file.'
+      responses:
+        200:
+          description: 'Successful response'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  a_info:
+                    type: string[]
+                    description: 'Information about files.'
+      tags:
+        - Api-DriveGenericInfo
+  '/Thoth/DriveMs/Api/DriveRegisterVariants.json':
+    get:
+      summary: ''
+      parameters:
+        - name: a_variant
+          in: query
+          description: 'List of variant file paths with key as descriptor.'
+          schema:
+            type: string[]
+        - name: s_link
+          in: query
+          description: 'Link to the file.'
+          schema:
+            type: string
+      responses:
+        200:
+          description: 'Successful response. Full description is not available yet.'
+      tags:
+        - Api-DriveRegisterVariants
+  '/Thoth/DriveMs/Api/DriveSave.json':
+    post:
+      summary: ''
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                a_param:
+                  type: array
+                  description: 'A set of parameters. The structure of this array corresponds to the argument <var>$a_param</var> in the method {@link DriveClientAbstract::save()}. If a file is uploaded using an S3 bucket, the array must contain the key `is_multipart`.'
+                s_content:
+                  type: string
+                  description: 'The contents of a specified file if a regular file is saved. Or this is the key of the object in S3, if the key `is_multipart` exists in the array of parameters {@link DriveSaveApi::$a_param}.'
+                s_link:
+                  type: string
+                  description: 'Link to the file.'
+                s_name:
+                  type: string|null
+                  description: 'File name with extension. `null` if a file name is not specified.'
+      responses:
+        200:
+          description: 'Successful response'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  a_file:
+                    type: array
+                    description: 'Information about saved a file. The structure of this array corresponds to the result of the {@link Drive::save()} method.'
+      tags:
+        - Api-DriveSave
+  '/Thoth/DriveMs/Api/DriveUrlSign.json':
+    get:
+      summary: ''
+      parameters:
+        - name: a_file
+          in: query
+          description: 'File data. Structure of this array corresponds to the result of the {@link Drive::file()} method.'
+          schema:
+            type: string[]
+        - name: s_name
+          in: query
+          description: 'Name of the file to set on download. `null` if file name not specified.'
+          schema:
+            type: string|null
+      responses:
+        200:
+          description: 'Successful response'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  url:
+                    type: string
+                    description: 'A pre-signed URL to download a file with restricted access rights.'
+      tags:
+        - Api-DriveUrlSign
   '/Studio/Microservice/Editor/List.json':
     get:
       summary: 'Gets a list of microservices.'
@@ -4427,6 +4623,11 @@ paths:
     get:
       summary: 'Retrieves a list of all sale items.'
       parameters:
+        - name: is_credit_card_check
+          in: query
+          description: '`true` to consider the requirement to have a credit card for booking (this requirement can be set in business settings) `false` to ignore it.'
+          schema:
+            type: boolean
         - name: k_business
           in: query
           description: 'The business key.'
@@ -12569,6 +12770,11 @@ paths:
     get:
       summary: 'Gets schedule of business {@link ScheduleListApi::$k_business} for day {@link ScheduleListApi::$dt_date}.'
       parameters:
+        - name: a_config
+          in: query
+          description: 'Configuration options for schedule. Key is option name, value is boolean. May contain the following keys: <dl> <dt> bool <var>is_appointment_cancel_recurring</var> </dt> <dd> If needed to show recurring canceled appointments on schedule. </dd> <dt> bool <var>is_appointment_cancel_single</var> </dt> <dd> If needed to show single canceled appointments on schedule. </dd> <dt> bool <var>is_class_cancel</var> </dt> <dd> If needed to show canceled classes on schedule. </dd> </dl>'
+          schema:
+            type: array
         - name: dl_end
           in: query
           description: 'The end date of the range from which the list of schedule sessions should be retrieved. This will be `null` if the range has no end date. If this value is used, {@link \Wl\Schedule\ScheduleList\StaffApp\ScheduleListApi::$dt_date} should not be set.'
@@ -12989,6 +13195,50 @@ paths:
       tags:
         - Finish-FinishMultiple
   '/Wl/Appointment/Book/Finish/Finish.json':
+    get:
+      summary: 'Loads data to prepare client side to complete booking.'
+      parameters:
+        - name: a_uid
+          in: query
+          description: 'List of user keys to book appointments. Primary keys in {@link \PassportLoginSql}. There may be empty values in this list, which means that this is a walk-in.'
+          schema:
+            type: string[]
+        - name: is_walk_in
+          in: query
+          description: 'If `true`, the client is a walk-in. Otherwise, this will be `false`.'
+          schema:
+            type: boolean
+        - name: k_business
+          in: query
+          description: 'The business key.'
+          schema:
+            type: string
+        - name: k_location
+          in: query
+          description: 'Location to show available appointment booking schedule. Primary key in {@link \RsLocationSql} table.'
+          schema:
+            type: string
+        - name: uid
+          in: query
+          description: 'The user key. Primary key in {@link \PassportLoginSql} table.'
+          schema:
+            type: string
+      responses:
+        200:
+          description: 'Successful response'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  a_notification:
+                    type: array
+                    description: 'Information for sending an appointment notification. <dl> <dt>bool [<var>is_mail</var>]</dt> <dd>`true` to send mail; `false` to not send.</dd> <dt>bool [<var>is_sms</var>]</dt> <dd>`true` to send SMS; `false` to not send.</dd> <dt>bool [<var>is_push</var>]</dt> <dd>`true` to send push notification; `false` to not send.</dd> </dl>'
+                  k_location:
+                    type: string
+                    description: 'Location to show available appointment booking schedule. Primary key in {@link \RsLocationSql} table.'
+      tags:
+        - Finish-Finish
     post:
       summary: 'Allows to pay an appointment or appointment purchase option for the client.'
       requestBody:
@@ -13004,9 +13254,6 @@ paths:
                 a_book_data:
                   type: array
                   description: 'All data from the provider model <tt>Wl_Appointment_Book_ProviderModel</tt>: <dl> <dt> array [<var>a_product</var>] </dt> <dd> Add-ons to the appointment. Specify this for appointment bookings only. Old format: array keys refer to primary keys. See table {@link \RsShopProductOptionSql}. New format: each element is an array: <dt>int <var>i_count</var></dt><dd>The add-on count</dd> <dt>string <var>k_shop_product_option</var></dt><dd>The key of add-on. Primary key in {@link \RsShopProductOptionSql} table.</dd> </dd> <dt> array [<var>a_repeat</var>] </dt> <dd> Recurring booking information: <dl> <dt> int[] [<var>a_week</var>] </dt> <dd> The days of week when appointment repeats. One of the {@link \ADateWeekSid} constants. This will be empty if the appointment doesn''t repeat weekly. </dd> <dt> string [<var>dl_end</var>] </dt> <dd> The date when the appointment''s repeat cycle stops. This will be empty if the repeat cycle doesn''t stop at a certain date. </dd> <dt> int [<var>i_occurrence</var>] </dt> <dd> The number of occurrences after which the appointment''s repeat cycle must stop. This will be empty if the repeat cycle doesn''t stop after a certain number of occurrences. </dd> <dt> int <var>i_period</var> </dt> <dd> The frequency of the appointment''s repeat cycle. </dd> <dt> int <var>id_period</var> </dt> <dd> The measurement unit of <tt>i_period</tt>. One of the {@link \ADurationSid} constants. </dd> <dt> bool [<var>is_month</var>] </dt> <dd> <tt>true</tt> if the appointment repeats monthly on the same date. <tt>false</tt> if the appointment repeats monthly on the same day of the week. <tt>null</tt> if the appointment doesn''t repeat monthly. </dd> </dl> This will be empty if the appointment isn''t recurring. </dd> <dt> array [<var>a_resource</var>] </dt> <dd> A list of assets for the appointment booking. Keys refer to asset categories. Primary keys in {@link \RsResourceTypeSql} table. Values refer to arrays with the next keys: <dl> <dt>int [<var>i_index</var>]</dt> <dd>The asset index on the layout. Specify this only if the asset category has a layout.</dd> <dt>string <var>k_resource</var></dt> <dd>The asset. Primary key in {@link \RsResourceSql} table.</dd> </dl> Specify this only for the appointment booking. </dd> <dt> string <var>dt_date</var> </dt> <dd> The date/time for the booking in MySQL format in the location''s time zone. </dd> <dt> int [<var>i_duration</var>] </dt> <dd> The duration of asset booking in minutes. Specify this for separate asset bookings only. </dd> <dt> int [<var>i_index</var>] </dt> <dd> The asset index on the layout. Specify this for separate asset bookings only and for cases when the asset category only has a layout. </dd> <dt> int <var>id_class_tab</var> </dt> <dd> The booking service type. One of the {@link \Wl\Classes\Tab\TabSid} constants. </dd> <dt> int [<var>id_gender_staff</var>] </dt> <dd> The gender of the staff member conducting the appointment. One of the {@link \AGenderSid} constants. Specify this for appointment bookings only. </dd> <dt> string [<var>k_login_promotion</var>] </dt> <dd> The user''s pass (for example, a membership or a package). Primary key in {@link \RsLoginPromotionSql} table. Specify this if you want to set the pass to use to pay for the booking. </dd> <dt> string [<var>k_resource</var>] </dt> <dd> The asset booking. Specify this for separate asset bookings only. Primary key in {@link \RsResourceSql} table. </dd> <dt> string [<var>k_service</var>] </dt> <dd> The appointment booking. Specify this for appointment bookings only. Primary key in {@link \RsServiceSql} table. </dd> <dt> string [<var>k_staff</var>] </dt> <dd> The staff member conducting the appointment. Specify this for appointment bookings only. Primary key in {@link \RsStaffSql} table. </dd> <dt> string [<var>k_staff_date</var>] </dt> <dd> The staff member conducting the appointment. The difference between this an <var>k_staff</var> is that this value must be set only in cases when you want to add a customer to an appointment that already exists. Specify this for appointment bookings only. Primary key in {@link \RsStaffSql} table. </dd> <dt>string [<var>m_tip_appointment</var>]</dt> <dd>The amount of selected tips.</dd> <dt> string [<var>uid_staff</var>] </dt> <dd> User ID staff member conducting the appointment. Specify this for appointment bookings only. Primary key in {@link \PassportLoginSql} table. </dd> <dt> string [<var>uid_staff_date</var>] </dt> <dd> User ID staff member conducting the appointment. The difference between this an <var>uid_staff</var> is that this value must be set only in cases when you want to add a customer to an appointment that already exists. Specify this for appointment bookings only. Primary key in {@link \PassportLoginSql} table. </dd> </dl>'
-                a_notification:
-                  type: array
-                  description: 'Information for sending an appointment notification. <dl> <dt>bool [<var>is_mail</var>]</dt> <dd>`true` to send mail; `false` to not send.</dd> <dt>bool [<var>is_sms</var>]</dt> <dd>`true` to send SMS; `false` to not send.</dd> <dt>bool [<var>is_push</var>]</dt> <dd>`true` to send push notification; `false` to not send.</dd> </dl>'
                 a_pay_form:
                   type: array[]
                   description: 'A list of payment sources to pay with. Structure of this array corresponds structure of {@link \RsPayForm::$a_pay_source}.'
@@ -13077,6 +13324,9 @@ paths:
                   a_login_activity_visit:
                     type: string[]
                     description: 'The activity keys of the bookings that were made.'
+                  a_notification:
+                    type: array
+                    description: 'Information for sending an appointment notification. <dl> <dt>bool [<var>is_mail</var>]</dt> <dd>`true` to send mail; `false` to not send.</dd> <dt>bool [<var>is_sms</var>]</dt> <dd>`true` to send SMS; `false` to not send.</dd> <dt>bool [<var>is_push</var>]</dt> <dd>`true` to send push notification; `false` to not send.</dd> </dl>'
                   a_visit:
                     type: string[]
                     description: 'The keys of visits.'
@@ -13086,6 +13336,50 @@ paths:
       tags:
         - Finish-Finish
   '/Wl/Appointment/Book/Finish/Finish47.json':
+    get:
+      summary: 'Loads data to prepare client side to complete booking.'
+      parameters:
+        - name: a_uid
+          in: query
+          description: 'List of user keys to book appointments. Primary keys in {@link \PassportLoginSql}. There may be empty values in this list, which means that this is a walk-in.'
+          schema:
+            type: string[]
+        - name: is_walk_in
+          in: query
+          description: 'If `true`, the client is a walk-in. Otherwise, this will be `false`.'
+          schema:
+            type: boolean
+        - name: k_business
+          in: query
+          description: 'The business key.'
+          schema:
+            type: string
+        - name: k_location
+          in: query
+          description: 'Location to show available appointment booking schedule. Primary key in {@link \RsLocationSql} table.'
+          schema:
+            type: string
+        - name: uid
+          in: query
+          description: 'The user key. Primary key in {@link \PassportLoginSql} table.'
+          schema:
+            type: string
+      responses:
+        200:
+          description: 'Successful response'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  a_notification:
+                    type: array
+                    description: 'Information for sending an appointment notification. <dl> <dt>bool [<var>is_mail</var>]</dt> <dd>`true` to send mail; `false` to not send.</dd> <dt>bool [<var>is_sms</var>]</dt> <dd>`true` to send SMS; `false` to not send.</dd> <dt>bool [<var>is_push</var>]</dt> <dd>`true` to send push notification; `false` to not send.</dd> </dl>'
+                  k_location:
+                    type: string
+                    description: 'Location to show available appointment booking schedule. Primary key in {@link \RsLocationSql} table.'
+      tags:
+        - Finish-Finish47
     post:
       summary: 'Allows to pay an appointment or appointment purchase option for the client.'
       requestBody:
@@ -13101,9 +13395,6 @@ paths:
                 a_book_data:
                   type: array
                   description: 'The documentation is the same as in {@link FinishApi::$a_book_data}.'
-                a_notification:
-                  type: array
-                  description: 'Information for sending an appointment notification. <dl> <dt>bool [<var>is_mail</var>]</dt> <dd>`true` to send mail; `false` to not send.</dd> <dt>bool [<var>is_sms</var>]</dt> <dd>`true` to send SMS; `false` to not send.</dd> <dt>bool [<var>is_push</var>]</dt> <dd>`true` to send push notification; `false` to not send.</dd> </dl>'
                 a_pay_form:
                   type: array[]
                   description: 'A list of payment sources to pay with. Structure of this array corresponds structure of {@link \RsPayForm::$a_pay_source}.'
@@ -13174,6 +13465,9 @@ paths:
                   a_login_activity_visit:
                     type: string[]
                     description: 'The activity keys of the bookings that were made.'
+                  a_notification:
+                    type: array
+                    description: 'Information for sending an appointment notification. <dl> <dt>bool [<var>is_mail</var>]</dt> <dd>`true` to send mail; `false` to not send.</dd> <dt>bool [<var>is_sms</var>]</dt> <dd>`true` to send SMS; `false` to not send.</dd> <dt>bool [<var>is_push</var>]</dt> <dd>`true` to send push notification; `false` to not send.</dd> </dl>'
                   a_visit:
                     type: string[]
                     description: 'The keys of visits.'
@@ -17593,6 +17887,30 @@ tags:
   -
     name: Announcement-AnnouncementList
     description: 'Retrieves a list of announcements.'
+  -
+    name: Api-DriveCopy
+    description: 'Copy file between two links.'
+  -
+    name: Api-DriveDelete
+    description: 'Deletes a link to a physical file from the database.'
+  -
+    name: Api-DriveDownload
+    description: 'Returns contents of a specified file.'
+  -
+    name: Api-DriveFile
+    description: 'Returns contents of a specified file.'
+  -
+    name: Api-DriveGenericInfo
+    description: 'Returns contents of a specified file.'
+  -
+    name: Api-DriveRegisterVariants
+    description: 'Registers variants.'
+  -
+    name: Api-DriveSave
+    description: 'Saves the uploaded file.'
+  -
+    name: Api-DriveUrlSign
+    description: 'Returns a pre-signed URL to download a file with restricted access rights.'
   -
     name: Api-KeySecret
     description: 'Gets a secret key for request signing. This is required for a CORS request. A request to this point must be signed as an ordinary request from the SDK using transient and persistent cookies. There must be no CORS (don''t send from a browser).'

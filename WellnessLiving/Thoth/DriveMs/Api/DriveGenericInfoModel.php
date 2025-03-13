@@ -1,0 +1,29 @@
+<?php
+
+namespace WellnessLiving\Thoth\DriveMs\Api;
+
+use WellnessLiving\WlModelAbstract;
+
+/**
+ * Returns contents of a specified file.
+ */
+class DriveGenericInfoModel extends WlModelAbstract
+{
+  /**
+   * Information about files.
+   *
+   * @post result
+   * @var string[]
+   */
+  public $a_info = [];
+
+  /**
+   * Link list to the file.
+   *
+   * @post post
+   * @var array
+   */
+  public $a_link = [];
+}
+
+?>
