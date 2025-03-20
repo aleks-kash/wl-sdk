@@ -34,7 +34,7 @@ class ResponseModel extends WlModelAbstract
   /**
    * Elements' uploaded files.
    *
-   * @post file
+   * @post post
    * @var array[] An array with files data, has next structure:<dl>
    *   <dt>array <var>error</var></dt>
    *   <dd>

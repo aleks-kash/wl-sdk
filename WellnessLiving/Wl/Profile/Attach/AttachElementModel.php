@@ -12,7 +12,7 @@ class AttachElementModel extends WlModelAbstract
   /**
    * Uploaded file.
    *
-   * @post file
+   * @post post
    * @var array
    */
   public $a_file = [];
