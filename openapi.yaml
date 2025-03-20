@@ -1,10 +1,10 @@
 openapi: 3.1.0
 info:
   title: 'WellnessLiving public API'
-  version: 1.1.20250313025626
+  version: 1.1.20250320073133
   description: |
     WellnessLiving API is a RESTful way to access and manage your business data.
-    Last updated at: 2025-03-13 02:56:26
+    Last updated at: 2025-03-20 07:31:33
 servers:
   - url: https://us.wellnessliving.com
     description: 'WellnessLiving server for businesses served from the United States data center'
@@ -2810,7 +2810,7 @@ paths:
                 properties:
                   a_info:
                     type: string[]
-                    description: 'Information about files.'
+                    description: 'Information about files. Every element of array is string in base64.'
       tags:
         - Api-DriveGenericInfo
   '/Thoth/DriveMs/Api/DriveRegisterVariants.json':
@@ -9880,20 +9880,15 @@ paths:
                 k_business:
                   type: string
                   description: 'The business key.'
+                k_visit:
+                  type: string
+                  description: 'The visit key.'
                 s_secret:
                   type: string
                   description: 'The secret for authenticating the attendance kiosk.'
       responses:
         200:
-          description: 'Successful response'
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  k_visit:
-                    type: string
-                    description: 'The visit key.'
+          description: 'Successful response. Full description is not available yet.'
       tags:
         - Roster-AttendanceListNotAttend
   '/Wl/Reception/Roster/AttendanceListAttend.json':

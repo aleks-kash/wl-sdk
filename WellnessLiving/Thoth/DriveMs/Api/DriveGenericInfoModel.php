@@ -10,7 +10,7 @@ use WellnessLiving\WlModelAbstract;
 class DriveGenericInfoModel extends WlModelAbstract
 {
   /**
-   * Information about files.
+   * Information about files. Every element of array is string in base64.
    *
    * @post result
    * @var string[]

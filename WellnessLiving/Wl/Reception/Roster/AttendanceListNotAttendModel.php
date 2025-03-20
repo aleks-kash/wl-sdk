@@ -12,7 +12,7 @@ class AttendanceListNotAttendModel extends WlModelAbstract
   /**
    * The business key.
    *
-   * @post get
+   * @post post
    * @var string
    */
   public $k_business = '';
@@ -20,15 +20,15 @@ class AttendanceListNotAttendModel extends WlModelAbstract
   /**
    * The visit key.
    *
-   * @post result
+   * @post post
    * @var string
    */
-  public $k_visit;
+  public $k_visit = '';
 
   /**
    * The secret for authenticating the attendance kiosk.
    *
-   * @post get
+   * @post post
    * @var string
    */
   public $s_secret = '';
