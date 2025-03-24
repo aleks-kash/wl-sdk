@@ -196,7 +196,7 @@ class ReceptionDesignModel extends WlModelAbstract
   /**
    * Name of the business to display on the client self check-in page.
    *
-   * @get get
+   * @get result
    * @var string
    */
   public $text_business_name = '';

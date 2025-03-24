@@ -48,7 +48,6 @@ class AttachElementModel extends WlModelAbstract
    * @delete get
    * @get get
    * @post get,result
-   * @put get
    * @var string
    */
   public $k_attach = '';
@@ -59,7 +58,6 @@ class AttachElementModel extends WlModelAbstract
    * @delete get
    * @get get
    * @post get
-   * @put get
    * @var string
    */
   public $k_business = '';
@@ -75,22 +73,24 @@ class AttachElementModel extends WlModelAbstract
   /**
    * Attachment description.
    *
+   * `null` for not update description.
+   *
    * @get result
    * @post post
-   * @put post
-   * @var string
+   * @var string|null
    */
-  public $text_description = '';
+  public $text_description = null;
 
   /**
    * Attachment file name.
    *
+   * `null` for not update file name.
+   *
    * @get result
    * @post post
-   * @put post
-   * @var string
+   * @var string|null
    */
-  public $text_filename = '';
+  public $text_filename = null;
 
   /**
    * Attachment file size.
@@ -114,7 +114,6 @@ class AttachElementModel extends WlModelAbstract
    * @delete get
    * @get get
    * @post get
-   * @put get
    * @var string
    */
   public $uid = '';
