@@ -26,7 +26,7 @@ class BusinessModel extends WlModelAbstract
    *  </dl>
    *
    * @post post
-   * @var bool
+   * @var array
    */
   public $a_staff_member = [];
 
@@ -66,14 +66,25 @@ class BusinessModel extends WlModelAbstract
 
   /**
    * The city key of the business.
+   * Optional.
    *
    * @post post
    * @var string
    */
-  public $k_office_city;
+  public $k_office_city = '0';
+
+  /**
+   * The email address of the location.
+   * Optional.
+   *
+   * @post post
+   * @var string
+   */
+  public $text_mail = '';
 
   /**
    * The address of the business. Optional.
+   * Optional.
    *
    * @post post
    * @var string
@@ -82,6 +93,7 @@ class BusinessModel extends WlModelAbstract
 
   /**
    * The postal code of the business. Optional.
+   * Optional.
    *
    * @post post
    * @var string
@@ -89,7 +101,7 @@ class BusinessModel extends WlModelAbstract
   public $text_office_postal = '';
 
   /**
-   * The phone number of the business.
+   * The phone number of the business, staff and location.
    *
    * @post post
    * @var string
@@ -103,6 +115,15 @@ class BusinessModel extends WlModelAbstract
    * @var string
    */
   public $text_title;
+
+  /**
+   * The URL of the business website.
+   * Optional.
+   *
+   * @post post
+   * @var string
+   */
+  public $url_site = '';
 }
 
 ?>

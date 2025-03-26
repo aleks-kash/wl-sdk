@@ -7,7 +7,7 @@ namespace WellnessLiving\Wl\Report;
  *
  * Do not add new reports here. Use New Report Generation instead.
  *
- * Last used ID: 267. -- See comments above.
+ * Last used ID: 268. -- See comments above.
  */
 abstract class WlReportSid
 {
@@ -1170,6 +1170,11 @@ abstract class WlReportSid
    * List of visits in attended state.
    */
   const VISIT_ATTEND_LIST = 64;
+
+  /**
+   * List of visits in attended state.
+   */
+  const VISIT_ATTEND_LIST_LEGACY = 268;
 
   /**
    * Visit book count.
