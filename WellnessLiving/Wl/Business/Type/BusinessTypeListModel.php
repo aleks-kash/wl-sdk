@@ -43,6 +43,10 @@ class BusinessTypeListModel extends WlModelAbstract
    *  <dd>The key of business type.</dd>
    *  <dt>string <var>text_category</var></dt>
    *  <dd>The title of the business category.</dd>
+   *  <dt>string <var>text_category_description</var></dt>
+   *  <dd>The description of the business category.</dd>
+   *  <dt>string <var>text_category_icon</var></dt>
+   *  <dd>The icon of the business category.</dd>
    *  <dt>string <var>text_file</var></dt>
    *  <dd>System name of the business type.</dd>
    *  <dt>string <var>text_title</var></dt>
