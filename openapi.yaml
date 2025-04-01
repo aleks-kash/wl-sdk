@@ -1,10 +1,10 @@
 openapi: 3.1.0
 info:
   title: 'WellnessLiving public API'
-  version: 1.1.20250327000737
+  version: 1.1.20250401135510
   description: |
     WellnessLiving API is a RESTful way to access and manage your business data.
-    Last updated at: 2025-03-27 00:07:37
+    Last updated at: 2025-04-01 13:55:10
 servers:
   - url: https://us.wellnessliving.com
     description: 'WellnessLiving server for businesses served from the United States data center'
@@ -1207,10 +1207,10 @@ paths:
                   description: 'The email address of the location. Optional.'
                 text_office_address:
                   type: string
-                  description: 'The address of the business. Optional. Optional.'
+                  description: 'The address of the business. Optional.'
                 text_office_postal:
                   type: string
-                  description: 'The postal code of the business. Optional. Optional.'
+                  description: 'The postal code of the business. Optional.'
                 text_phone:
                   type: string
                   description: 'The phone number of the business, staff and location.'
@@ -4151,7 +4151,7 @@ paths:
                     properties:
                       a_region:
                         type: array
-                        description: 'A list of regions grouped by their country. <dl> <dt> string[] <var>a_region</var> </dt> <dd> A list of regions in the country. Every element has the next keys: <dl> <dt> string <var>k_geo</var> </dt> <dd> The region key. </dd> <dt> string <var>s_title</var> </dt> <dd> The name of the region. </dd> </dl> </dd> <dt> string <var>k_geo_country</var> </dt> <dd> The country key. </dd> <dt> string <var>s_title</var> </dt> <dd> The name of the country. </dd> </dl>'
+                        description: 'A list of regions grouped by their country. <dl> <dt>string[] <var>a_region</var></dt> <dd> A list of regions in the country. Every element has the next keys: <dl> <dt>string <var>k_geo</var></dt> <dd>The region key.</dd> <dt>string <var>s_title</var></dt> <dd>The name of the region.</dd> </dl> </dd> <dt>int <var>id_locale</var></dt> <dd>The locale ID of the country. One of the {@link LocaleSid} constants.</dd> <dt>string <var>k_geo_country</var></dt> <dd>The country key.</dd> <dt>string <var>s_abbr</var></dt> <dd>The country abbreviation.</dd> <dt>string <var>s_title</var></dt> <dd>The name of the country.</dd> </dl>'
       tags:
         - Region-Region
   '/Core/Drive/ImageUpload/ImageUpload.json':
@@ -5882,7 +5882,7 @@ paths:
                     properties:
                       a_visit:
                         type: array
-                        description: 'Elements of user''s schedule. Every element has next keys: <dl> <dt>string <var>k_business</var></dt> <dd> Key of the business in which this visit was made. Primary key in {@link \RsBusinessSql} table. </dd> <dt> string <var>k_visit</var> </dt> <dd> Key of a book/visit. Primary key in {@link \RsVisitSql} table. </dd> </dl>'
+                        description: 'Elements of user''s schedule. Every element has next keys: <dl> <dt>string <var>dtu_date</var></dt> <dd> Date and time of the visit in UTC. </dd> <dt>string <var>k_business</var></dt> <dd> Key of the business in which this visit was made. Primary key in {@link \RsBusinessSql} table. </dd> <dt> string <var>k_visit</var> </dt> <dd> Key of a book/visit. Primary key in {@link \RsVisitSql} table. </dd> </dl>'
       tags:
         - Page-PageList
   '/Wl/Schedule/ClassView/ClassView.json':
@@ -8792,6 +8792,33 @@ paths:
                     description: 'Successful response. Full description is not available yet.'
       tags:
         - AuthorizePartner-AuthorizePartner
+  '/Wl/Business/Create/BusinessTrialHistory.json':
+    post:
+      summary: 'Checks if the email or phone number has already been used for a trial account.'
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                text_mail:
+                  type: string
+                  description: 'The email address of the location.'
+                text_phone:
+                  type: string
+                  description: 'The phone number of the business, staff and location.'
+      responses:
+        200:
+          description: 'Response always comes with status 200. Inspect the rest of the response body to determine the result.'
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - type: object
+                    description: 'Successful response. Full description is not available yet.'
+      tags:
+        - Create-BusinessTrialHistory
   '/Wl/Coupon/CouponList/List.json':
     get:
       summary: 'Gets list of coupons.'
@@ -16937,6 +16964,11 @@ paths:
     get:
       summary: 'Checks if user can book specified session.'
       parameters:
+        - name: a_check
+          in: query
+          description: 'List of check that must be ignored. Each element must be a member of {@link ProcessCheckSid}.'
+          schema:
+            type: array
         - name: dtu_date
           in: query
           description: 'The date/time of the session to check for booking availability.'
@@ -19957,6 +19989,9 @@ tags:
   -
     name: CouponList-List
     description: 'Retrieves a list of gift cards.'
+  -
+    name: Create-BusinessTrialHistory
+    description: 'Handles requests to the trial history API.'
   -
     name: Credential-Credential
     description: 'Manages credentials for the application.'

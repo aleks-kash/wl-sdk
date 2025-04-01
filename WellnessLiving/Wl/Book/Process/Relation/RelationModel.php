@@ -3,6 +3,7 @@
 namespace WellnessLiving\Wl\Book\Process\Relation;
 
 use WellnessLiving\WlModelAbstract;
+use WellnessLiving\Wl\Book\Process\ProcessCheckSid;
 use WellnessLiving\Wl\Family\Relation\WlFamilyRelationSid;
 
 /**
@@ -10,6 +11,18 @@ use WellnessLiving\Wl\Family\Relation\WlFamilyRelationSid;
  */
 class RelationModel extends WlModelAbstract
 {
+  /**
+   * List of check that must be ignored.
+   * Each element must be a member of {@link ProcessCheckSid}.
+   *
+   * @get get
+   * @var int[]
+   */
+  public $a_check = [
+    1,
+    2,
+  ];
+
   /**
    * The date/time of the session to check for booking availability.
    *

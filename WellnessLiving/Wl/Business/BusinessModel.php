@@ -34,10 +34,11 @@ class BusinessModel extends WlModelAbstract
    * The business locale.
    *
    * @post post
+   * @put post
    * @var int
    * @see LocaleSid
    */
-  public $id_locale;
+  public $id_locale = 0;
 
   /**
    * `true` if location should be also created for the business.
@@ -54,7 +55,7 @@ class BusinessModel extends WlModelAbstract
    * @post result
    * @var string
    */
-  public $k_business;
+  public $k_business = '';
 
   /**
    * The key of the business type.
@@ -62,7 +63,7 @@ class BusinessModel extends WlModelAbstract
    * @post post
    * @var string
    */
-  public $k_business_type;
+  public $k_business_type = '';
 
   /**
    * The city key of the business.
@@ -78,12 +79,13 @@ class BusinessModel extends WlModelAbstract
    * Optional.
    *
    * @post post
+   * @put post
    * @var string
    */
   public $text_mail = '';
 
   /**
-   * The address of the business. Optional.
+   * The address of the business.
    * Optional.
    *
    * @post post
@@ -92,7 +94,7 @@ class BusinessModel extends WlModelAbstract
   public $text_office_address = '';
 
   /**
-   * The postal code of the business. Optional.
+   * The postal code of the business.
    * Optional.
    *
    * @post post
@@ -104,9 +106,10 @@ class BusinessModel extends WlModelAbstract
    * The phone number of the business, staff and location.
    *
    * @post post
+   * @put post
    * @var string
    */
-  public $text_phone;
+  public $text_phone = '';
 
   /**
    * The title of the business.
@@ -114,7 +117,7 @@ class BusinessModel extends WlModelAbstract
    * @post post
    * @var string
    */
-  public $text_title;
+  public $text_title = '';
 
   /**
    * The URL of the business website.

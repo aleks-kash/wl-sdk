@@ -14,6 +14,10 @@ class PageListModel extends WlModelAbstract
   /**
    * Elements of user's schedule. Every element has next keys:
    * <dl>
+   *   <dt>string <var>dtu_date</var></dt>
+   *   <dd>
+   *     Date and time of the visit in UTC.
+   *   </dd>
    *   <dt>string <var>k_business</var></dt>
    *   <dd>
    *     Key of the business in which this visit was made.
