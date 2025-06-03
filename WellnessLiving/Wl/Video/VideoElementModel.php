@@ -20,11 +20,13 @@ class VideoElementModel extends WlModelAbstract
   public $a_location;
 
   /**
+   * TODO wl-71918: remove this property when external developers confirm that they do not use it.
    * The keys of the staff members who are on the video.
    *
    * @get result
    * @post post
    * @var string[]
+   * @deprecated This property will be removed in the future.
    */
   public $a_staff;
 
@@ -34,12 +36,15 @@ class VideoElementModel extends WlModelAbstract
    *   <dd>The staff member key.</dd>
    *   <dt>string <var>text_name</var></dt>
    *   <dd>The staff member's full name.</dd>
+   *   <dt>string <var>uid_staff</var></dt>
+   *   <dd>The staff user ID.</dd>
    * </dl>
    *
    * @get result
+   * @post post
    * @var array
    */
-  public $a_staff_info;
+  public $a_staff_info = [];
 
   /**
    * The video category keys where this video can be found.
@@ -223,12 +228,25 @@ class VideoElementModel extends WlModelAbstract
   /**
    * The video key.
    *
+   * *Be careful, when use this property in code, use {@link VideoElementModel::$k_video_binary} instead.*
+   * In this property can be key in next format:
+   * * [Deprecated] String key in old format.
+   * * String key in new format.
+   *
    * @delete get
    * @get get
    * @post get,result
    * @var string
    */
   public $k_video;
+
+  /**
+   * The binary string video key.
+   *
+   * @get result
+   * @var string
+   */
+  public $k_video_binary;
 
   /**
    * The video category primary key.

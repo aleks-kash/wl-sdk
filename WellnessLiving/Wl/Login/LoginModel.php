@@ -100,6 +100,14 @@ class LoginModel extends WlModelAbstract
   public $can_postcard;
 
   /**
+   * Whether this user can send SMS. If `true` - user can send SMS, otherwise - `false`.
+   *
+   * @get result
+   * @var bool
+   */
+  public $can_send_message = false;
+
+  /**
    * The height of the requested photo.
    *
    * @get get

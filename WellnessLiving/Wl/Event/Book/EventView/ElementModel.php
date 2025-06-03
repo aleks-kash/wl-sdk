@@ -35,11 +35,12 @@ class ElementModel extends WlModelAbstract
   /**
    * Retrieves information about an event item.
    *
-   * Received only if {@link ElementModel::$k_event} has been specified. In this case other fields aren't receivers.
+   * Received only if {@link ElementModel::$k_event} has been specified.
+   * In this case, other fields aren't receivers.
    *
    * <dl>
    *   <dt>string <var>dt_date</var></dt>
-   *   <dd>Date/time when session starts. In UTC.</dd>
+   *   <dd>Date/time when the session starts. In UTC.</dd>
    *   <dt>string <var>k_class_period</var></dt>
    *   <dd>Class session primary keys.</dd>
    * </dl>
@@ -66,13 +67,13 @@ class ElementModel extends WlModelAbstract
    * The logo of event.
    * <dl>
    *   <dt>int [<var>i_height</var>]</dt>
-   *   <dd>Is returned only if staff has photo. Image height.</dd>
+   *   <dd>Is returned only if staff has a photo. Image height.</dd>
    *   <dt>int [<var>i_width</var>]</dt>
-   *   <dd>Is returned only if staff has photo. Image width.</dd>
+   *   <dd>Is returned only if staff has a photo. Image width.</dd>
    *   <dt>int [<var>id_gender</var>] </dt>
-   *   <dd>Is returned only if staff does not have photo. ID of staff gender. One of {@link AGenderSid} constants.</dd>
+   *   <dd>Is returned only if staff does not have a photo. ID of staff gender. One of {@link AGenderSid} constants.</dd>
    *   <dt>string [<var>url_logo</var>]</dt>
-   *   <dd>Is returned only if staff has photo. URL to image.</dd>
+   *   <dd>Is returned only if staff has a photo. URL to image.</dd>
    * </dl>
    *
    * @get result
@@ -89,12 +90,12 @@ class ElementModel extends WlModelAbstract
   public $a_class_tab;
 
   /**
-   * Displays information for a bulk of events.
+   * Displays information for a large number of events.
    *
    * Received only if {@link ElementModel::$s_event} has been specified. In this case, other fields aren't receivers.
    *
    * The event keys of this array.
-   * Values of this array and sub arrays with keys that correspond to all fields in this table that may be received.
+   * Values of this array and subarrays with keys that correspond to all fields in this table that may be received.
    *
    * @get result
    * @var array
@@ -324,6 +325,14 @@ class ElementModel extends WlModelAbstract
   public $dt_start;
 
   /**
+   * Datetime of the session.
+   *
+   * @get get
+   * @var string|null
+   */
+  public $dtu_session = null;
+
+  /**
    * Whether event will be hidden in the White Label mobile application.
    * <tt>true</tt> means that event will not be displayed, <tt>false</tt> otherwise.
    *
@@ -350,7 +359,7 @@ class ElementModel extends WlModelAbstract
 
   /**
    * Image height in pixels. Please specify this value if you need image to be returned in specific size.
-   * In case this value is not specified returned image will have default thumbnail size.
+   * In case this value is not specified, the returned image will have the default thumbnail size.
    *
    * @get get
    * @var int
@@ -359,7 +368,7 @@ class ElementModel extends WlModelAbstract
 
   /**
    * Image width in pixels. Please specify this value if you need image to be returned in specific size.
-   * In case this value is not specified returned image will have default thumbnail size.
+   * In case this value is not specified, the returned image will have the default thumbnail size.
    *
    * @get get
    * @var int
@@ -384,7 +393,7 @@ class ElementModel extends WlModelAbstract
 
   /**
    * Staff image height in pixels. Please specify this value if you need image to be returned in specific size.
-   * In case this value is not specified returned image will have default thumbnail size.
+   * In case this value is not specified, the returned image will have the default thumbnail size.
    *
    * @get get
    * @var int
@@ -393,7 +402,7 @@ class ElementModel extends WlModelAbstract
 
   /**
    * Staff image width in pixels. Please specify this value if you need image to be returned in specific size.
-   * In case this value is not specified returned image will have default thumbnail size.
+   * In case this value is not specified, the returned image will have the default thumbnail size.
    *
    * @get get
    * @var int
@@ -420,7 +429,7 @@ class ElementModel extends WlModelAbstract
   public $is_age_restrict = false;
 
   /**
-   * `true` if the event availability was checked; `false` if the event has too many sessions and calculating
+   * `true` if the event availability was checked; `false` if the event has too many sessions, and calculating
    *  the availability of each one takes a lot of time.
    *
    * @get result
@@ -454,6 +463,15 @@ class ElementModel extends WlModelAbstract
   public $is_full;
 
   /**
+   * `true` if the selected session has already started and do not available to book.
+   * `false` otherwise.
+   *
+   * @get result
+   * @var bool
+   */
+  public $is_past = false;
+
+  /**
    * `true` if the event can be paid with a Purchase Option only.
    * `false` if full event purchases or single session purchases are permitted.
    *
@@ -464,7 +482,7 @@ class ElementModel extends WlModelAbstract
 
   /**
    * `true` if clients, when they book event, which has been started, can pay only for the sessions in the future.
-   * `false` if clients, when they book event, has to pay for the entire event and number of left in the future sessions
+   * `false` if clients, when they book event, have to pay for the entire event and the number of lefts in the future sessions
    * does not matter.
    *
    * @get result
@@ -490,7 +508,7 @@ class ElementModel extends WlModelAbstract
   public $is_single_session_buy;
 
   /**
-   * <tt>true</tt> -if event is virtual; <tt>false</tt> - otherwise.
+   * <tt>true</tt> if event is virtual; <tt>false</tt> - otherwise.
    *
    * @get result
    * @var bool
@@ -514,8 +532,16 @@ class ElementModel extends WlModelAbstract
   public $k_business = null;
 
   /**
+   * Key of a class period to show information for.
+   *
+   * @get get
+   * @var string|null
+   */
+  public $k_class_period = null;
+
+  /**
    * The event key.
-   * You can specify {@link ElementModel::$s_event} instead to get information for a bulk of events.
+   * You can specify {@link ElementModel::$s_event} instead to get information for a large number of events.
    *
    * @get get
    * @var string
@@ -539,7 +565,7 @@ class ElementModel extends WlModelAbstract
   public $m_price_total;
 
   /**
-   * Price of the full event, should be used as full price while {@link ElementModel::$dt_early} is actual.
+   * Price of the full event should be used as full price while {@link ElementModel::$dt_early} is actual.
    *
    * @get result
    * @var string|null
@@ -557,7 +583,7 @@ class ElementModel extends WlModelAbstract
 
   /**
    * A list of event keys serialized with JSON.
-   * Specify instead of {@link ElementModel::$k_event} to get information for a bulk of events.
+   * Specify instead of {@link ElementModel::$k_event} to get information for a large number of events.
    *
    * @get get
    * @var string

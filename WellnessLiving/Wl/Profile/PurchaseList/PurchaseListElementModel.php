@@ -141,6 +141,14 @@ class PurchaseListElementModel extends WlModelAbstract
   public $can_renew;
 
   /**
+   * The cancellation date of the promotion. Only available if the item is a promotion and has been cancelled.
+   *
+   * @get result
+   * @var string
+   */
+  public $dl_cancel = '';
+
+  /**
    * The expiration date of the promotion. Only available if the item is a promotion.
    *
    * @get result
@@ -255,6 +263,14 @@ class PurchaseListElementModel extends WlModelAbstract
    * @var int
    */
   public $i_buy;
+
+  /**
+   * The number of days notice before the client is able to set cancel date.
+   *
+   * @get result
+   * @var int
+   */
+  public $i_client_cancel_notice_days;
 
   /**
    * The percentage value of the discount given by a reward prize. This will be `0` if a discount wasn't applied.
@@ -424,6 +440,22 @@ class PurchaseListElementModel extends WlModelAbstract
    * @var bool
    */
   public $is_asset;
+
+  /**
+   * If `true`, then a promotion is pending cancellation. Otherwise, this will be `false`.
+   *
+   * @get result
+   * @var bool
+   */
+  public $is_cancel_pending = false;
+
+  /**
+   * If `true`, then a promotion can be canceled by a client. Otherwise, this will be `false`.
+   *
+   * @get result
+   * @var bool
+   */
+  public $is_client_cancel_allow;
 
   /**
    * If `true`, then the purchased item is a component of another purchase item, as is the case of a package.
@@ -695,6 +727,16 @@ class PurchaseListElementModel extends WlModelAbstract
    * @var string
    */
   public $m_refund;
+
+  /**
+   * Cancellation fee amount.
+   *
+   * `null` if no need charge fee.
+   *
+   * @get result
+   * @var string|null
+   */
+  public $m_terminate_fee = null;
 
   /**
    * The redemption code. This value is used only if the purchase is bought via a redemption code.

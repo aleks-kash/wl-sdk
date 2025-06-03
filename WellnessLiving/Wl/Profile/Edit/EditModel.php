@@ -221,6 +221,20 @@ class EditModel extends WlModelAbstract
   public $k_business = '';
 
   /**
+   * Key of the lead source.
+   *
+   * `null` if not defined.
+   *
+   * When creating or editing a user:
+   *
+   * @get result
+   * @post get
+   * @put get
+   * @var string|null
+   */
+  public $k_lead_source = null;
+
+  /**
    * Exception class name.
    * `null` if there was no mistake.
    *

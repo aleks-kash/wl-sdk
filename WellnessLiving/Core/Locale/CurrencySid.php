@@ -9,7 +9,7 @@ namespace WellnessLiving\Core\Locale;
  *
  * @link https://docs.1010data.com/1010dataReferenceManual/DataTypesAndFormats/currencyUnitCodes.html
  *
- * Last used ID: 16
+ * Last used ID: 17
  */
 abstract class CurrencySid
 {
@@ -84,6 +84,13 @@ abstract class CurrencySid
    * US dollars.
    */
   const USD = 1;
+
+  /**
+   * West African CFA franc.
+   *
+   * Is used in Senegal.
+   */
+  const XOF = 17;
 
   /**
    * South African rand.

@@ -7,7 +7,7 @@ namespace WellnessLiving\Thoth\PayProcessor\Nuvei\Code;
  *
  * Last used ID: 16
  *
- * @link Thoth/PayProcessor/Nuvei/doc/OMNI_Channel_ISO20022_V2.38.pdf 7.3.12.
+ * @link Thoth/PayProcessor/Nuvei/doc/OMNI_Channel_ISO20022_V2.40.pdf 7.3.12.
  */
 class CSResponseReasonSid
 {

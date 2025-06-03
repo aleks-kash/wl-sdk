@@ -17,7 +17,9 @@ class UserInfoModel extends WlModelAbstract
    *    <dt>string <var>text_title</var></dt>
    *    <dd>Name of the field. Will be <tt>null</tt> for general fields. Their titles are static.</dd>
    *    <dt>string <var>text_value</var></dt>
-   *    <dd>Value of the field.</dd>
+   *    <dd>Value of the field. This is the key of the selected item for `select` and `radio` elements.</dd>
+   *    <dt>string <var>text_value_title</var></dt>
+   *    <dd>Title of the selected option for `select` and `radio` elements. Unused for other elements.</dd>
    * </dl>
    *
    * @get result

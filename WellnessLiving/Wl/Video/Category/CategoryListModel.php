@@ -12,6 +12,10 @@ class CategoryListModel extends WlModelAbstract
   /**
    * A list of shared video category keys displayed in the order to be saved.
    *
+   * Values can be:
+   * * <b>[Deprecated]</b> String keys in old format.
+   * * String keys in new format.
+   *
    * @put post
    * @var string[]
    */

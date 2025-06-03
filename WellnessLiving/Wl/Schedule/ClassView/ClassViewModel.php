@@ -69,7 +69,7 @@ class ClassViewModel extends WlModelAbstract
    *     int <var>id_deny_reason</var>
    *   </dt>
    *   <dd>
-   *     ID of deny reason. One of {@link DenyReasonSid} constants.
+   *     ID of denying reason. One of {@link DenyReasonSid} constants.
    *   </dd>
    *   <dt>bool <var>is_book</var></dt>
    *   <dd>This will be `true` if the current class was booked by the current client.</dd>

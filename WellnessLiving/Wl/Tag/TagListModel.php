@@ -13,16 +13,19 @@ class TagListModel extends WlModelAbstract
    * The tag list.
    *
    * Each element has the next structure:<dl>
-   * <dt>string <var>k_tag</var> </dt>
-   * <dd>The tag key.</dd>
-   * <dt>string <var>text_title</var></dt>
-   * <dd>The tag title.</dd>
+   *   <dt>int <var>i_sort</var></dt>
+   *   <dd>The sort order of the tag.</dd>
+   *   <dt>string <var>k_tag</var> </dt>
+   *   <dd>The tag key.</dd>
+   *   <dt>string <var>text_title</var></dt>
+   *   <dd>The tag title.</dd>
    * </dl>
    *
    * @get result
+   * @post post,result
    * @var array[]
    */
-  public $a_list;
+  public $a_list = [];
 
   /**
    * Whether a business did set up a penalty fee for failed automatic payments.
@@ -44,9 +47,10 @@ class TagListModel extends WlModelAbstract
    * The business key of the tags.
    *
    * @get get
+   * @post get
    * @var string
    */
-  public $k_business;
+  public $k_business = '';
 }
 
 ?>

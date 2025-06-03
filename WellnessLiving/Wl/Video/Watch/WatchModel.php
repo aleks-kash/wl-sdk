@@ -45,7 +45,9 @@ class WatchModel extends WlModelAbstract
   public $k_business;
 
   /**
-   * The video string key.
+   * The video string key:
+   * * [Deprecated] String key in old format.
+   * * String key in new format.
    *
    * @post post
    * @var string

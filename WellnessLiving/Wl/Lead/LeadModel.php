@@ -134,6 +134,16 @@ class LeadModel extends WlModelAbstract
   public $k_business = '0';
 
   /**
+   * Key of the lead source.
+   *
+   * Must be `null` if <var>text_lead_source</var> is set.
+   *
+   * @post post,result
+   * @var string|null
+   */
+  public $k_lead_source = null;
+
+  /**
    * The key of the widget skin. If left empty, then the default skin is used.
    * This will be the Lead Capture widget skin with "Use this widget for the Add Lead form" selected.
    * If your business doesn't have a skin selected, this endpoint will default to the system-wide default,
@@ -156,12 +166,25 @@ class LeadModel extends WlModelAbstract
   public $s_captcha = '';
 
   /**
+   * Lead source title.
+   *
+   * A new lead source will be created if it does not exist.
+   * Must be `null` if <var>k_lead_source</var> is set.
+   *
+   * @post post
+   * @var string|null
+   */
+  public $text_lead_source = null;
+
+  /**
    * The key of the new user.
+   *
+   * Typing is not added because the variable is an integer. Specifying typing may break third party integration.
    *
    * @post result
    * @var string
    */
-  public $uid;
+  public $uid = null;
 
   /**
    * The URL to load the image with a captcha test.

@@ -12,16 +12,13 @@ use WellnessLiving\Wl\Family\Relation\WlFamilyRelationSid;
 class RelationModel extends WlModelAbstract
 {
   /**
-   * List of check that must be ignored.
+   * List of check that must be skipped.
    * Each element must be a member of {@link ProcessCheckSid}.
    *
    * @get get
    * @var int[]
    */
-  public $a_check = [
-    1,
-    2,
-  ];
+  public $a_check_ignore = [];
 
   /**
    * The date/time of the session to check for booking availability.

@@ -58,6 +58,14 @@ class DataModel extends WlModelAbstract
   public $id_category;
 
   /**
+   * Business status for managing claim request behavior.
+   *
+   * @get result
+   * @var int
+   */
+  public $id_claim_status;
+
+  /**
    * The currency ID of the given business (or the system currency ID if the business didn't pass).
    *
    * @get result
@@ -210,7 +218,7 @@ class DataModel extends WlModelAbstract
   public $k_business_token;
 
   /**
-   * Key of business type.
+   * Key of the business type.
    *
    * @get result
    * @var string
@@ -283,6 +291,14 @@ class DataModel extends WlModelAbstract
    * @var string
    */
   public $url_google;
+
+  /**
+   * URL of the home tour page related to the business type.
+   *
+   * @get result
+   * @var string
+   */
+  public $url_home_tour = '';
 
   /**
    * The Instagram page.

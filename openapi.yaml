@@ -1,10 +1,10 @@
 openapi: 3.1.0
 info:
   title: 'WellnessLiving public API'
-  version: 1.1.20250401135510
+  version: 1.1.20250603080204
   description: |
     WellnessLiving API is a RESTful way to access and manage your business data.
-    Last updated at: 2025-04-01 13:55:10
+    Last updated at: 2025-06-03 08:02:04
 servers:
   - url: https://us.wellnessliving.com
     description: 'WellnessLiving server for businesses served from the United States data center'
@@ -1021,6 +1021,9 @@ paths:
                       a_data:
                         type: array
                         description: 'The report contents. Contents of this array can vary based on the report that''s loaded.'
+                      a_total:
+                        type: array
+                        description: 'The report total. Contents of this array can vary based on the report that''s loaded.'
       tags:
         - Report-Data
   '/Wl/Report/PageData.json':
@@ -1196,6 +1199,9 @@ paths:
                 is_location_create:
                   type: boolean
                   description: '`true` if location should be also created for the business. `false` if otherwise.'
+                is_mail_send:
+                  type: boolean
+                  description: '`true` to send {@link \RsMailSid::BUSINESS_CREATE} mail when creating a staff member. Otherwise send {@link \RsMailSid::LOGIN_WELCOME} mail.'
                 k_business_type:
                   type: string
                   description: 'The key of the business type.'
@@ -1232,7 +1238,67 @@ paths:
                     properties:
                       k_business:
                         type: string
-                        description: 'The key of the created business.'
+                        description: 'The key of the business. When using {@link BusinessApi::post()} returned key of the created business. When using {@link BusinessApi::put()} used for update business.'
+                      k_location:
+                        type: [string, "null"]
+                        description: 'The key of the location for update or after creating. `null` if location is not created.'
+                      uid:
+                        type: [string, "null"]
+                        description: 'The UID of the created staff member or `null` if no staff member should be created.'
+                      url_password_change:
+                        type: [string, "null"]
+                        description: 'Url for password change page. Filled only when creating staff member, otherwise `null`.'
+      tags:
+        - Business-Business
+    put:
+      summary: 'Claims business.'
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                a_staff_member:
+                  type: array
+                  description: 'Empty array means to not create a staff member. Otherwise, information about staff member to be created in the business. <dl> <dt>bool <var>is_enter</var></dt> <dd>Should created staff member be automatically signed in or not.</dd> <dt>string <var>text_mail</var></dt> <dd>Email address to be used to sign in.</dd> <dt>string <var>text_name_first</var></dt> <dd>The first name of the staff member.</dd> <dt>string <var>text_name_last</var></dt> <dd>The last name of the staff member.</dd> </dl>'
+                is_mail_send:
+                  type: boolean
+                  description: '`true` to send {@link \RsMailSid::BUSINESS_CREATE} mail when creating a staff member. Otherwise send {@link \RsMailSid::LOGIN_WELCOME} mail.'
+                k_business:
+                  type: string
+                  description: 'The key of the business. When using {@link BusinessApi::post()} returned key of the created business. When using {@link BusinessApi::put()} used for update business.'
+                k_location:
+                  type: [string, "null"]
+                  description: 'The key of the location for update or after creating. `null` if location is not created.'
+                text_mail:
+                  type: string
+                  description: 'The email address of the location. Optional.'
+                text_phone:
+                  type: string
+                  description: 'The phone number of the business, staff and location.'
+      responses:
+        200:
+          description: 'Response always comes with status 200. Inspect the rest of the response body to determine the result.'
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - type: object
+                    description: 'Successful response.'
+                    properties:
+                      k_business:
+                        type: string
+                        description: 'The key of the business. When using {@link BusinessApi::post()} returned key of the created business. When using {@link BusinessApi::put()} used for update business.'
+                      k_location:
+                        type: [string, "null"]
+                        description: 'The key of the location for update or after creating. `null` if location is not created.'
+                      uid:
+                        type: [string, "null"]
+                        description: 'The UID of the created staff member or `null` if no staff member should be created.'
+                      url_password_change:
+                        type: [string, "null"]
+                        description: 'Url for password change page. Filled only when creating staff member, otherwise `null`.'
       tags:
         - Business-Business
   '/Wl/Business/Data.json':
@@ -1281,6 +1347,10 @@ paths:
                         type: number
                         format: int32
                         description: 'The business category ID of the business.'
+                      id_claim_status:
+                        type: number
+                        format: int32
+                        description: 'Business status for managing claim request behavior. Constant from {@link BusinessClaimStatusSid}.'
                       id_currency:
                         type: number
                         format: int32
@@ -1334,7 +1404,7 @@ paths:
                         description: 'The business key obtained by the security token {@link DataApi::$text_token}. This can be used on the client side if authorization token should be used instead of the business key (the business key isn''t available).'
                       k_business_type:
                         type: string
-                        description: 'Key of business type.'
+                        description: 'Key of the business type.'
                       k_currency:
                         type: string
                         description: 'The currency key of the given business, or the system currency if the business didn''t pass.'
@@ -1356,6 +1426,9 @@ paths:
                       url_google:
                         type: string
                         description: 'The Google+ page.'
+                      url_home_tour:
+                        type: string
+                        description: 'URL of the home tour page related to the business type.'
                       url_instagram:
                         type: string
                         description: 'The Instagram page.'
@@ -1418,6 +1491,9 @@ paths:
                       can_postcard:
                         type: boolean
                         description: 'Whether this user can send postcards.'
+                      can_send_message:
+                        type: boolean
+                        description: 'Whether this user can send SMS. If `true` - user can send SMS, otherwise - `false`.'
                       id_gender:
                         type: number
                         format: int32
@@ -2056,7 +2132,7 @@ paths:
             type: string
         - name: k_video
           in: query
-          description: 'The video key.'
+          description: 'The video key. *Be careful, when use this property in code, use {@link VideoElementApi::$k_video_binary} instead.* In this property can be key in next format: * [Deprecated] String key in old format. See {@link DbShardKey::keyString()}. * String key in new format. See {@link DbShardKey::keyBinary()} or {@link DbKey::generate()}.'
           schema:
             type: string
       responses:
@@ -2085,7 +2161,7 @@ paths:
             type: string
         - name: k_video
           in: query
-          description: 'The video key.'
+          description: 'The video key. *Be careful, when use this property in code, use {@link VideoElementApi::$k_video_binary} instead.* In this property can be key in next format: * [Deprecated] String key in old format. See {@link DbShardKey::keyString()}. * String key in new format. See {@link DbShardKey::keyBinary()} or {@link DbKey::generate()}.'
           schema:
             type: string
       responses:
@@ -2103,10 +2179,10 @@ paths:
                         description: 'The keys of the locations where this video is available.'
                       a_staff:
                         type: array
-                        description: 'The keys of the staff members who are on the video.'
+                        description: 'TODO wl-71918: remove this property when external developers confirm that they do not use it. The keys of the staff members who are on the video.'
                       a_staff_info:
                         type: array
-                        description: 'A list of staff members associated with the video. Every item has the following structure:<dl> <dt>string <var>k_staff</var></dt> <dd>The staff member key. Primary key in {@link \RsStaffSql} table.</dd> <dt>string <var>text_name</var></dt> <dd>The staff member''s full name.</dd> </dl>'
+                        description: 'A list of staff members associated with the video. Every item has the following structure:<dl> <dt>string <var>k_staff</var></dt> <dd>The staff member key. Primary key in {@link \RsStaffSql} table.</dd> <dt>string <var>text_name</var></dt> <dd>The staff member''s full name.</dd> <dt>string <var>uid_staff</var></dt> <dd>The staff user ID. Primary key in {@link \PassportLoginSql}.`uid`.</dd> </dl>'
                       a_video_category:
                         type: array
                         description: 'The video category keys where this video can be found.'
@@ -2158,6 +2234,9 @@ paths:
                       is_video_level:
                         type: boolean
                         description: 'If `true`, the video level for the video is enabled. If `false`, the video level for the video is disabled.'
+                      k_video_binary:
+                        type: string
+                        description: 'The binary string video key.'
                       k_video_category_primary:
                         type: string
                         description: 'The video category primary key.'
@@ -2219,7 +2298,7 @@ paths:
             type: string
         - name: k_video
           in: query
-          description: 'The video key.'
+          description: 'The video key. *Be careful, when use this property in code, use {@link VideoElementApi::$k_video_binary} instead.* In this property can be key in next format: * [Deprecated] String key in old format. See {@link DbShardKey::keyString()}. * String key in new format. See {@link DbShardKey::keyBinary()} or {@link DbKey::generate()}.'
           schema:
             type: string
       requestBody:
@@ -2234,7 +2313,10 @@ paths:
                   description: 'The keys of the locations where this video is available.'
                 a_staff:
                   type: array
-                  description: 'The keys of the staff members who are on the video.'
+                  description: 'TODO wl-71918: remove this property when external developers confirm that they do not use it. The keys of the staff members who are on the video.'
+                a_staff_info:
+                  type: array
+                  description: 'A list of staff members associated with the video. Every item has the following structure:<dl> <dt>string <var>k_staff</var></dt> <dd>The staff member key. Primary key in {@link \RsStaffSql} table.</dd> <dt>string <var>text_name</var></dt> <dd>The staff member''s full name.</dd> <dt>string <var>uid_staff</var></dt> <dd>The staff user ID. Primary key in {@link \PassportLoginSql}.`uid`.</dd> </dl>'
                 a_video_category:
                   type: array
                   description: 'The video category keys where this video can be found.'
@@ -2307,7 +2389,7 @@ paths:
                     properties:
                       k_video:
                         type: string
-                        description: 'The video key.'
+                        description: 'The video key. *Be careful, when use this property in code, use {@link VideoElementApi::$k_video_binary} instead.* In this property can be key in next format: * [Deprecated] String key in old format. See {@link DbShardKey::keyString()}. * String key in new format. See {@link DbShardKey::keyBinary()} or {@link DbKey::generate()}.'
       tags:
         - Video-VideoElement
   '/Wl/Video/VideoList.json':
@@ -2478,7 +2560,7 @@ paths:
                     properties:
                       a_location:
                         type: array
-                        description: 'Information about the business''s location(s). If you''ve specified multiple businesses for this endpoint, this will return location information for multiple businesses. Keys refer to location keys. Values refer to nested arrays with the next keys: <dl> <dt> int <var>a_directories</var> </dt> <dd> List of directories from {@link \RsProjectSid}, where location is published. </dd> <dt> array <var>a_timezone</var> </dt> <dd> Information about location timezone. Includes `k_timezone` for primary key, `text_abbr` for user-friendly short abbreviation and `text_name` for the name of the timezone. </dd> <dt> float <var>f_latitude</var> </dt> <dd> The location latitude. </dd> <dt> float <var>f_longitude</var> </dt> <dd> The location longitude. </dd> <dt> int <var>i_shift</var> </dt> <dd> Timezone shift in hours. </dd> <dt> string <var>k_business</var> </dt> <dd> The business key. </dd> <dt> string <var>k_country</var> </dt> <dd> Country key. Primary key in the {@link \AGeoSql} table. </dd> <dt> string <var>k_location</var> </dt> <dd> The location key. </dd> <dt> string <var>k_region</var> </dt> <dd> Region key. Primary key in {@link \AGeoSql} table. </dd> <dt> string <var>s_title</var> </dt> <dd> The location title. </dd> <dt> string <var>text_address</var> </dt> <dd> The location''s full address. </dd> <dt> string [<var>url_logo</var>] </dt> <dd> The location logo''s URL. This will only be set if the location has a logo and contains small thumbnail of the image. </dd> <dt> string [<var>url_logo_source</var>] </dt> <dd> The location logo''s URL. This will only be set if the location has a logo and contains full uploaded image. </dd> </dl>'
+                        description: 'Information about the business''s location(s). If you''ve specified multiple businesses for this endpoint, this will return location information for multiple businesses. Keys refer to location keys. Values refer to nested arrays with the next keys: <dl> <dt> int <var>a_directories</var> </dt> <dd> List of directories from {@link \RsProjectSid}, where location is published. </dd> <dt> array <var>a_timezone</var> </dt> <dd> Information about location timezone. Includes `k_timezone` for primary key, `text_abbr` for user-friendly short abbreviation and `text_name` for the name of the timezone. </dd> <dt> float <var>f_latitude</var> </dt> <dd> The location latitude. </dd> <dt> float <var>f_longitude</var> </dt> <dd> The location longitude. </dd> <dt> int <var>i_shift</var> </dt> <dd> Timezone shift in hours. </dd> <dt> string <var>k_business</var> </dt> <dd> The business key. </dd> <dt> string <var>k_country</var> </dt> <dd> Country key. Primary key in the {@link \AGeoSql} table. </dd> <dt> string <var>k_location</var> </dt> <dd> The location key. </dd> <dt> string <var>k_region</var> </dt> <dd> Region key. Primary key in {@link \AGeoSql} table. </dd> <dt> string <var>s_mail</var> </dt> <dd> The location email address. </dd> <dt> string <var>s_phone</var> </dt> <dd> The location phone number. </dd> <dt> string <var>s_title</var> </dt> <dd> The location title. </dd> <dt> string <var>text_address</var> </dt> <dd> The location''s full address. </dd> <dt> string [<var>url_logo</var>] </dt> <dd> The location logo''s URL. This will only be set if the location has a logo and contains small thumbnail of the image. </dd> <dt> string [<var>url_logo_source</var>] </dt> <dd> The location logo''s URL. This will only be set if the location has a logo and contains full uploaded image. </dd> </dl>'
       tags:
         - Location-List
   '/Wl/Location/Location.json':
@@ -2725,9 +2807,15 @@ paths:
                 a_field_data:
                   type: array
                   description: 'A list of fields containing the lead information. The keys are the field keys and values are field values. If field key is `Address` field key, value may be an array or string. Can be a string if only address field is used. Will be an array if city and postal code are used, with the following keys: <dl> <dt>string <var>text_address</var></dt> <dd>Address.</dd> <dt>string <var>k_city</var></dt> <dd>City key. Primary key in {@link \AGeoSql}.</dd> <dt>string <var>text_postal</var></dt> <dd>Postal code.</dd> </dl>'
+                k_lead_source:
+                  type: [string, "null"]
+                  description: 'Key of the lead source. Primary key in {@link LeadSourceSql} table. Must be `null` if <var>text_lead_source</var> is set. If both parameters are empty, the {@link LeadSourceSid::ENDPOINT} lead source will be used.'
                 s_captcha:
                   type: string
                   description: 'The characters entered by the lead for the captcha test. This isn''t necessary if the GET method returned an empty {@link LeadApi::$url_captcha}. This field isn''t necessary if the GET method returned an empty {@link LeadApi::$url_captcha}.'
+                text_lead_source:
+                  type: [string, "null"]
+                  description: 'Lead source title. A new lead source will be created if it does not exist. Must be `null` if <var>k_lead_source</var> is set. If both parameters are empty, the {@link LeadSourceSid::ENDPOINT} lead source will be used.'
       responses:
         200:
           description: 'Response always comes with status 200. Inspect the rest of the response body to determine the result.'
@@ -2738,9 +2826,12 @@ paths:
                   - type: object
                     description: 'Successful response.'
                     properties:
+                      k_lead_source:
+                        type: [string, "null"]
+                        description: 'Key of the lead source. Primary key in {@link LeadSourceSql} table. Must be `null` if <var>text_lead_source</var> is set. If both parameters are empty, the {@link LeadSourceSid::ENDPOINT} lead source will be used.'
                       uid:
                         type: string
-                        description: 'The key of the new user.'
+                        description: 'The key of the new user. Typing is not added because the variable is an integer. Specifying typing may break third party integration.'
       tags:
         - Lead-Lead
   '/Wl/Tag/TagList.json':
@@ -2764,13 +2855,46 @@ paths:
                     properties:
                       a_list:
                         type: array
-                        description: 'The tag list. Each element has the next structure:<dl> <dt>string <var>k_tag</var> </dt> <dd>The tag key. Primary key in the {@link \RsTagSql} table.</dd> <dt>string <var>text_title</var></dt> <dd>The tag title.</dd> </dl>'
+                        description: 'The tag list. Each element has the next structure:<dl> <dt>int <var>i_sort</var></dt> <dd>The sort order of the tag.</dd> <dt>string <var>k_tag</var> </dt> <dd>The tag key. Primary key in the {@link \RsTagSql} table.</dd> <dt>string <var>text_title</var></dt> <dd>The tag title.</dd> </dl>'
                       has_fee:
                         type: boolean
                         description: 'Whether a business did set up a penalty fee for failed automatic payments.'
                       has_surcharge:
                         type: boolean
                         description: 'Whether a business did set up surcharges.'
+      tags:
+        - Tag-TagList
+    post:
+      summary: 'Saves the list of tags. Can be used to create new tags or update existing ones.'
+      parameters:
+        - name: k_business
+          in: query
+          description: 'The business key of the tags.'
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                a_list:
+                  type: array
+                  description: 'The tag list. Each element has the next structure:<dl> <dt>int <var>i_sort</var></dt> <dd>The sort order of the tag.</dd> <dt>string <var>k_tag</var> </dt> <dd>The tag key. Primary key in the {@link \RsTagSql} table.</dd> <dt>string <var>text_title</var></dt> <dd>The tag title.</dd> </dl>'
+      responses:
+        200:
+          description: 'Response always comes with status 200. Inspect the rest of the response body to determine the result.'
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - type: object
+                    description: 'Successful response.'
+                    properties:
+                      a_list:
+                        type: array
+                        description: 'The tag list. Each element has the next structure:<dl> <dt>int <var>i_sort</var></dt> <dd>The sort order of the tag.</dd> <dt>string <var>k_tag</var> </dt> <dd>The tag key. Primary key in the {@link \RsTagSql} table.</dd> <dt>string <var>text_title</var></dt> <dd>The tag title.</dd> </dl>'
       tags:
         - Tag-TagList
   '/Wl/Tax/TaxList.json':
@@ -3218,7 +3342,7 @@ paths:
                     properties:
                       a_list:
                         type: object
-                        description: 'A list of microservices. One element contains:<dl> <dt>bool <var>is_remove</var></dt> <dd>Whether the microservice has been deleted. `true` is the microservice is removed, `false` otherwise.</dd> <dt>string <var>json_path</var></dt> <dd> A list of repositories and paths of this microservice. Copy of {@link \Studio\Microservice\MicroserviceSql}.<var>json_path</var> field. </dd> <dt>string <var>k_project</var></dt> <dd>Project key. Primary key in {@link \StudioProjectSql} table.</dd> <dt>string <var>s_file</var></dt> <dd>File name.</dd> <dt>string <var>s_variable</var></dt> <dd> Microservice-specific variables. A set of pairs key=value, separated by newlines. The list of variables is described in class {@link PromotingConfigValue}. </dd> <dt>string <var>text_project</var></dt> <dd>Title of the project.</dd> <dt>string <var>text_title</var></dt> <dd>Title of the microservice.</dd> <dt>string <var>url_microservice_promoting</var></dt> <dd>URL of the promoting page for this microservice.</dd> </dl>'
+                        description: 'A list of microservices. One element contains:<dl> <dt>bool <var>is_remove</var></dt> <dd>Whether the microservice has been deleted. `true` is the microservice is removed, `false` otherwise.</dd> <dt>string <var>json_path</var></dt> <dd> A list of repositories and paths of this microservice. Copy of {@link \Studio\Microservice\MicroserviceSql}.<var>json_path</var> field. </dd> <dt>string <var>k_project</var></dt> <dd>Project key. Primary key in {@link \StudioProjectSql} table.</dd> <dt>string <var>s_file</var></dt> <dd>File name.</dd> <dt>string <var>s_group</var></dt> <dd>The group of microservices.</dd> <dt>string <var>s_variable</var></dt> <dd> Microservice-specific variables. A set of pairs key=value, separated by newlines. The list of variables is described in class {@link PromotingConfigValue}. </dd> <dt>string <var>text_project</var></dt> <dd>Title of the project.</dd> <dt>string <var>text_title</var></dt> <dd>Title of the microservice.</dd> <dt>string <var>url_microservice_promoting</var></dt> <dd>URL of the promoting page for this microservice.</dd> </dl>'
       tags:
         - Editor-List
   '/Studio/Task/Branch/BranchList.json':
@@ -3322,9 +3446,19 @@ paths:
           description: 'Deployment instance key which creates/deletes a branch for the specified task. Primary key in the {@link \StudioDeployInstanceSql} table.'
           schema:
             type: string
+        - name: k_microservice
+          in: query
+          description: 'A microservice key. Primary key in {@link MicroserviceSql} table.'
+          schema:
+            type: string
         - name: k_task
           in: query
           description: 'Task key within which a branch should be created/deleted. Primary key in the {@link \StudioTaskSql} table.'
+          schema:
+            type: string
+        - name: s_environment
+          in: query
+          description: 'A microservice environment for create branch.'
           schema:
             type: string
       requestBody:
@@ -3609,6 +3743,11 @@ paths:
           description: 'Debug token to check.'
           schema:
             type: string
+        - name: s_url
+          in: query
+          description: 'URL of the application that has made request to check token.'
+          schema:
+            type: string
       responses:
         200:
           description: 'Response always comes with status 200. Inspect the rest of the response body to determine the result.'
@@ -3753,6 +3892,9 @@ paths:
                         type: number
                         format: int32
                         description: 'Type of the service. One of {@link \Studio\Ip\Service\ServiceTypeSid} constants.'
+                      is_auto_restricted:
+                        type: boolean
+                        description: 'Indicates whether automatic session renewal for IP-based access is restricted. If set to `1`, access by IP is restricted and automatic session renewal is disabled if `0`, access by IP is allowed and session can be automatically renewed.'
                       text_group:
                         type: string
                         description: 'Group of services.'
@@ -3787,6 +3929,9 @@ paths:
                   type: number
                   format: int32
                   description: 'Type of the service. One of {@link \Studio\Ip\Service\ServiceTypeSid} constants.'
+                is_auto_restricted:
+                  type: boolean
+                  description: 'Indicates whether automatic session renewal for IP-based access is restricted. If set to `1`, access by IP is restricted and automatic session renewal is disabled if `0`, access by IP is allowed and session can be automatically renewed.'
                 text_group:
                   type: string
                   description: 'Group of services.'
@@ -4453,7 +4598,7 @@ paths:
               properties:
                 s_application:
                   type: [string, "null"]
-                  description: 'The application ID. This will be `null` if the application is being used to make the request. Use the application credential from the {@link FacebookCredential} class for user authorization.'
+                  description: 'The application id. When application not passed, credential loaded from the application, which makes the request, used {@link FacebookCredential} for load the credential. For set credential need used {@link CredentialApi} and set {@link CredentialApi::$cid_credential} to {@link FacebookCredential::CID}. When application passed, the credential loaded by application id.'
                 s_token:
                   type: string
                   description: 'The Facebook token.'
@@ -4520,7 +4665,7 @@ paths:
               properties:
                 s_application:
                   type: [string, "null"]
-                  description: 'The application ID. This will be `null` for application use, which makes the request. Use the application credential from {@link GoogleCredential} for user authorization.'
+                  description: 'The application id. When application not passed, credential loaded from the application, which makes the request, used {@link GoogleCredential} for load the credential. For set credential need used {@link CredentialApi} and set {@link CredentialApi::$cid_credential} to {@link GoogleCredential::CID}. When application passed, the credential loaded by application id.'
                 s_code:
                   type: string
                   description: 'The Google server authorization code.'
@@ -5631,9 +5776,24 @@ paths:
     get:
       summary: ''
       parameters:
+        - name: a_class
+          in: query
+          description: 'The list of classes keys to filter. A comma separated list of class keys. Primary keys in {@link \RsClassSql} table. Return sessions with matching class IDs. If it''s empty, all classes/events will be returned.'
+          schema:
+            type: array
+        - name: a_day
+          in: query
+          description: 'Class filter by day of the week. Array of number representing the days of the week. Return sessions matching the given weekdays. (7 = Sunday, 1 = Monday, ..., 6 = Saturday) Empty array means no filtering.'
+          schema:
+            type: array
         - name: a_location
           in: query
           description: 'The list of location keys to filter results. If it''s empty, schedule for all locations will be returned. All given locations should be from the same business, which is sent in {@link ClassListApi::$k_business}.'
+          schema:
+            type: array
+        - name: a_time
+          in: query
+          description: 'Class filter by time of day. Array with start and end time in "HH:MM" format (24h). Include sessions that start between the specified time range. List of time parameters: <dl> <dt>string <var>tl_start</var></dt> <dd>Time when the session starts.</dd> <dt>string <var>tl_end</var></dt> <dd>Time when the session ends.</dd> </dl> Example: <tt>[`tl_start` => `06:00`, `tl_end` => `14:00`]</tt>. Empty array means no filtering.'
           schema:
             type: array
         - name: dt_date
@@ -5656,6 +5816,11 @@ paths:
           description: 'If `true`, sessions from every class tab are returned. If `false`, use the {@link ClassListApi::$k_class_tab} value.'
           schema:
             type: boolean
+        - name: is_virtual
+          in: query
+          description: 'Class filter by type. The class is virtual. `true`: Only virtual classes. `false`: Only in-person. `null` or not set: No filtering.'
+          schema:
+            type: [boolean, "null"]
         - name: k_business
           in: query
           description: 'The business key.'
@@ -5929,7 +6094,7 @@ paths:
                         description: 'Asset list data.'
                       a_class:
                         type: [array, "null"]
-                        description: 'Detailed information about the class. When loaded, it contains the following fields: <dl> <dt>array <var>a_image</var></dt> <dd>Information describing a class image.<dl> <dt>int <var>i_height</var></dt> <dd>The image height.</dd> <dt>int <var>i_width</var></dt> <dd>The image width.</dd> <dt>bool <var>is_empty</var></dt> <dd>This will be `true` if there''s no image and a default is used.</dd> <dt>bool|null <var>is_own</var></dt> <dd>This field will be `true` if the image used for the class is an image uploaded in class setup. If the image is not uploaded in the class setup, but there is at least one image in Setup->Locations image slider, this field will be `false`. `null` if class image is not uploaded, and there are no images in location slider, in this case empty image is used.</dd> <dt>string <var>s_url</var></dt> <dd>The URL link to the image.</dd> </dl></dd> <dt>int[] <var>a_tag</var></dt> <dd>A list of tags that can be used to describe the class in the catalog.</dd> <dt>bool <var>can_book</var></dt> <dd>Determines whether the current client can book this class.</dd> <dt>string <var>dt_date_global</var></dt> <dd>The session date/time in UTC.</dd> <dt>string <var>dt_date_local</var></dt> <dd>The start date in the local time zone.</dd> <dt>string <var>html_deny_reason</var></dt> <dd>The reason why the client can''t book this class. This will be set only if <var>can_book</var> is `false`.</dd> <dt>string <var>html_description</var></dt> <dd>The class description.</dd> <dt>string <var>html_special</var></dt> <dd>The special instructions.</dd> <dt>int|null <var>i_age_from</var></dt> <dd>The lower bound of age permitted in the class. This will be `null` there''s no age limit set.</dd> <dt>int|null <var>i_age_to</var></dt> <dd>The upper bound of age permitted in the class. This will be `null` there''s no age limit.</dd> <dt>int <var>i_book</var></dt> <dd>The count of booked visits.</dd> <dt>int <var>i_capacity</var></dt> <dd>The class capacity.</dd> <dt>int <var>i_duration</var></dt> <dd>The class duration in minutes.</dd> <dt> int <var>id_deny_reason</var> </dt> <dd> ID of deny reason. One of {@link \Wl\Schedule\ClassView\DenyReasonSid} constants. </dd> <dt>bool <var>is_book</var></dt> <dd>This will be `true` if the current class was booked by the current client.</dd> <dt>bool <var>is_cancel</var></dt> <dd>This will be `true` if the class period was canceled. Otherwise, this will be `false`.</dd> <dt>bool <var>is_promotion_only</var></dt> <dd>This will be `true` if this class can only be paid for using a Purchase Option. Otherwise, this will be `false`.</dd> <dt>bool <var>is_wait_list</var></dt> <dd>This will be `true` if user is only on the wait list. Otherwise, this will be `false`.</dd> <dt>bool <var>is_wait_list_enabled</var></dt> <dd>This will be `true` if the wait list is enabled for this class. Otherwise, this will be `false`.</dd> <dt>string <var>m_price</var></dt> <dd>The session price.</dd> <dt>bool <var>hide_price</var></dt> <dd>Hide individual price of the class session, if client has applicable pricing option.</dd> <dt>string <var>s_duration</var></dt> <dd>The class duration in a human readable format.</dd> <dt>string <var>s_title</var></dt> <dd>The class name.</dd> <dt>string <var>text_room</var></dt> <dd>The class room.</dd> </dl> This will be `null` if data isn''t loaded yet.'
+                        description: 'Detailed information about the class. When loaded, it contains the following fields: <dl> <dt>array <var>a_image</var></dt> <dd>Information describing a class image.<dl> <dt>int <var>i_height</var></dt> <dd>The image height.</dd> <dt>int <var>i_width</var></dt> <dd>The image width.</dd> <dt>bool <var>is_empty</var></dt> <dd>This will be `true` if there''s no image and a default is used.</dd> <dt>bool|null <var>is_own</var></dt> <dd>This field will be `true` if the image used for the class is an image uploaded in class setup. If the image is not uploaded in the class setup, but there is at least one image in Setup->Locations image slider, this field will be `false`. `null` if class image is not uploaded, and there are no images in location slider, in this case empty image is used.</dd> <dt>string <var>s_url</var></dt> <dd>The URL link to the image.</dd> </dl></dd> <dt>int[] <var>a_tag</var></dt> <dd>A list of tags that can be used to describe the class in the catalog.</dd> <dt>bool <var>can_book</var></dt> <dd>Determines whether the current client can book this class.</dd> <dt>string <var>dt_date_global</var></dt> <dd>The session date/time in UTC.</dd> <dt>string <var>dt_date_local</var></dt> <dd>The start date in the local time zone.</dd> <dt>string <var>html_deny_reason</var></dt> <dd>The reason why the client can''t book this class. This will be set only if <var>can_book</var> is `false`.</dd> <dt>string <var>html_description</var></dt> <dd>The class description.</dd> <dt>string <var>html_special</var></dt> <dd>The special instructions.</dd> <dt>int|null <var>i_age_from</var></dt> <dd>The lower bound of age permitted in the class. This will be `null` there''s no age limit set.</dd> <dt>int|null <var>i_age_to</var></dt> <dd>The upper bound of age permitted in the class. This will be `null` there''s no age limit.</dd> <dt>int <var>i_book</var></dt> <dd>The count of booked visits.</dd> <dt>int <var>i_capacity</var></dt> <dd>The class capacity.</dd> <dt>int <var>i_duration</var></dt> <dd>The class duration in minutes.</dd> <dt> int <var>id_deny_reason</var> </dt> <dd> ID of denying reason. One of {@link \Wl\Schedule\ClassView\DenyReasonSid} constants. </dd> <dt>bool <var>is_book</var></dt> <dd>This will be `true` if the current class was booked by the current client.</dd> <dt>bool <var>is_cancel</var></dt> <dd>This will be `true` if the class period was canceled. Otherwise, this will be `false`.</dd> <dt>bool <var>is_promotion_only</var></dt> <dd>This will be `true` if this class can only be paid for using a Purchase Option. Otherwise, this will be `false`.</dd> <dt>bool <var>is_wait_list</var></dt> <dd>This will be `true` if user is only on the wait list. Otherwise, this will be `false`.</dd> <dt>bool <var>is_wait_list_enabled</var></dt> <dd>This will be `true` if the wait list is enabled for this class. Otherwise, this will be `false`.</dd> <dt>string <var>m_price</var></dt> <dd>The session price.</dd> <dt>bool <var>hide_price</var></dt> <dd>Hide individual price of the class session, if client has applicable pricing option.</dd> <dt>string <var>s_duration</var></dt> <dd>The class duration in a human readable format.</dd> <dt>string <var>s_title</var></dt> <dd>The class name.</dd> <dt>string <var>text_room</var></dt> <dd>The class room.</dd> </dl> This will be `null` if data isn''t loaded yet.'
                       a_location:
                         type: [array, "null"]
                         description: 'Location data. This will be `null` if data isn''t loaded yet.'
@@ -5997,7 +6162,7 @@ paths:
                         description: 'Asset list data.'
                       a_class:
                         type: [array, "null"]
-                        description: 'Detailed information about the class. When loaded, it contains the following fields: <dl> <dt>array <var>a_image</var></dt> <dd>Information describing a class image.<dl> <dt>int <var>i_height</var></dt> <dd>The image height.</dd> <dt>int <var>i_width</var></dt> <dd>The image width.</dd> <dt>bool <var>is_empty</var></dt> <dd>This will be `true` if there''s no image and a default is used.</dd> <dt>bool|null <var>is_own</var></dt> <dd>This field will be `true` if the image used for the class is an image uploaded in class setup. If the image is not uploaded in the class setup, but there is at least one image in Setup->Locations image slider, this field will be `false`. `null` if class image is not uploaded, and there are no images in location slider, in this case empty image is used.</dd> <dt>string <var>s_url</var></dt> <dd>The URL link to the image.</dd> </dl></dd> <dt>int[] <var>a_tag</var></dt> <dd>A list of tags that can be used to describe the class in the catalog.</dd> <dt>bool <var>can_book</var></dt> <dd>Determines whether the current client can book this class.</dd> <dt>string <var>dt_date_global</var></dt> <dd>The session date/time in UTC.</dd> <dt>string <var>dt_date_local</var></dt> <dd>The start date in the local time zone.</dd> <dt>string <var>html_deny_reason</var></dt> <dd>The reason why the client can''t book this class. This will be set only if <var>can_book</var> is `false`.</dd> <dt>string <var>html_description</var></dt> <dd>The class description.</dd> <dt>string <var>html_special</var></dt> <dd>The special instructions.</dd> <dt>int|null <var>i_age_from</var></dt> <dd>The lower bound of age permitted in the class. This will be `null` there''s no age limit set.</dd> <dt>int|null <var>i_age_to</var></dt> <dd>The upper bound of age permitted in the class. This will be `null` there''s no age limit.</dd> <dt>int <var>i_book</var></dt> <dd>The count of booked visits.</dd> <dt>int <var>i_capacity</var></dt> <dd>The class capacity.</dd> <dt>int <var>i_duration</var></dt> <dd>The class duration in minutes.</dd> <dt> int <var>id_deny_reason</var> </dt> <dd> ID of deny reason. One of {@link \Wl\Schedule\ClassView\DenyReasonSid} constants. </dd> <dt>bool <var>is_book</var></dt> <dd>This will be `true` if the current class was booked by the current client.</dd> <dt>bool <var>is_cancel</var></dt> <dd>This will be `true` if the class period was canceled. Otherwise, this will be `false`.</dd> <dt>bool <var>is_promotion_only</var></dt> <dd>This will be `true` if this class can only be paid for using a Purchase Option. Otherwise, this will be `false`.</dd> <dt>bool <var>is_wait_list</var></dt> <dd>This will be `true` if user is only on the wait list. Otherwise, this will be `false`.</dd> <dt>bool <var>is_wait_list_enabled</var></dt> <dd>This will be `true` if the wait list is enabled for this class. Otherwise, this will be `false`.</dd> <dt>string <var>m_price</var></dt> <dd>The session price.</dd> <dt>bool <var>hide_price</var></dt> <dd>Hide individual price of the class session, if client has applicable pricing option.</dd> <dt>string <var>s_duration</var></dt> <dd>The class duration in a human readable format.</dd> <dt>string <var>s_title</var></dt> <dd>The class name.</dd> <dt>string <var>text_room</var></dt> <dd>The class room.</dd> </dl> This will be `null` if data isn''t loaded yet.'
+                        description: 'Detailed information about the class. When loaded, it contains the following fields: <dl> <dt>array <var>a_image</var></dt> <dd>Information describing a class image.<dl> <dt>int <var>i_height</var></dt> <dd>The image height.</dd> <dt>int <var>i_width</var></dt> <dd>The image width.</dd> <dt>bool <var>is_empty</var></dt> <dd>This will be `true` if there''s no image and a default is used.</dd> <dt>bool|null <var>is_own</var></dt> <dd>This field will be `true` if the image used for the class is an image uploaded in class setup. If the image is not uploaded in the class setup, but there is at least one image in Setup->Locations image slider, this field will be `false`. `null` if class image is not uploaded, and there are no images in location slider, in this case empty image is used.</dd> <dt>string <var>s_url</var></dt> <dd>The URL link to the image.</dd> </dl></dd> <dt>int[] <var>a_tag</var></dt> <dd>A list of tags that can be used to describe the class in the catalog.</dd> <dt>bool <var>can_book</var></dt> <dd>Determines whether the current client can book this class.</dd> <dt>string <var>dt_date_global</var></dt> <dd>The session date/time in UTC.</dd> <dt>string <var>dt_date_local</var></dt> <dd>The start date in the local time zone.</dd> <dt>string <var>html_deny_reason</var></dt> <dd>The reason why the client can''t book this class. This will be set only if <var>can_book</var> is `false`.</dd> <dt>string <var>html_description</var></dt> <dd>The class description.</dd> <dt>string <var>html_special</var></dt> <dd>The special instructions.</dd> <dt>int|null <var>i_age_from</var></dt> <dd>The lower bound of age permitted in the class. This will be `null` there''s no age limit set.</dd> <dt>int|null <var>i_age_to</var></dt> <dd>The upper bound of age permitted in the class. This will be `null` there''s no age limit.</dd> <dt>int <var>i_book</var></dt> <dd>The count of booked visits.</dd> <dt>int <var>i_capacity</var></dt> <dd>The class capacity.</dd> <dt>int <var>i_duration</var></dt> <dd>The class duration in minutes.</dd> <dt> int <var>id_deny_reason</var> </dt> <dd> ID of denying reason. One of {@link \Wl\Schedule\ClassView\DenyReasonSid} constants. </dd> <dt>bool <var>is_book</var></dt> <dd>This will be `true` if the current class was booked by the current client.</dd> <dt>bool <var>is_cancel</var></dt> <dd>This will be `true` if the class period was canceled. Otherwise, this will be `false`.</dd> <dt>bool <var>is_promotion_only</var></dt> <dd>This will be `true` if this class can only be paid for using a Purchase Option. Otherwise, this will be `false`.</dd> <dt>bool <var>is_wait_list</var></dt> <dd>This will be `true` if user is only on the wait list. Otherwise, this will be `false`.</dd> <dt>bool <var>is_wait_list_enabled</var></dt> <dd>This will be `true` if the wait list is enabled for this class. Otherwise, this will be `false`.</dd> <dt>string <var>m_price</var></dt> <dd>The session price.</dd> <dt>bool <var>hide_price</var></dt> <dd>Hide individual price of the class session, if client has applicable pricing option.</dd> <dt>string <var>s_duration</var></dt> <dd>The class duration in a human readable format.</dd> <dt>string <var>s_title</var></dt> <dd>The class name.</dd> <dt>string <var>text_room</var></dt> <dd>The class room.</dd> </dl> This will be `null` if data isn''t loaded yet.'
                       a_location:
                         type: [array, "null"]
                         description: 'Location data. This will be `null` if data isn''t loaded yet.'
@@ -6050,7 +6215,7 @@ paths:
         - Tab-Tab
   '/Wl/Shop/Category/Category.json':
     get:
-      summary: ''
+      summary: 'This method is called to process a GET query.'
       parameters:
         - name: k_business
           in: query
@@ -6994,6 +7159,9 @@ paths:
                       can_renew:
                         type: boolean
                         description: 'This is `true` only if the purchased item is a promotion and the user can control the renewal of the promotion. Otherwise, this will be `false`.'
+                      dl_cancel:
+                        type: string
+                        description: 'The cancellation date of the promotion. Only available if the item is a promotion and has been cancelled.'
                       dl_end:
                         type: string
                         description: 'The expiration date of the promotion. Only available if the item is a promotion.'
@@ -7040,6 +7208,10 @@ paths:
                         type: number
                         format: int32
                         description: 'The number of purchased items bought at the time of purchase. This will be `0` for purchase items obtained via a redemption code or as a result of an import.'
+                      i_client_cancel_notice_days:
+                        type: number
+                        format: int32
+                        description: 'The number of days notice before the client is able to set cancel date.'
                       i_discount_count:
                         type: number
                         format: int32
@@ -7110,6 +7282,12 @@ paths:
                       is_asset:
                         type: boolean
                         description: 'Whether the purchase item is asset.'
+                      is_cancel_pending:
+                        type: boolean
+                        description: 'If `true`, then a promotion is pending cancellation. Otherwise, this will be `false`.'
+                      is_client_cancel_allow:
+                        type: boolean
+                        description: 'If `true`, then a promotion can be canceled by a client. Otherwise, this will be `false`.'
                       is_component:
                         type: boolean
                         description: 'If `true`, then the purchased item is a component of another purchase item, as is the case of a package. If `false`, then the purchased item isn''t a component of another purchase item.'
@@ -7182,6 +7360,9 @@ paths:
                       m_refund:
                         type: string
                         description: 'The amount refunded. This will be `0` if there are no refunds.'
+                      m_terminate_fee:
+                        type: [string, "null"]
+                        description: 'Cancellation fee amount. `null` if no need charge fee.'
                       s_code:
                         type: string
                         description: 'The redemption code. This value is used only if the purchase is bought via a redemption code.'
@@ -7310,6 +7491,9 @@ paths:
                       is_short:
                         type: boolean
                         description: 'Indicates whether to display the full profile edit form or the short version. This is assumed to be used only in user registration mode.'
+                      k_lead_source:
+                        type: [string, "null"]
+                        description: 'Key of the lead source. `null` if not defined. When creating or editing a user: {@link LeadSourceElementApi::LEAD_SOURCE_REPLACE_NONE} if Lead Source is to be unselected for the user.'
                       s_class:
                         type: [string, "null"]
                         description: 'Exception class name. `null` if there was no mistake.'
@@ -7357,6 +7541,11 @@ paths:
           description: 'The key of the business you''re editing. An empty value will return the system-wide fields.'
           schema:
             type: string
+        - name: k_lead_source
+          in: query
+          description: 'Key of the lead source. `null` if not defined. When creating or editing a user: {@link LeadSourceElementApi::LEAD_SOURCE_REPLACE_NONE} if Lead Source is to be unselected for the user.'
+          schema:
+            type: [string, "null"]
         - name: text_business_uid_key
           in: query
           description: 'Compound key delimited wit a colon. First part is business key, where selected client exists. Primary key in {@link \RsBusinessSql} table. Second part - uid of already existed user we want to add. Primary key in {@link \PassportLoginSql} table. Empty if non-existent client is being added.'
@@ -7463,6 +7652,11 @@ paths:
           description: 'The key of the business you''re editing. An empty value will return the system-wide fields.'
           schema:
             type: string
+        - name: k_lead_source
+          in: query
+          description: 'Key of the lead source. `null` if not defined. When creating or editing a user: {@link LeadSourceElementApi::LEAD_SOURCE_REPLACE_NONE} if Lead Source is to be unselected for the user.'
+          schema:
+            type: [string, "null"]
         - name: uid
           in: query
           description: 'The key of the user to edit. If empty, an empty form will be displayed to add a new user.'
@@ -7588,6 +7782,9 @@ paths:
                       is_short:
                         type: boolean
                         description: 'Indicates whether to display the full profile edit form or the short version. This is assumed to be used only in user registration mode.'
+                      k_lead_source:
+                        type: [string, "null"]
+                        description: 'Key of the lead source. `null` if not defined. When creating or editing a user: {@link LeadSourceElementApi::LEAD_SOURCE_REPLACE_NONE} if Lead Source is to be unselected for the user.'
                       s_class:
                         type: [string, "null"]
                         description: 'Exception class name. `null` if there was no mistake.'
@@ -7635,6 +7832,11 @@ paths:
           description: 'The key of the business you''re editing. An empty value will return the system-wide fields.'
           schema:
             type: string
+        - name: k_lead_source
+          in: query
+          description: 'Key of the lead source. `null` if not defined. When creating or editing a user: {@link LeadSourceElementApi::LEAD_SOURCE_REPLACE_NONE} if Lead Source is to be unselected for the user.'
+          schema:
+            type: [string, "null"]
         - name: text_business_uid_key
           in: query
           description: 'Compound key delimited wit a colon. First part is business key, where selected client exists. Primary key in {@link \RsBusinessSql} table. Second part - uid of already existed user we want to add. Primary key in {@link \PassportLoginSql} table. Empty if non-existent client is being added.'
@@ -7741,6 +7943,11 @@ paths:
           description: 'The key of the business you''re editing. An empty value will return the system-wide fields.'
           schema:
             type: string
+        - name: k_lead_source
+          in: query
+          description: 'Key of the lead source. `null` if not defined. When creating or editing a user: {@link LeadSourceElementApi::LEAD_SOURCE_REPLACE_NONE} if Lead Source is to be unselected for the user.'
+          schema:
+            type: [string, "null"]
         - name: uid
           in: query
           description: 'The key of the user to edit. If empty, an empty form will be displayed to add a new user.'
@@ -8280,7 +8487,7 @@ paths:
             format: int32
         - name: is_credit_card_check
           in: query
-          description: 'Checking whether the client has a credit card (if configured in the business) will be skipped if this flag is set to `false`. Use this field with caution. The final booking will not use this flag and the check will still be performed.'
+          description: 'Checking whether the client has a credit card (if configured in the business) will be skipped if this flag is set to `false`. Use this field with caution. The final booking will not use this flag, and the check will still be performed.'
           schema:
             type: boolean
         - name: k_class_period
@@ -8365,7 +8572,7 @@ paths:
             format: int32
         - name: is_credit_card_check
           in: query
-          description: 'Checking whether the client has a credit card (if configured in the business) will be skipped if this flag is set to `false`. Use this field with caution. The final booking will not use this flag and the check will still be performed.'
+          description: 'Checking whether the client has a credit card (if configured in the business) will be skipped if this flag is set to `false`. Use this field with caution. The final booking will not use this flag, and the check will still be performed.'
           schema:
             type: boolean
         - name: k_class_period
@@ -8450,7 +8657,7 @@ paths:
             format: int32
         - name: is_credit_card_check
           in: query
-          description: 'Checking whether the client has a credit card (if configured in the business) will be skipped if this flag is set to `false`. Use this field with caution. The final booking will not use this flag and the check will still be performed.'
+          description: 'Checking whether the client has a credit card (if configured in the business) will be skipped if this flag is set to `false`. Use this field with caution. The final booking will not use this flag, and the check will still be performed.'
           schema:
             type: boolean
         - name: k_class_period
@@ -8792,22 +8999,20 @@ paths:
                     description: 'Successful response. Full description is not available yet.'
       tags:
         - AuthorizePartner-AuthorizePartner
-  '/Wl/Business/Create/BusinessTrialHistory.json':
-    post:
-      summary: 'Checks if the email or phone number has already been used for a trial account.'
-      requestBody:
-        required: true
-        content:
-          application/x-www-form-urlencoded:
-            schema:
-              type: object
-              properties:
-                text_mail:
-                  type: string
-                  description: 'The email address of the location.'
-                text_phone:
-                  type: string
-                  description: 'The phone number of the business, staff and location.'
+  '/Wl/Business/Claim/BusinessClaim.json':
+    get:
+      summary: 'Checks if the email or phone number has already been used for a trial account or not.'
+      parameters:
+        - name: text_mail
+          in: query
+          description: 'The email address of the location.'
+          schema:
+            type: string
+        - name: text_phone
+          in: query
+          description: 'The phone number of the business, staff and location.'
+          schema:
+            type: string
       responses:
         200:
           description: 'Response always comes with status 200. Inspect the rest of the response body to determine the result.'
@@ -8818,7 +9023,40 @@ paths:
                   - type: object
                     description: 'Successful response. Full description is not available yet.'
       tags:
-        - Create-BusinessTrialHistory
+        - Claim-BusinessClaim
+    post:
+      summary: 'Completes the verification process of the trial business.'
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                k_business:
+                  type: string
+                  description: 'The key of the business to be verified.'
+                k_location:
+                  type: string
+                  description: 'The key of the location to be verified.'
+                uid_verified:
+                  type: string
+                  description: 'The key of the user who verified the business.'
+      responses:
+        200:
+          description: 'Response always comes with status 200. Inspect the rest of the response body to determine the result.'
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - type: object
+                    description: 'Successful response.'
+                    properties:
+                      url_microsite:
+                        type: string
+                        description: ''
+      tags:
+        - Claim-BusinessClaim
   '/Wl/Coupon/CouponList/List.json':
     get:
       summary: 'Gets list of coupons.'
@@ -9825,9 +10063,24 @@ paths:
                       dt_start:
                         type: [string, "null"]
                         description: 'The start date of the current hold, in the local time zone. `null` if it shouldn''t be updated.'
+                      dtu_date_notification:
+                        type: [string, "null"]
+                        description: 'The date when the email notification was sent. `null` if it shouldn''t be updated.'
+                      is_mail:
+                        type: boolean
+                        description: 'Whether or not to send email notification. <tt>false</tt> if not initialized.'
+                      is_push:
+                        type: boolean
+                        description: 'Whether or not to send push notification. <tt>false</tt> if not initialized.'
+                      is_sms:
+                        type: boolean
+                        description: 'Whether or not to send SMS notification. <tt>false</tt> if not initialized.'
                       k_login_promotion:
                         type: [string, "null"]
                         description: 'The Purchase Option key. If this key is used, a new hold will be created. The endpoint will return a `start-cross` status code if a hold is already in place. Ignored if {@link PromotionPayPauseApi::$k_promotion_pay_pause} is provided. `null` if not yet initialized.'
+                      k_mail_pattern:
+                        type: object
+                        description: 'Key of the email pattern.'
                       k_promotion_pay_pause:
                         type: [string, "null"]
                         description: 'The promotion payment hold key. If this key is used, it will edit an existing hold. This key will be empty if there''s no active hold in place or if a scheduled hold isn''t in effect. `null` if not yet initialized or if the request is based on {@link PromotionPayPauseApi::$k_login_promotion}.'
@@ -9871,6 +10124,15 @@ paths:
             schema:
               type: object
               properties:
+                is_mail:
+                  type: boolean
+                  description: 'Whether or not to send email notification. <tt>false</tt> if not initialized.'
+                is_push:
+                  type: boolean
+                  description: 'Whether or not to send push notification. <tt>false</tt> if not initialized.'
+                is_sms:
+                  type: boolean
+                  description: 'Whether or not to send SMS notification. <tt>false</tt> if not initialized.'
                 text_note:
                   type: [string, "null"]
                   description: 'Additional notes for the promotion payment pause period. Leave this field as `null` if the note shouldn''t be updated. `null` if it shouldn''t be updated.'
@@ -9919,6 +10181,15 @@ paths:
             schema:
               type: object
               properties:
+                is_mail:
+                  type: boolean
+                  description: 'Whether or not to send email notification. <tt>false</tt> if not initialized.'
+                is_push:
+                  type: boolean
+                  description: 'Whether or not to send push notification. <tt>false</tt> if not initialized.'
+                is_sms:
+                  type: boolean
+                  description: 'Whether or not to send SMS notification. <tt>false</tt> if not initialized.'
                 text_note:
                   type: [string, "null"]
                   description: 'Additional notes for the promotion payment pause period. Leave this field as `null` if the note shouldn''t be updated. `null` if it shouldn''t be updated.'
@@ -10056,7 +10327,7 @@ paths:
                     properties:
                       html_contract:
                         type: string
-                        description: 'Formatted text of business liability release. Not empty if business has liability release and if user did not agree to this liability release.'
+                        description: 'Formatted text of business liability release. Not empty if the business has a liability release and if the user did not agree to this liability release.'
       tags:
         - Agree-Agree
     post:
@@ -10081,7 +10352,7 @@ paths:
               properties:
                 is_agree:
                   type: [boolean, "null"]
-                  description: '<tt>false</tt> if user has not agreed to use Electronic Signatures, <tt>true</tt> if user has agreed to use Electronic Signatures, <tt>null</tt> otherwise.'
+                  description: '<tt>false</tt> if the user has not agreed to use Electronic Signatures, <tt>true</tt> if the user has agreed to use Electronic Signatures, <tt>null</tt> otherwise.'
                 s_signature:
                   type: string
                   description: 'The base64-encoded user''s signature image from the signature pad as a PNG file.'
@@ -11607,6 +11878,16 @@ paths:
     get:
       summary: ''
       parameters:
+        - name: is_check_staff_access
+          in: query
+          description: 'Determines that only staff members which the current user has access to should be retrieved. `true` if only staff members which the current user has access to should be retrieved. `false` otherwise.'
+          schema:
+            type: boolean
+        - name: is_staff_inactive
+          in: query
+          description: 'Whether inactive and removed staff members are available. If `true` inactive and removed staff members are available. `false` otherwise.'
+          schema:
+            type: boolean
         - name: k_business
           in: query
           description: 'The key of the business to show information for.'
@@ -11693,7 +11974,7 @@ paths:
                     properties:
                       a_custom_field:
                         type: array
-                        description: 'List of the custom user fields. Each value is:<dl> <dt>string <var>k_field</var></dt> <dd>Field key. Primary key in {@link \RsFieldSql} table.</dd> <dt>string <var>text_title</var></dt> <dd>Name of the field. Will be <tt>null</tt> for general fields. Their titles are static.</dd> <dt>string <var>text_value</var></dt> <dd>Value of the field.</dd> </dl>'
+                        description: 'List of the custom user fields. Each value is:<dl> <dt>string <var>k_field</var></dt> <dd>Field key. Primary key in {@link \RsFieldSql} table.</dd> <dt>string <var>text_title</var></dt> <dd>Name of the field. Will be <tt>null</tt> for general fields. Their titles are static.</dd> <dt>string <var>text_value</var></dt> <dd>Value of the field. This is the key of the selected item for `select` and `radio` elements.</dd> <dt>string <var>text_value_title</var></dt> <dd>Title of the selected option for `select` and `radio` elements. Unused for other elements.</dd> </dl>'
                       a_member_group:
                         type: array
                         description: 'List of member groups that the user belongs to.'
@@ -12037,7 +12318,7 @@ paths:
               properties:
                 a_order:
                   type: array
-                  description: 'A list of shared video category keys displayed in the order to be saved.'
+                  description: 'A list of shared video category keys displayed in the order to be saved. Values can be: * <b>[Deprecated]</b> String keys in old format. See {@link DbShardKey}. * String keys in new format. See {@link DbKey}.'
       responses:
         200:
           description: 'Response always comes with status 200. Inspect the rest of the response body to determine the result.'
@@ -12072,7 +12353,7 @@ paths:
                   description: 'The business key.'
                 k_video:
                   type: string
-                  description: 'The video string key.'
+                  description: 'The video string key: * [Deprecated] String key in old format. See {@link DbShardKey::keyString()}. * String key in new format. See {@link DbKey::generate()} or {@link DbShardKey::keyBinary()}.'
       responses:
         200:
           description: 'Response always comes with status 200. Inspect the rest of the response body to determine the result.'
@@ -12688,7 +12969,7 @@ paths:
                   description: 'Business in which authorization is performed.'
                 s_application:
                   type: [string, "null"]
-                  description: 'The application ID. This will be `null` for application use, which makes the request. Use the application credential from {@link GoogleCredential} for user authorization.'
+                  description: 'The application id. When application not passed, credential loaded from the application, which makes the request, used {@link GoogleCredential} for load the credential. For set credential need used {@link CredentialApi} and set {@link CredentialApi::$cid_credential} to {@link GoogleCredential::CID}. When application passed, the credential loaded by application id.'
                 s_code:
                   type: string
                   description: 'The Google server authorization code.'
@@ -12818,6 +13099,10 @@ paths:
                 a_new:
                   type: array
                   description: 'The new relationship to be added to user, specified with {@link \Wl\Family\Relation\RelationApi::$uid}: <dl> <dt>int <var>id_family_relation</var></dt> <dd>The relationship type. One of the {@link \RsFamilyRelationSid} constants.</dd> <dt>string <var>uid</var></dt> <dd>The related user''s key. Primary key in {@link \PassportLoginSql} table.</dd> </dl>'
+                id_mode:
+                  type: number
+                  format: int32
+                  description: 'ID of source mode. One of {@link \Wl\Mode\ModeSid} constants.'
       responses:
         200:
           description: 'Response always comes with status 200. Inspect the rest of the response body to determine the result.'
@@ -12857,6 +13142,85 @@ paths:
                         description: 'The relationship types in the business. Key is ID, value is SID.'
       tags:
         - Relation-FamilyRelation
+  '/Wl/Lead/Source/LeadSourceList.json':
+    get:
+      summary: 'Gets list of Lead Sources.'
+      parameters:
+        - name: k_business
+          in: query
+          description: 'Business key.'
+          schema:
+            type: string
+      responses:
+        200:
+          description: 'Response always comes with status 200. Inspect the rest of the response body to determine the result.'
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - type: object
+                    description: 'Successful response.'
+                    properties:
+                      a_lead_source:
+                        type: array
+                        description: 'List of Lead Sources. <dl> <dt>int|null <var>i_sort</var></dt> <dd> Sorting order. Only used in the Lead Source widget option. `null` is a temporary value that exists for a short time during the process of inserting of a new row. </dd> <dt>int|null <var>id_lead_source</var></dt> <dd> System-defined Lead Source ID. One of the {@link LeadSourceSid} constants. `null` if it is a custom Lead Source. </dd> <dt>bool <var>is_add_lead</var></dt> <dd> `true` if this skin will be used for "Add Lead" form or `false` otherwise. Only one skin in the business can be used for "Add Lead" form. </dd> <dt>bool <var>is_use</var></dt> <dd> Determines whether Lead Source is being used. `true` if Lead Source is being used. `false` - otherwise. </dd> <dt>string <var>k_lead_source</var></dt> <dd> Key of the lead source. Primary key in {@link LeadSourceSql} table. </dd> <dt>string <var>k_skin</var></dt> <dd> Key of the lead skin. Primary key in {@link \RsSkinSql} table. </dd> <dt>string <var>text_title</var></dt> <dd> Name of the Lead Source. </dd> </dl>'
+                      text_lead_source_field:
+                        type: string
+                        description: 'Lead Source field title.'
+      tags:
+        - Source-LeadSourceList
+  '/Wl/Lead/Source/LeadSourceElement.json':
+    delete:
+      summary: 'Deletes custom source lead.'
+      parameters:
+        - name: k_lead_source_replace
+          in: query
+          description: 'Key of the lead source. Primary key in {@link LeadSourceSql} table.'
+          schema:
+            type: string
+      responses:
+        200:
+          description: 'Response always comes with status 200. Inspect the rest of the response body to determine the result.'
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - type: object
+                    description: 'Successful response. Full description is not available yet.'
+      tags:
+        - Source-LeadSourceElement
+    post:
+      summary: 'Creates or edits a custom source lead.'
+      parameters:
+        - name: text_lead_source_field
+          in: query
+          description: 'Lead Source field title.'
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                a_lead_source:
+                  type: array
+                  description: 'List of Lead Sources. <dl> <dt>int <var>i_sort</var></dt> <dd> Sorting order. </dd> <dt>int|null <var>id_lead_source</var></dt> <dd> System-defined Lead Source ID. One of the {@link LeadSourceSql} constants. `null` if it is a custom Lead Source. </dd> <dt>string <var>k_lead_source</var></dt> <dd> Key of the lead source. Primary key in {@link LeadSourceSql} table. </dd> <dt>string [<var>k_skin</var>]</dt> <dd> Key of the lead skin. Primary key in {@link \RsSkinSql} table. Will be set only in case if <var>id_lead_source</var> is {@link LeadSourceSid::WIDGET} and widget can''t be used for "Add Lead" form. `false` - otherwise. </dd> <dt>string <var>text_title</var></dt> <dd> Name of the Lead Source. </dd> </dl>'
+                k_business:
+                  type: string
+                  description: 'Business key. Primary key in {@link \RsBusinessSql} table.'
+      responses:
+        200:
+          description: 'Response always comes with status 200. Inspect the rest of the response body to determine the result.'
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - type: object
+                    description: 'Successful response. Full description is not available yet.'
+      tags:
+        - Source-LeadSourceElement
   '/Wl/Gym/Visit/VisitAdd.json':
     post:
       summary: ''
@@ -12964,7 +13328,7 @@ paths:
                   description: 'Business in which authorization is performed.'
                 s_application:
                   type: [string, "null"]
-                  description: 'The application ID. This will be `null` if the application is being used to make the request. Use the application credential from the {@link FacebookCredential} class for user authorization.'
+                  description: 'The application id. When application not passed, credential loaded from the application, which makes the request, used {@link FacebookCredential} for load the credential. For set credential need used {@link CredentialApi} and set {@link CredentialApi::$cid_credential} to {@link FacebookCredential::CID}. When application passed, the credential loaded by application id.'
                 s_token:
                   type: string
                   description: 'The Facebook token.'
@@ -13148,6 +13512,24 @@ paths:
                         description: 'Determines whether the email address exists.'
       tags:
         - Email-EmailExist
+  '/Core/Passport/Enter/Jwt/JwtToken.json':
+    get:
+      summary: 'Returns a jwt token that can be used to log user.'
+      responses:
+        200:
+          description: 'Response always comes with status 200. Inspect the rest of the response body to determine the result.'
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - type: object
+                    description: 'Successful response.'
+                    properties:
+                      s_token:
+                        type: string
+                        description: 'Jwt token that allows to authenticate user.'
+      tags:
+        - Jwt-JwtToken
   '/Core/Passport/Login/Enter/Enter.json':
     post:
       summary: 'Generates notepad for user sign in form.'
@@ -13886,27 +14268,32 @@ paths:
           description: 'The first available date for booking. If this is set and {@link ElementApi::$dl_book_available_end} is a set list of sessions available for booking {@link ElementApi::$a_book_available} should match given date range.'
           schema:
             type: [string, "null"]
+        - name: dtu_session
+          in: query
+          description: 'Datetime of the session.'
+          schema:
+            type: [string, "null"]
         - name: i_image_height
           in: query
-          description: 'Image height in pixels. Please specify this value if you need image to be returned in specific size. In case this value is not specified returned image will have default thumbnail size.'
+          description: 'Image height in pixels. Please specify this value if you need image to be returned in specific size. In case this value is not specified, the returned image will have the default thumbnail size.'
           schema:
             type: number
             format: int32
         - name: i_image_width
           in: query
-          description: 'Image width in pixels. Please specify this value if you need image to be returned in specific size. In case this value is not specified returned image will have default thumbnail size.'
+          description: 'Image width in pixels. Please specify this value if you need image to be returned in specific size. In case this value is not specified, the returned image will have the default thumbnail size.'
           schema:
             type: number
             format: int32
         - name: i_staff_image_height
           in: query
-          description: 'Staff image height in pixels. Please specify this value if you need image to be returned in specific size. In case this value is not specified returned image will have default thumbnail size.'
+          description: 'Staff image height in pixels. Please specify this value if you need image to be returned in specific size. In case this value is not specified, the returned image will have the default thumbnail size.'
           schema:
             type: number
             format: int32
         - name: i_staff_image_width
           in: query
-          description: 'Staff image width in pixels. Please specify this value if you need image to be returned in specific size. In case this value is not specified returned image will have default thumbnail size.'
+          description: 'Staff image width in pixels. Please specify this value if you need image to be returned in specific size. In case this value is not specified, the returned image will have the default thumbnail size.'
           schema:
             type: number
             format: int32
@@ -13920,14 +14307,19 @@ paths:
           description: 'Key of a business. Primary key in {@link \RsBusinessSql} table to that belongs requested event(s).'
           schema:
             type: [string, "null"]
+        - name: k_class_period
+          in: query
+          description: 'Key of a class period to show information for. Primary key in {@link \RsClassPeriodSql}.'
+          schema:
+            type: [string, "null"]
         - name: k_event
           in: query
-          description: 'The event key. You can specify {@link ElementApi::$s_event} instead to get information for a bulk of events.'
+          description: 'The event key. You can specify {@link ElementApi::$s_event} instead to get information for a large number of events.'
           schema:
             type: string
         - name: s_event
           in: query
-          description: 'A list of event keys serialized with JSON. Specify instead of {@link ElementApi::$k_event} to get information for a bulk of events.'
+          description: 'A list of event keys serialized with JSON. Specify instead of {@link ElementApi::$k_event} to get information for a large number of events.'
           schema:
             type: string
         - name: uid
@@ -13950,19 +14342,19 @@ paths:
                         description: 'Displays information about age restrictions for this event. An empty array if there are no age restrictions. <dl> <dt>int|null <var>i_age_from</var></dt> <dd>The minimum age for participation in the event. `null` if there''s no minimum age set or information isn''t available.</dd> <dt>int|null <var>i_age_to</var></dt> <dd>The age limit for participation in the event. `null` if there''s no age limit set or information isn''t available.</dd> <dt>bool <var>is_age_public</var></dt> <dd>`true` if age restrictions are public and available, `false` if they''re hidden. When restrictions are hidden and the current user isn''t a staff member, the age range will be empty.</dd> </dl>'
                       a_book_available:
                         type: array
-                        description: 'Retrieves information about an event item. Received only if {@link ElementApi::$k_event} has been specified. In this case other fields aren''t receivers. <dl> <dt>string <var>dt_date</var></dt> <dd>Date/time when session starts. In UTC.</dd> <dt>string <var>k_class_period</var></dt> <dd>Class session primary keys. Primary keys in table {@link \RsClassPeriodSql}.</dd> </dl>'
+                        description: 'Retrieves information about an event item. Received only if {@link ElementApi::$k_event} has been specified. In this case, other fields aren''t receivers. <dl> <dt>string <var>dt_date</var></dt> <dd>Date/time when the session starts. In UTC.</dd> <dt>string <var>k_class_period</var></dt> <dd>Class session primary keys. Primary keys in table {@link \RsClassPeriodSql}.</dd> </dl>'
                       a_business_policy:
                         type: array
                         description: 'Displays all business policies connected to clients and bookings. Contains the same structure as the {@link BusinessConfigApi::$a_business_policy} property. If policies are overwritten for a certain event, the impacted event''s policies will be in this result. Otherwise, the result will display the business policies.'
                       a_class_logo:
                         type: array
-                        description: 'The logo of event. <dl> <dt>int [<var>i_height</var>]</dt> <dd>Is returned only if staff has photo. Image height.</dd> <dt>int [<var>i_width</var>]</dt> <dd>Is returned only if staff has photo. Image width.</dd> <dt>int [<var>id_gender</var>] </dt> <dd>Is returned only if staff does not have photo. ID of staff gender. One of {@link \AGenderSid} constants.</dd> <dt>string [<var>url_logo</var>]</dt> <dd>Is returned only if staff has photo. URL to image.</dd> </dl>'
+                        description: 'The logo of event. <dl> <dt>int [<var>i_height</var>]</dt> <dd>Is returned only if staff has a photo. Image height.</dd> <dt>int [<var>i_width</var>]</dt> <dd>Is returned only if staff has a photo. Image width.</dd> <dt>int [<var>id_gender</var>] </dt> <dd>Is returned only if staff does not have a photo. ID of staff gender. One of {@link \AGenderSid} constants.</dd> <dt>string [<var>url_logo</var>]</dt> <dd>Is returned only if staff has a photo. URL to image.</dd> </dl>'
                       a_class_tab:
                         type: array
                         description: 'The list of keys from class tab.+ Primary keys in {@link \Wl\Classes\Tab\Sql\ClassTab\Sql} table.'
                       a_event:
                         type: array
-                        description: 'Displays information for a bulk of events. Received only if {@link ElementApi::$s_event} has been specified. In this case, other fields aren''t receivers. The event keys of this array. Values of this array and sub arrays with keys that correspond to all fields in this table that may be received.'
+                        description: 'Displays information for a large number of events. Received only if {@link ElementApi::$s_event} has been specified. In this case, other fields aren''t receivers. The event keys of this array. Values of this array and subarrays with keys that correspond to all fields in this table that may be received.'
                       a_schedule:
                         type: array
                         description: 'A list of event sessions. Every element has the following next keys: <dl> <dt> array <var>a_day</var> </dt> <dd> A list of days of the week when the session has occurred. Keys - a number corresponding to a day of the week (0 - Sunday, 6 - Saturday). The value is always <tt>true</tt>. </dd> <dt>array <var>a_repeat</var></dt> <dd> Repeat periodicity instructions. <dl> <dt>int <var>i_repeat</var></dt> <dd>Count of the periods which specified in <var>id_repeat</var>.</dd> <dt>int <var>id_repeat</var></dt> <dd>Measuring unit of <var>i_repeat</var> (week, month, year).</dd> </dl> </dd> <dt> array[] <var>a_staff</var> </dt> <dd> A list of staff members who conduct the session. Every element has the following next keys: <dl> <dt>string <var>k_staff</var></dt> <dd>The staff member key. Primary key in {@link \RsStaffSql} table.</dd> <dt>string <var>s_name</var></dt> <dd>The staff member name.</dd> <dt>string <var>s_surname</var></dt> <dd>The first letter of staff member''s surname.</dd> </dl> </dd> <dt> string[] <var>a_virtual_location</var> </dt> <dd> List of virtual locations. Primary keys in {@link \RsLocationSql} table. </dd> <dt> string <var>dt_end</var> </dt> <dd> The end date of the session. The local date without time. </dd> <dt> string <var>dt_start</var> </dt> <dd> The start date of the session. The local date without time. </dd> <dt> bool <var>hide_location</var> </dt> <dd> `true` if the location should be hidden in the event details. Hide if the event is virtual or if the business only has one location. `false` otherwise. </dd> <dt> int <var>i_capacity</var> </dt> <dd> The class capacity. </dd> <dt> int <var>i_duration</var> </dt> <dd> The duration of the class in seconds. </dd> <dt> bool <var>is_virtual</var> </dt> <dd> This will be `true` if the session is not held in person but offered remotely. It will be `false` otherwise. </dd> <dt> string <var>f_price</var> </dt> <dd> The price of the session, if it can be purchased separately. </dd> <dt> string <var>k_class_period</var> </dt> <dd> The key of the class period. </dd> <dt> string <var>k_location</var> </dt> <dd> The key of the location where the session is held. </dd> <dt> string <var>s_location</var> </dt> <dd> The location title. </dd> <dt> string <var>s_time</var> </dt> <dd> The time when session occurred. A textual representation of the start and end time of a session. Example: <tt>10:00 am - 11:00 am</tt> </dd> <dt> string <var>s_timezone</var> </dt> <dd> The name of the timezone in which the session is held. </dd> <dt> string <var>text_room</var> </dt> <dd> The room of the event. </dd> </dl>'
@@ -14009,7 +14401,7 @@ paths:
                         description: 'Whether the event is age restricted. `true` if the event is age restricted, `false` if the event is not.'
                       is_availability_checked:
                         type: boolean
-                        description: '`true` if the event availability was checked; `false` if the event has too many sessions and calculating the availability of each one takes a lot of time.'
+                        description: '`true` if the event availability was checked; `false` if the event has too many sessions, and calculating the availability of each one takes a lot of time.'
                       is_book:
                         type: boolean
                         description: '<tt>true</tt> if the event is already booked; <tt>false</tt> if the event isn''t booked.'
@@ -14019,18 +14411,21 @@ paths:
                       is_full:
                         type: boolean
                         description: '`true` if there are no free spots in the event; booking is available only into the wait list. `false` otherwise.'
+                      is_past:
+                        type: boolean
+                        description: '`true` if the selected session has already started and do not available to book. `false` otherwise.'
                       is_promotion_only:
                         type: boolean
                         description: '`true` if the event can be paid with a Purchase Option only. `false` if full event purchases or single session purchases are permitted.'
                       is_prorate:
                         type: boolean
-                        description: '`true` if clients, when they book event, which has been started, can pay only for the sessions in the future. `false` if clients, when they book event, has to pay for the entire event and number of left in the future sessions does not matter. Copy of {@link \RsClassSql}.<tt>is_prorate</tt>.'
+                        description: '`true` if clients, when they book event, which has been started, can pay only for the sessions in the future. `false` if clients, when they book event, have to pay for the entire event and the number of lefts in the future sessions does not matter. Copy of {@link \RsClassSql}.<tt>is_prorate</tt>.'
                       is_single_session_buy:
                         type: boolean
                         description: 'Determines whether this event allows paying for a single session.'
                       is_virtual:
                         type: boolean
-                        description: '<tt>true</tt> -if event is virtual; <tt>false</tt> - otherwise.'
+                        description: '<tt>true</tt> if event is virtual; <tt>false</tt> - otherwise.'
                       k_book_class_period:
                         type: string
                         description: 'The ID of the session which should be used to go to the booking wizard.'
@@ -14042,7 +14437,7 @@ paths:
                         description: 'The price of the all sessions of the event.'
                       m_price_total_early:
                         type: [string, "null"]
-                        description: 'Price of the full event, should be used as full price while {@link ElementApi::$dt_early} is actual.'
+                        description: 'Price of the full event should be used as full price while {@link ElementApi::$dt_early} is actual.'
                       s_deny_reason:
                         type: string
                         description: 'The reason why the event can''t be booked. Empty if {@link ElementApi::$k_book_class_period} isn''t empty.'
@@ -14155,7 +14550,7 @@ paths:
                     properties:
                       a_schedule:
                         type: array
-                        description: 'The sessions present on the business schedule. These are sorted chronologically in ascending order. Every element has the following keys: <dl> <dt> string[] <var>a_note</var> </dt> <dd> List of notes. </dd> <dt> array[]|null <var>a_quiz</var> </dt> <dd> List of quizzes. Has next structure: <dl> <dt>bool <var>id_status</var></dt> <dd> Response status ID. One of {@link ResponseStatusSid} constants. </dd> <dt>bool <var>is_hide</var></dt> <dd>Whether it''s hidden. `true` quiz is hidden, `false` otherwise.</dd> <dt>bool <var>is_require</var></dt> <dd>Whether it''s required. `true` quiz is required, `false` otherwise.</dd> <dt>string <var>k_quiz</var></dt> <dd>Quiz key, primary key in {@link \Core\Quiz\QuizSql} table.</dd> <dt>string <var>k_quiz_login</var></dt> <dd>Quiz login key, primary key in {@link \Wl\Quiz\Login\QuizLoginSql} table.</dd> <dt>string <var>k_quiz_response</var></dt> <dd>Quiz response key, primary key in {@link \Wl\Quiz\Response\ResponseSql} table.</dd> <dt>string <var>text_title</var></dt> <dd>Quiz title.</dd> </dl> `null` if no quizzes for schedule item. </dd> <dt> array <var>a_appointment_visit_info</var> </dt> <dd> Additional visit information about this appointment. Empty array if it''s a class. <dl> <dt> int <var>id_visit</var> </dt> <dd> Visit id. One of {@link \Wl\Visit\VisitSid} constants. </dd> <dt> bool <var>is_confirmed</var> </dt> <dd> `true` means that appointment was requested and confirmed by the staff. </dd> <dt> bool <var>is_deny</var> </dt> <dd> `true` means that appointment was requested and denied by the staff. </dd> <dt> bool <var>is_notify_request_accept</var> </dt> <dd> `true` means that the client will receive a notification, if appointment will be confirmed by the staff. </dd> <dt> bool <var>is_notify_request_deny</var> </dt> <dd> `true` means that the client will receive a notification, if appointment will be denied by the staff. </dd> <dt> bool <var>is_request</var> </dt> <dd> `true` means that appointment was requested, but not confirmed by the staff. </dd> </dl> </dd> <dt> string[] <var>a_resource</var> </dt> <dd> A list of assets involved in the session. Primary keys in {@link \RsResourceSql} table. </dd> <dt> string[] <var>a_resource_removed</var> </dt> <dd> List of removed assets involved in the session. Primary keys in {@link \RsResourceSql} table. </dd> <dt> string[] <var>a_staff</var> </dt> <dd> A list of staff members who will conduct the session. Primary keys in {@link \RsStaffSql} table. Deprecated, use <var>a_staff_list</var> instead. </dd> <dt> array <var>a_staff_info</var> </dt> <dd> Information about staff members who conduct this session. The keys are primary keys in {@link \RsStaffSql} table. Values are array with data: <dl> <dt> string <var>text_staff</var> </dt> <dd> Staff full name. </dd> <dt> bool <var>is_staff_change</var> </dt> <dd> <tt>true</tt> means staff is substituted, <tt>false</tt> simple staff member. </dd> <dt> string <var>k_staff</var> </dt> <dd> Staff key. Primary keys in {@link \RsStaffSql} table. </dd> </dl> </dd> <dt> string[] <var>a_user</var> </dt> <dd> For appointments, this is a list of the names of users who are scheduled to attend the session. </dd> <dt> string[] <var>a_virtual_location</var> </dt> <dd> List of virtual locations. Each value is primary key in {@link \RsLocationSql} table. </dd> <dt> string <var>dt_date</var> </dt> <dd> The date/time of the session in UTC. </dd> <dt> string <var>dt_date_cancel</var> </dt> <dd> The date/time when the session was canceled in UTC. Only used for appointments. </dd> <dt> string <var>dt_date_local</var> </dt> <dd> The date/time of the session in local time. </dd> <dt> bool <var>has_quiz_uncompleted</var> </dt> <dd> `true` if has uncompleted quizzes, `false` otherwise. </dd> <dt> int <var>i_book</var> </dt> <dd> The number of clients booked into the session. </dd> <dt> int <var>i_capacity</var> </dt> <dd> The maximum capacity of the session. </dd> <dt> int <var>i_duration</var> </dt> <dd> The duration of the session in minutes. </dd> <dt> int <var>i_padding_after</var> </dt> <dd> The padding time after the session in minutes. Only used for appointments. </dd> <dt> int <var>i_padding_before</var> </dt> <dd> The padding time before the session in minutes. Only used for appointments. </dd> <dt> int <var>i_start</var> </dt> <dd> The start time in minutes after midnight. For example, a class starting at 10:30 in the morning local time will have an `i_start` value of 630. </dd> <dt> int <var>i_wait</var> </dt> <dd> Count clients on waitlist. </dd> <dt> int <var>id_option</var> </dt> <dd> Appointment title display style. Set only for appointments, for others it will be equal to 0. Constants from {@link \Wl\Schedule\Design\OptionSid}. </dd> <dt> int <var>id_service</var> </dt> <dd> The ID of the service type. One of {@link \RsServiceSid} constants. </dd> <dt> bool <var>is_arrive</var> </dt> <dd> For appointments: <tt>true</tt> if user has checked-in; <tt>false</tt> otherwise. For classes always <tt>null</tt>. </dd> <dt> bool <var>is_pay</var> </dt> <dd> For appointments: <tt>true</tt> if appointment is paid; <tt>false</tt> otherwise. For classes always <tt>null</tt>. </dd> <dt> bool <var>is_repeat</var> </dt> <dd> For appointments: <tt>true</tt> if appointment is recurring; <tt>false</tt> otherwise. For classes always <tt>null</tt>. </dd> <dt> string <var>k_appointment</var> </dt> <dd> The appointment key. Primary key in {@link \RsAppointmentSql} table. If the session isn''t an appointment, this will be `0`. </dd> <dt> string <var>dt_confirm</var> </dt> <dd> Confirmation date for appointment in MySQL format. Will be zero date + time in case appointment is not yet confirmed by client. </dd> <dt> string <var>k_class</var> </dt> <dd> The class key. Primary key in {@link \RsClassSql} table. If the session isn''t a class, this will be `0`. </dd> <dt> string <var>k_class_period</var> </dt> <dd> The class period key. Primary key in {@link \RsClassPeriodSql} table. If the session isn''t a class, this will be `0`. </dd> <dt> string <var>k_location</var> </dt> <dd> The location key for where the session takes place. Primary key in {@link \RsLocationSql} table. </dd> <dt> string <var>k_service</var> </dt> <dd> This is the key of the appointment type, while `k_appointment` is the specific instance. Primary key in {@link \RsServiceSql} table. For other cases, this will be `0`. </dd> <dt> string <var>s_title</var> </dt> <dd> The name of the session. </dd> <dt> bool <var>show_quiz_icon</var> </dt> <dd> `true` when need show quiz icon, `false` otherwise. </dd> <dt> string <var>text_alert</var> </dt> <dd> Alert message. </dd> <dt> string <var>text_color_background</var> </dt> <dd> The background color in hex representation as used on WellnessLiving. </dd> <dt> string <var>text_color_border</var> </dt> <dd> The border color in hex representation as used on WellnessLiving. </dd> <dt> string <var>text_quiz_title</var> </dt> <dd> Title for quiz icon. </dd> <dt> bool<var>is_virtual_service</var> </dt> <dd> <tt>true</tt> - If the business has at least one virtual service, <tt>false</tt> - otherwise. </dd> <dt> string<var>url_image</var> </dt> <dd> URL to image. Empty if image not exist. </dd> </dl>'
+                        description: 'The sessions present on the business schedule. These are sorted chronologically in ascending order. Every element has the following keys: <dl> <dt> string[] <var>a_note</var> </dt> <dd> List of notes. </dd> <dt> array[]|null <var>a_quiz</var> </dt> <dd> List of quizzes. Has next structure: <dl> <dt>bool <var>id_status</var></dt> <dd> Response status ID. One of {@link ResponseStatusSid} constants. </dd> <dt>bool <var>is_hide</var></dt> <dd>Whether it''s hidden. `true` quiz is hidden, `false` otherwise.</dd> <dt>bool <var>is_require</var></dt> <dd>Whether it''s required. `true` quiz is required, `false` otherwise.</dd> <dt>string <var>k_quiz</var></dt> <dd>Quiz key, primary key in {@link \Core\Quiz\QuizSql} table.</dd> <dt>string <var>k_quiz_login</var></dt> <dd>Quiz login key, primary key in {@link \Wl\Quiz\Login\QuizLoginSql} table.</dd> <dt>string <var>k_quiz_response</var></dt> <dd>Quiz response key, primary key in {@link \Wl\Quiz\Response\ResponseSql} table.</dd> <dt>string <var>text_title</var></dt> <dd>Quiz title.</dd> </dl> `null` if no quizzes for schedule item. </dd> <dt> array <var>a_appointment_visit_info</var> </dt> <dd> Additional visit information about this appointment. Empty array if it''s a class. <dl> <dt> int <var>id_visit</var> </dt> <dd> Visit id. One of {@link \Wl\Visit\VisitSid} constants. </dd> <dt> bool <var>is_confirmed</var> </dt> <dd> `true` means that appointment was requested and confirmed by the staff. </dd> <dt> bool <var>is_deny</var> </dt> <dd> `true` means that appointment was requested and denied by the staff. </dd> <dt> bool <var>is_notify_request_accept</var> </dt> <dd> `true` means that the client will receive a notification, if appointment will be confirmed by the staff. </dd> <dt> bool <var>is_notify_request_deny</var> </dt> <dd> `true` means that the client will receive a notification, if appointment will be denied by the staff. </dd> <dt> bool <var>is_request</var> </dt> <dd> `true` means that appointment was requested, but not confirmed by the staff. </dd> </dl> </dd> <dt> string[] <var>a_resource</var> </dt> <dd> A list of assets involved in the session. Primary keys in {@link \RsResourceSql} table. </dd> <dt> string[] <var>a_resource_removed</var> </dt> <dd> List of removed assets involved in the session. Primary keys in {@link \RsResourceSql} table. </dd> <dt> string[] <var>a_staff</var> </dt> <dd> A list of staff members who will conduct the session. Primary keys in {@link \RsStaffSql} table. Deprecated, use <var>a_staff_list</var> instead. </dd> <dt> array <var>a_staff_info</var> </dt> <dd> Information about staff members who conduct this session. The keys are primary keys in {@link \RsStaffSql} table. Values are array with data: <dl> <dt> string <var>text_staff</var> </dt> <dd> Staff full name. </dd> <dt> bool <var>is_staff_change</var> </dt> <dd> <tt>true</tt> means staff is substituted, <tt>false</tt> simple staff member. </dd> <dt> string <var>k_staff</var> </dt> <dd> Staff key. Primary keys in {@link \RsStaffSql} table. </dd> </dl> </dd> <dt> string[] <var>a_user</var> </dt> <dd> For appointments, this is a list of the names of users who are scheduled to attend the session. </dd> <dt> string[] <var>a_virtual_location</var> </dt> <dd> List of virtual locations. Each value is primary key in {@link \RsLocationSql} table. </dd> <dt> string <var>dt_date</var> </dt> <dd> The date/time of the session in UTC. </dd> <dt> string <var>dt_date_cancel</var> </dt> <dd> The date/time when the session was canceled in UTC. Only used for appointments. </dd> <dt> string <var>dt_date_local</var> </dt> <dd> The date/time of the session in local time. </dd> <dt> bool <var>has_quiz_uncompleted</var> </dt> <dd> `true` if has uncompleted quizzes, `false` otherwise. </dd> <dt> int <var>i_addon</var> </dt> <dd> The number of addons for the current appointment. Set only if the current session is an appointment. </dd> <dt> int <var>i_book</var> </dt> <dd> The number of clients booked into the session. </dd> <dt> int <var>i_capacity</var> </dt> <dd> The maximum capacity of the session. </dd> <dt> int <var>i_duration</var> </dt> <dd> The duration of the session in minutes. </dd> <dt> int <var>i_padding_after</var> </dt> <dd> The padding time after the session in minutes. Only used for appointments. </dd> <dt> int <var>i_padding_before</var> </dt> <dd> The padding time before the session in minutes. Only used for appointments. </dd> <dt> int <var>i_start</var> </dt> <dd> The start time in minutes after midnight. For example, a class starting at 10:30 in the morning local time will have an `i_start` value of 630. </dd> <dt> int <var>i_wait</var> </dt> <dd> Count clients on waitlist. </dd> <dt> int <var>id_option</var> </dt> <dd> Appointment title display style. Set only for appointments, for others it will be equal to 0. Constants from {@link \Wl\Schedule\Design\OptionSid}. </dd> <dt> int <var>id_service</var> </dt> <dd> The ID of the service type. One of {@link \RsServiceSid} constants. </dd> <dt> bool <var>is_arrive</var> </dt> <dd> For appointments: <tt>true</tt> if user has checked-in; <tt>false</tt> otherwise. For classes always <tt>null</tt>. </dd> <dt> bool <var>is_pay</var> </dt> <dd> For appointments: <tt>true</tt> if appointment is paid; <tt>false</tt> otherwise. For classes always <tt>null</tt>. </dd> <dt> bool <var>is_repeat</var> </dt> <dd> For appointments: <tt>true</tt> if appointment is recurring; <tt>false</tt> otherwise. For classes always <tt>null</tt>. </dd> <dt> string <var>k_appointment</var> </dt> <dd> The appointment key. Primary key in {@link \RsAppointmentSql} table. If the session isn''t an appointment, this will be `0`. </dd> <dt> string <var>dt_confirm</var> </dt> <dd> Confirmation date for appointment in MySQL format. Will be zero date + time in case appointment is not yet confirmed by client. </dd> <dt> string <var>k_class</var> </dt> <dd> The class key. Primary key in {@link \RsClassSql} table. If the session isn''t a class, this will be `0`. </dd> <dt> string <var>k_class_period</var> </dt> <dd> The class period key. Primary key in {@link \RsClassPeriodSql} table. If the session isn''t a class, this will be `0`. </dd> <dt> string <var>k_location</var> </dt> <dd> The location key for where the session takes place. Primary key in {@link \RsLocationSql} table. </dd> <dt> string <var>k_service</var> </dt> <dd> This is the key of the appointment type, while `k_appointment` is the specific instance. Primary key in {@link \RsServiceSql} table. For other cases, this will be `0`. </dd> <dt> string <var>s_title</var> </dt> <dd> The name of the session. </dd> <dt> bool <var>show_quiz_icon</var> </dt> <dd> `true` when need show quiz icon, `false` otherwise. </dd> <dt> int <var>t_business_start</var> </dt> <dd> The earliest time the business where the session takes place, opens. In Unix format. </dd> <dt> int <var>t_business_end</var> </dt> <dd> The latest time the business where the session takes place, closes. In Unix format. </dd> <dt> string <var>text_alert</var> </dt> <dd> Alert message. </dd> <dt> string <var>text_color_background</var> </dt> <dd> The background color in hex representation as used on WellnessLiving. </dd> <dt> string <var>text_color_border</var> </dt> <dd> The border color in hex representation as used on WellnessLiving. </dd> <dt> string <var>text_quiz_title</var> </dt> <dd> Title for quiz icon. </dd> <dt> bool<var>is_virtual_service</var> </dt> <dd> <tt>true</tt> - If the business has at least one virtual service, <tt>false</tt> - otherwise. </dd> <dt> string<var>url_image</var> </dt> <dd> URL to image. Empty if image not exist. </dd> </dl>'
                       is_virtual_service:
                         type: boolean
                         description: '<tt>true</tt> - If the business has at least one virtual service, <tt>false</tt> - otherwise.'
@@ -14667,7 +15062,7 @@ paths:
       parameters:
         - name: a_book_data
           in: query
-          description: 'All data from the provider model <tt>Wl_Appointment_Book_ProviderModel</tt>: <dl> <dt> array [<var>a_product</var>] </dt> <dd> Add-ons to the appointment. Specify this for appointment bookings only. Old format: array keys refer to primary keys. See table {@link \RsShopProductOptionSql}. New format: each element is an array: <dt>int <var>i_count</var></dt><dd>The add-on count</dd> <dt>string <var>k_shop_product_option</var></dt><dd>The key of add-on. Primary key in {@link \RsShopProductOptionSql} table.</dd> </dd> <dt> array [<var>a_repeat</var>] </dt> <dd> Recurring booking information: <dl> <dt> int[] [<var>a_week</var>] </dt> <dd> The days of week when appointment repeats. One of the {@link \ADateWeekSid} constants. This will be empty if the appointment doesn''t repeat weekly. </dd> <dt> string [<var>dl_end</var>] </dt> <dd> The date when the appointment''s repeat cycle stops. This will be empty if the repeat cycle doesn''t stop at a certain date. </dd> <dt> int [<var>i_occurrence</var>] </dt> <dd> The number of occurrences after which the appointment''s repeat cycle must stop. This will be empty if the repeat cycle doesn''t stop after a certain number of occurrences. </dd> <dt> int <var>i_period</var> </dt> <dd> The frequency of the appointment''s repeat cycle. </dd> <dt> int <var>id_period</var> </dt> <dd> The measurement unit of <tt>i_period</tt>. One of the {@link \ADurationSid} constants. </dd> <dt> bool [<var>is_month</var>] </dt> <dd> <tt>true</tt> if the appointment repeats monthly on the same date. <tt>false</tt> if the appointment repeats monthly on the same day of the week. <tt>null</tt> if the appointment doesn''t repeat monthly. </dd> </dl> This will be empty if the appointment isn''t recurring. </dd> <dt> array [<var>a_resource</var>] </dt> <dd> A list of assets for the appointment booking. Keys refer to asset categories. Primary keys in {@link \RsResourceTypeSql} table. Values refer to arrays with the next keys: <dl> <dt>int [<var>i_index</var>]</dt> <dd>The asset index on the layout. Specify this only if the asset category has a layout.</dd> <dt>string <var>k_resource</var></dt> <dd>The asset. Primary key in {@link \RsResourceSql} table.</dd> </dl> Specify this only for the appointment booking. </dd> <dt> string <var>dt_date</var> </dt> <dd> The date/time for the booking in MySQL format in the location''s time zone. </dd> <dt> int [<var>i_duration</var>] </dt> <dd> The duration of asset booking in minutes. Specify this for separate asset bookings only. </dd> <dt> int [<var>i_index</var>] </dt> <dd> The asset index on the layout. Specify this for separate asset bookings only and for cases when the asset category only has a layout. </dd> <dt> int <var>id_class_tab</var> </dt> <dd> The booking service type. One of the {@link \Wl\Classes\Tab\TabSid} constants. </dd> <dt> int [<var>id_gender_staff</var>] </dt> <dd> The gender of the staff member conducting the appointment. One of the {@link \AGenderSid} constants. Specify this for appointment bookings only. </dd> <dt> string [<var>k_login_promotion</var>] </dt> <dd> The user''s pass (for example, a membership or a package). Primary key in {@link \RsLoginPromotionSql} table. Specify this if you want to set the pass to use to pay for the booking. </dd> <dt> string [<var>k_resource</var>] </dt> <dd> The asset booking. Specify this for separate asset bookings only. Primary key in {@link \RsResourceSql} table. </dd> <dt> string [<var>k_service</var>] </dt> <dd> The appointment booking. Specify this for appointment bookings only. Primary key in {@link \RsServiceSql} table. </dd> <dt> string [<var>k_staff</var>] </dt> <dd> The staff member conducting the appointment. Specify this for appointment bookings only. Primary key in {@link \RsStaffSql} table. </dd> <dt> string [<var>k_staff_date</var>] </dt> <dd> The staff member conducting the appointment. The difference between this an <var>k_staff</var> is that this value must be set only in cases when you want to add a customer to an appointment that already exists. Specify this for appointment bookings only. Primary key in {@link \RsStaffSql} table. </dd> <dt>string [<var>m_tip_appointment</var>]</dt> <dd>The amount of selected tips.</dd> <dt> string [<var>uid_staff</var>] </dt> <dd> User ID staff member conducting the appointment. Specify this for appointment bookings only. Primary key in {@link \PassportLoginSql} table. </dd> <dt> string [<var>uid_staff_date</var>] </dt> <dd> User ID staff member conducting the appointment. The difference between this an <var>uid_staff</var> is that this value must be set only in cases when you want to add a customer to an appointment that already exists. Specify this for appointment bookings only. Primary key in {@link \PassportLoginSql} table. </dd> </dl>'
+          description: 'All data from the provider model <tt>Wl_Appointment_Book_ProviderModel</tt>: <dl> <dt> array [<var>a_product</var>] </dt> <dd> Add-ons to the appointment. Specify this for appointment bookings only. Old format: array keys refer to primary keys. See table {@link \RsShopProductOptionSql}. New format: each element is an array: <dt>int <var>i_count</var></dt><dd>The add-on count</dd> <dt>string <var>k_shop_product_option</var></dt><dd>The key of add-on. Primary key in {@link \RsShopProductOptionSql} table.</dd> </dd> <dt> array [<var>a_repeat</var>] </dt> <dd> Recurring booking information: <dl> <dt> int[] [<var>a_week</var>] </dt> <dd> The days of week when appointment repeats. One of the {@link \ADateWeekSid} constants. This will be empty if the appointment doesn''t repeat weekly. </dd> <dt> string [<var>dl_end</var>] </dt> <dd> The date when the appointment''s repeat cycle stops. This will be empty if the repeat cycle doesn''t stop at a certain date. </dd> <dt> int [<var>i_occurrence</var>] </dt> <dd> The number of occurrences after which the appointment''s repeat cycle must stop. This will be empty if the repeat cycle doesn''t stop after a certain number of occurrences. </dd> <dt> int <var>i_period</var> </dt> <dd> The frequency of the appointment''s repeat cycle. </dd> <dt> int <var>id_period</var> </dt> <dd> The measurement unit of <tt>i_period</tt>. One of the {@link \ADurationSid} constants. </dd> <dt> bool [<var>is_month</var>] </dt> <dd> <tt>true</tt> if the appointment repeats monthly on the same date. <tt>false</tt> if the appointment repeats monthly on the same day of the week. <tt>null</tt> if the appointment doesn''t repeat monthly. </dd> </dl> This will be empty if the appointment isn''t recurring. </dd> <dt> array [<var>a_resource</var>] </dt> <dd> A list of assets for the appointment booking. Keys refer to asset categories. Primary keys in {@link \RsResourceTypeSql} table. Values refer to arrays with the next keys: <dl> <dt>int [<var>i_index</var>]</dt> <dd>The asset index on the layout. Specify this only if the asset category has a layout.</dd> <dt>string <var>k_resource</var></dt> <dd>The asset. Primary key in {@link \RsResourceSql} table.</dd> </dl> Specify this only for the appointment booking. </dd> <dt> string <var>dt_date</var> </dt> <dd> The date/time for the booking in MySQL format in the location''s time zone. </dd> <dt> int [<var>i_duration</var>] </dt> <dd> The duration of asset booking in minutes. Specify this for separate asset bookings only. </dd> <dt> int [<var>i_index</var>] </dt> <dd> The asset index on the layout. Specify this for separate asset bookings only and for cases when the asset category only has a layout. </dd> <dt> int <var>id_class_tab</var> </dt> <dd> The booking service type. One of the {@link \Wl\Classes\Tab\TabSid} constants. </dd> <dt> int [<var>id_gender_staff</var>] </dt> <dd> The gender of the staff member conducting the appointment. One of the {@link \AGenderSid} constants. Specify this for appointment bookings only. </dd> <dt> string [<var>k_login_promotion</var>] </dt> <dd> The user''s pass (for example, a membership or a package). Primary key in {@link \RsLoginPromotionSql} table. Specify this if you want to set the pass to use to pay for the booking. </dd> <dt> string [<var>k_resource</var>] </dt> <dd> The asset booking. Specify this for separate asset bookings only. Primary key in {@link \RsResourceSql} table. </dd> <dt> string [<var>k_service</var>] </dt> <dd> The appointment booking. Specify this for appointment bookings only. Primary key in {@link \RsServiceSql} table. </dd> <dt> string [<var>k_staff</var>] </dt> <dd> The staff member conducting the appointment. Specify this for appointment bookings only. Primary key in {@link \RsStaffSql} table. </dd> <dt> string [<var>k_staff_date</var>] </dt> <dd> The staff member conducting the appointment. The difference between this an <var>k_staff</var> is that this value must be set only in cases when you want to add a customer to an appointment that already exists. Specify this for appointment bookings only. Primary key in {@link \RsStaffSql} table. </dd> <dt>string [<var>m_tip_appointment</var>]</dt> <dd>The amount of selected tips.</dd> </dl>'
           schema:
             type: array
         - name: a_uid
@@ -16315,7 +16710,7 @@ paths:
             format: int32
         - name: is_credit_card_check
           in: query
-          description: 'Checking whether the client has a credit card (if configured in the business) will be skipped if this flag is set to `false`. Use this field with caution. The final booking will not use this flag and the check will still be performed.'
+          description: 'Checking whether the client has a credit card (if configured in the business) will be skipped if this flag is set to `false`. Use this field with caution. The final booking will not use this flag, and the check will still be performed.'
           schema:
             type: boolean
         - name: k_class_period
@@ -16346,7 +16741,7 @@ paths:
                         description: 'A list of all class sessions that can be booked together. Every element has the next structure: <dl> <dt> string[] <var>a_staff</var> </dt> <dd> List of staff names that are leading this session. </dd> <dt> string[] <var>a_virtual_location</var> </dt> <dd> List of virtual locations. </dd> <dt> string <var>dt_date</var> </dt> <dd> The date/time when session starts in MySQL format and in GMT. </dd> <dt> boolean <var>is_select</var> </dt> <dd> <tt>true</tt> if this session should be selected when page is initialized; <tt>false</tt> if otherwise. </dd> <dt> bool <var>is_wait</var> </dt> <dd> `true` if client is added to a wait list, `false` - to an active list. </dd> <dt> bool <var>is_wait_list_unpaid</var> </dt> <dd> Allow clients to join the wait list unpaid. </dd> <dt> string <var>k_class_period</var> </dt> <dd> The key of the session. Primary keys in {@link \RsClassPeriodSql} table. </dd> <dt> string <var>k_location</var> </dt> <dd> Location key. Primary key in {@link \RsLocationSql} table. </dd> <dt> bool <var>m_price</var> </dt> <dd> Price of the session. </dd> <dt> string <var>s_location</var> </dt> <dd> The name of the location where the session occurred. </dd> <dt> string <var>s_start</var> </dt> <dd> The date/time when the session starts in human-readable format. Returned in the time zone of the location. </dd> <dt> string <var>text_duration</var> </dt> <dd> String representation of session duration. Duration formatting method {@link InfoApi::_classDurationFormat()}. </dd> </dl>'
                       a_session_free:
                         type: array
-                        description: 'List of sessions that can be paid without new purchases. Such as previously prepaid or free sessions. A result of the {@link \RsBookProcess::sessionFreeGet()} method execution. Each its item has the key of following format: <dl> <dt>string <var>dt_date</var>::<var>k_class_period</var></dt><dd>Composite key of the array.</dd> </dl> and the value of following structure: <dl> <dt>string <var>dt_date</var></dt><dd>Session date.</dd> <dt>string <var>k_class_period</var></dt><dd>Class period key for the session.</dd> </dl>'
+                        description: 'List of sessions that can be paid without new purchases. Such as previously prepaid or free sessions. A result of the {@link \RsBookProcess::sessionFreeGet()} method execution. Each its item has the key of following format: <dl> <dt>string <var>dt_date::k_class_period</var></dt><dd>Composite key of the array.</dd> </dl> and the value of following structure: <dl> <dt>string <var>dt_date</var></dt><dd>Session date.</dd> <dt>string <var>k_class_period</var></dt><dd>Class period key for the session.</dd> </dl>'
                       a_staff:
                         type: array
                         description: 'The staff member conducting the session. Every element has the next structure: <dl> <dt> array <var>a_logo</var> </dt> <dd> The staff member photo: <dl> <dt>int <var>i_height</var></dt> <dd>The image height.</dd> <dt>int <var>i_width</var></dt> <dd>The image width.</dd> <dt>string <var>s_url</var></dt> <dd>The image URL.</dd> </dl> </dd> <dt>string <var>s_family</var></dt> <dd>The first letter of staff member surname.</dd> <dt>string <var>s_staff</var></dt> <dd>The staff member''s name.</dd> <dt>string <var>uid</var></dt> <dd>UID of the staff member. Primary key in {@link \PassportLoginSql} table.</dd> </dl>'
@@ -16394,6 +16789,9 @@ paths:
                       is_event_session:
                         type: boolean
                         description: 'Can client chooses several session per booking.'
+                      is_location_phone:
+                        type: boolean
+                        description: '`true` if need to display location phone number, `false` otherwise.'
                       is_promotion_only:
                         type: boolean
                         description: '`true` if event can be paid with pricing option only. `false` if full event purchase or single session purchase are allowed. Copy of {@link \RsClassSql}.`is_promotion_only`.'
@@ -16430,6 +16828,9 @@ paths:
                       s_time:
                         type: string
                         description: 'The time when the session takes place in the location''s time zone. In format `hh:mm`.'
+                      text_location_phone:
+                        type: string
+                        description: 'Location phone number.'
                       text_room:
                         type: string
                         description: 'Room where session takes place.'
@@ -16457,7 +16858,7 @@ paths:
             format: int32
         - name: is_credit_card_check
           in: query
-          description: 'Checking whether the client has a credit card (if configured in the business) will be skipped if this flag is set to `false`. Use this field with caution. The final booking will not use this flag and the check will still be performed.'
+          description: 'Checking whether the client has a credit card (if configured in the business) will be skipped if this flag is set to `false`. Use this field with caution. The final booking will not use this flag, and the check will still be performed.'
           schema:
             type: boolean
         - name: k_class_period
@@ -16495,6 +16896,9 @@ paths:
                 is_agree:
                   type: boolean
                   description: 'Determines if the user has agreed to the liability release. `true` - if  the user has agreed. Otherwise, this will be. `false` - if the user hasn''t agreed or the agreement isn''t required.'
+                is_book_unpaid:
+                  type: boolean
+                  description: '`true` to book unpaid. `false` otherwise. Allows booking unpaid when client has a login promotion that can be used to pay for the service. Allowed in {@link ModeSid::WIDGET} mode only.'
                 is_force_pay_later:
                   type: boolean
                   description: '`true` if user pressed ''Pay later''. `false` if user pressed ''Pay now''.'
@@ -16551,7 +16955,7 @@ paths:
             format: int32
         - name: is_credit_card_check
           in: query
-          description: 'Checking whether the client has a credit card (if configured in the business) will be skipped if this flag is set to `false`. Use this field with caution. The final booking will not use this flag and the check will still be performed.'
+          description: 'Checking whether the client has a credit card (if configured in the business) will be skipped if this flag is set to `false`. Use this field with caution. The final booking will not use this flag, and the check will still be performed.'
           schema:
             type: boolean
         - name: k_class_period
@@ -16582,7 +16986,7 @@ paths:
                         description: 'A list of all class sessions that can be booked together. Every element has the next structure: <dl> <dt> string[] <var>a_staff</var> </dt> <dd> List of staff names that are leading this session. </dd> <dt> string[] <var>a_virtual_location</var> </dt> <dd> List of virtual locations. </dd> <dt> string <var>dt_date</var> </dt> <dd> The date/time when session starts in MySQL format and in GMT. </dd> <dt> boolean <var>is_select</var> </dt> <dd> <tt>true</tt> if this session should be selected when page is initialized; <tt>false</tt> if otherwise. </dd> <dt> bool <var>is_wait</var> </dt> <dd> `true` if client is added to a wait list, `false` - to an active list. </dd> <dt> bool <var>is_wait_list_unpaid</var> </dt> <dd> Allow clients to join the wait list unpaid. </dd> <dt> string <var>k_class_period</var> </dt> <dd> The key of the session. Primary keys in {@link \RsClassPeriodSql} table. </dd> <dt> string <var>k_location</var> </dt> <dd> Location key. Primary key in {@link \RsLocationSql} table. </dd> <dt> bool <var>m_price</var> </dt> <dd> Price of the session. </dd> <dt> string <var>s_location</var> </dt> <dd> The name of the location where the session occurred. </dd> <dt> string <var>s_start</var> </dt> <dd> The date/time when the session starts in human-readable format. Returned in the time zone of the location. </dd> <dt> string <var>text_duration</var> </dt> <dd> String representation of session duration. Duration formatting method {@link InfoApi::_classDurationFormat()}. </dd> </dl>'
                       a_session_free:
                         type: array
-                        description: 'List of sessions that can be paid without new purchases. Such as previously prepaid or free sessions. A result of the {@link \RsBookProcess::sessionFreeGet()} method execution. Each its item has the key of following format: <dl> <dt>string <var>dt_date</var>::<var>k_class_period</var></dt><dd>Composite key of the array.</dd> </dl> and the value of following structure: <dl> <dt>string <var>dt_date</var></dt><dd>Session date.</dd> <dt>string <var>k_class_period</var></dt><dd>Class period key for the session.</dd> </dl>'
+                        description: 'List of sessions that can be paid without new purchases. Such as previously prepaid or free sessions. A result of the {@link \RsBookProcess::sessionFreeGet()} method execution. Each its item has the key of following format: <dl> <dt>string <var>dt_date::k_class_period</var></dt><dd>Composite key of the array.</dd> </dl> and the value of following structure: <dl> <dt>string <var>dt_date</var></dt><dd>Session date.</dd> <dt>string <var>k_class_period</var></dt><dd>Class period key for the session.</dd> </dl>'
                       a_staff:
                         type: array
                         description: 'The staff member conducting the session. Every element has the next structure: <dl> <dt> array <var>a_logo</var> </dt> <dd> The staff member photo: <dl> <dt>int <var>i_height</var></dt> <dd>The image height.</dd> <dt>int <var>i_width</var></dt> <dd>The image width.</dd> <dt>string <var>s_url</var></dt> <dd>The image URL.</dd> </dl> </dd> <dt>string <var>s_family</var></dt> <dd>The first letter of staff member surname.</dd> <dt>string <var>s_staff</var></dt> <dd>The staff member''s name.</dd> <dt>string <var>uid</var></dt> <dd>UID of the staff member. Primary key in {@link \PassportLoginSql} table.</dd> </dl>'
@@ -16630,6 +17034,9 @@ paths:
                       is_event_session:
                         type: boolean
                         description: 'Can client chooses several session per booking.'
+                      is_location_phone:
+                        type: boolean
+                        description: '`true` if need to display location phone number, `false` otherwise.'
                       is_promotion_only:
                         type: boolean
                         description: '`true` if event can be paid with pricing option only. `false` if full event purchase or single session purchase are allowed. Copy of {@link \RsClassSql}.`is_promotion_only`.'
@@ -16666,6 +17073,9 @@ paths:
                       s_time:
                         type: string
                         description: 'The time when the session takes place in the location''s time zone. In format `hh:mm`.'
+                      text_location_phone:
+                        type: string
+                        description: 'Location phone number.'
                       text_room:
                         type: string
                         description: 'Room where session takes place.'
@@ -16693,7 +17103,7 @@ paths:
             format: int32
         - name: is_credit_card_check
           in: query
-          description: 'Checking whether the client has a credit card (if configured in the business) will be skipped if this flag is set to `false`. Use this field with caution. The final booking will not use this flag and the check will still be performed.'
+          description: 'Checking whether the client has a credit card (if configured in the business) will be skipped if this flag is set to `false`. Use this field with caution. The final booking will not use this flag, and the check will still be performed.'
           schema:
             type: boolean
         - name: k_class_period
@@ -16731,6 +17141,9 @@ paths:
                 is_agree:
                   type: boolean
                   description: 'Determines if the user has agreed to the liability release. `true` - if  the user has agreed. Otherwise, this will be. `false` - if the user hasn''t agreed or the agreement isn''t required.'
+                is_book_unpaid:
+                  type: boolean
+                  description: '`true` to book unpaid. `false` otherwise. Allows booking unpaid when client has a login promotion that can be used to pay for the service. Allowed in {@link ModeSid::WIDGET} mode only.'
                 is_force_pay_later:
                   type: boolean
                   description: '`true` if user pressed ''Pay later''. `false` if user pressed ''Pay now''.'
@@ -16892,7 +17305,7 @@ paths:
             format: int32
         - name: is_credit_card_check
           in: query
-          description: 'Checking whether the client has a credit card (if configured in the business) will be skipped if this flag is set to `false`. Use this field with caution. The final booking will not use this flag and the check will still be performed.'
+          description: 'Checking whether the client has a credit card (if configured in the business) will be skipped if this flag is set to `false`. Use this field with caution. The final booking will not use this flag, and the check will still be performed.'
           schema:
             type: boolean
         - name: k_class_period
@@ -16930,6 +17343,9 @@ paths:
                 can_book:
                   type: boolean
                   description: 'Determines whether the class/event can be booked at this step or not. This is an external process control flag.'
+                is_book_unpaid:
+                  type: boolean
+                  description: '`true` to book unpaid. `false` otherwise. Allows booking unpaid when client has a login promotion that can be used to pay for the service. Allowed in {@link ModeSid::WIDGET} mode only.'
                 is_force_pay_later:
                   type: boolean
                   description: '`true` if user pressed ''Pay later''. `false` if user pressed ''Pay now''.'
@@ -16964,9 +17380,9 @@ paths:
     get:
       summary: 'Checks if user can book specified session.'
       parameters:
-        - name: a_check
+        - name: a_check_ignore
           in: query
-          description: 'List of check that must be ignored. Each element must be a member of {@link ProcessCheckSid}.'
+          description: 'List of check that must be skipped. Each element must be a member of {@link ProcessCheckSid}.'
           schema:
             type: array
         - name: dtu_date
@@ -17213,7 +17629,7 @@ paths:
             format: int32
         - name: is_credit_card_check
           in: query
-          description: 'Checking whether the client has a credit card (if configured in the business) will be skipped if this flag is set to `false`. Use this field with caution. The final booking will not use this flag and the check will still be performed.'
+          description: 'Checking whether the client has a credit card (if configured in the business) will be skipped if this flag is set to `false`. Use this field with caution. The final booking will not use this flag, and the check will still be performed.'
           schema:
             type: boolean
         - name: k_class_period
@@ -17257,6 +17673,9 @@ paths:
                 can_book:
                   type: boolean
                   description: 'Determines whether the class/event can be booked at this step or not. This is an external process control flag.'
+                is_book_unpaid:
+                  type: boolean
+                  description: '`true` to book unpaid. `false` otherwise. Allows booking unpaid when client has a login promotion that can be used to pay for the service. Allowed in {@link ModeSid::WIDGET} mode only.'
                 is_card_authorize:
                   type: boolean
                   description: 'If client must authorize credit card.'
@@ -17340,7 +17759,7 @@ paths:
             type: boolean
         - name: is_credit_card_check
           in: query
-          description: 'Checking whether the client has a credit card (if configured in the business) will be skipped if this flag is set to `false`. Use this field with caution. The final booking will not use this flag and the check will still be performed.'
+          description: 'Checking whether the client has a credit card (if configured in the business) will be skipped if this flag is set to `false`. Use this field with caution. The final booking will not use this flag, and the check will still be performed.'
           schema:
             type: boolean
         - name: k_business
@@ -17571,7 +17990,7 @@ paths:
             type: boolean
         - name: is_credit_card_check
           in: query
-          description: 'Checking whether the client has a credit card (if configured in the business) will be skipped if this flag is set to `false`. Use this field with caution. The final booking will not use this flag and the check will still be performed.'
+          description: 'Checking whether the client has a credit card (if configured in the business) will be skipped if this flag is set to `false`. Use this field with caution. The final booking will not use this flag, and the check will still be performed.'
           schema:
             type: boolean
         - name: json_session
@@ -17649,7 +18068,7 @@ paths:
             format: int32
         - name: is_credit_card_check
           in: query
-          description: 'Checking whether the client has a credit card (if configured in the business) will be skipped if this flag is set to `false`. Use this field with caution. The final booking will not use this flag and the check will still be performed.'
+          description: 'Checking whether the client has a credit card (if configured in the business) will be skipped if this flag is set to `false`. Use this field with caution. The final booking will not use this flag, and the check will still be performed.'
           schema:
             type: boolean
         - name: k_class_period
@@ -17693,7 +18112,7 @@ paths:
             format: int32
         - name: is_credit_card_check
           in: query
-          description: 'Checking whether the client has a credit card (if configured in the business) will be skipped if this flag is set to `false`. Use this field with caution. The final booking will not use this flag and the check will still be performed.'
+          description: 'Checking whether the client has a credit card (if configured in the business) will be skipped if this flag is set to `false`. Use this field with caution. The final booking will not use this flag, and the check will still be performed.'
           schema:
             type: boolean
         - name: k_class_period
@@ -17731,6 +18150,9 @@ paths:
                 can_book:
                   type: boolean
                   description: 'Determines whether the class/event can be booked at this step or not. This is an external process control flag.'
+                is_book_unpaid:
+                  type: boolean
+                  description: '`true` to book unpaid. `false` otherwise. Allows booking unpaid when client has a login promotion that can be used to pay for the service. Allowed in {@link ModeSid::WIDGET} mode only.'
                 is_force_pay_later:
                   type: boolean
                   description: '`true` if user pressed ''Pay later''. `false` if user pressed ''Pay now''.'
@@ -17783,7 +18205,7 @@ paths:
             format: int32
         - name: is_credit_card_check
           in: query
-          description: 'Checking whether the client has a credit card (if configured in the business) will be skipped if this flag is set to `false`. Use this field with caution. The final booking will not use this flag and the check will still be performed.'
+          description: 'Checking whether the client has a credit card (if configured in the business) will be skipped if this flag is set to `false`. Use this field with caution. The final booking will not use this flag, and the check will still be performed.'
           schema:
             type: boolean
         - name: k_class_period
@@ -17832,7 +18254,7 @@ paths:
             format: int32
         - name: is_credit_card_check
           in: query
-          description: 'Checking whether the client has a credit card (if configured in the business) will be skipped if this flag is set to `false`. Use this field with caution. The final booking will not use this flag and the check will still be performed.'
+          description: 'Checking whether the client has a credit card (if configured in the business) will be skipped if this flag is set to `false`. Use this field with caution. The final booking will not use this flag, and the check will still be performed.'
           schema:
             type: boolean
         - name: k_class_period
@@ -17864,6 +18286,9 @@ paths:
                 can_book:
                   type: boolean
                   description: 'Determines whether the class/event can be booked at this step or not. This is an external process control flag.'
+                is_book_unpaid:
+                  type: boolean
+                  description: '`true` to book unpaid. `false` otherwise. Allows booking unpaid when client has a login promotion that can be used to pay for the service. Allowed in {@link ModeSid::WIDGET} mode only.'
                 is_force_pay_later:
                   type: boolean
                   description: '`true` if user pressed ''Pay later''. `false` if user pressed ''Pay now''.'
@@ -17916,7 +18341,7 @@ paths:
             format: int32
         - name: is_credit_card_check
           in: query
-          description: 'Checking whether the client has a credit card (if configured in the business) will be skipped if this flag is set to `false`. Use this field with caution. The final booking will not use this flag and the check will still be performed.'
+          description: 'Checking whether the client has a credit card (if configured in the business) will be skipped if this flag is set to `false`. Use this field with caution. The final booking will not use this flag, and the check will still be performed.'
           schema:
             type: boolean
         - name: json_session
@@ -17970,7 +18395,7 @@ paths:
             format: int32
         - name: is_credit_card_check
           in: query
-          description: 'Checking whether the client has a credit card (if configured in the business) will be skipped if this flag is set to `false`. Use this field with caution. The final booking will not use this flag and the check will still be performed.'
+          description: 'Checking whether the client has a credit card (if configured in the business) will be skipped if this flag is set to `false`. Use this field with caution. The final booking will not use this flag, and the check will still be performed.'
           schema:
             type: boolean
         - name: json_session
@@ -18007,6 +18432,9 @@ paths:
                 can_book:
                   type: boolean
                   description: 'Determines whether the class/event can be booked at this step or not. This is an external process control flag.'
+                is_book_unpaid:
+                  type: boolean
+                  description: '`true` to book unpaid. `false` otherwise. Allows booking unpaid when client has a login promotion that can be used to pay for the service. Allowed in {@link ModeSid::WIDGET} mode only.'
                 is_force_pay_later:
                   type: boolean
                   description: '`true` if user pressed ''Pay later''. `false` if user pressed ''Pay now''.'
@@ -19010,7 +19438,7 @@ paths:
       parameters:
         - name: cid_credential
           in: query
-          description: 'The CID of the credential. Accepted values: <ul> <li> <tt>972</tt> - The Google credential. Use the {@link GoogleCredentialData} object to send the credential. </li> <li> <tt>973</tt> - The Facebook credential. Use the {@link GoogleCredentialData} object to send the credential. </li> </ul>'
+          description: 'The CID of the credential. Accepted values: <ul> <li> {@link GoogleCredential::CID} - The Google credential. Use the {@link GoogleCredentialData} object to send the credential. </li> <li> {@link FacebookCredential::CID} - The Facebook credential. Use the {@link GoogleCredentialData} object to send the credential. </li> </ul>'
           schema:
             type: number
             format: int32
@@ -19030,7 +19458,7 @@ paths:
       parameters:
         - name: cid_credential
           in: query
-          description: 'The CID of the credential. Accepted values: <ul> <li> <tt>972</tt> - The Google credential. Use the {@link GoogleCredentialData} object to send the credential. </li> <li> <tt>973</tt> - The Facebook credential. Use the {@link GoogleCredentialData} object to send the credential. </li> </ul>'
+          description: 'The CID of the credential. Accepted values: <ul> <li> {@link GoogleCredential::CID} - The Google credential. Use the {@link GoogleCredentialData} object to send the credential. </li> <li> {@link FacebookCredential::CID} - The Facebook credential. Use the {@link GoogleCredentialData} object to send the credential. </li> </ul>'
           schema:
             type: number
             format: int32
@@ -19054,7 +19482,7 @@ paths:
       parameters:
         - name: cid_credential
           in: query
-          description: 'The CID of the credential. Accepted values: <ul> <li> <tt>972</tt> - The Google credential. Use the {@link GoogleCredentialData} object to send the credential. </li> <li> <tt>973</tt> - The Facebook credential. Use the {@link GoogleCredentialData} object to send the credential. </li> </ul>'
+          description: 'The CID of the credential. Accepted values: <ul> <li> {@link GoogleCredential::CID} - The Google credential. Use the {@link GoogleCredentialData} object to send the credential. </li> <li> {@link FacebookCredential::CID} - The Facebook credential. Use the {@link GoogleCredentialData} object to send the credential. </li> </ul>'
           schema:
             type: number
             format: int32
@@ -19164,7 +19592,7 @@ paths:
               properties:
                 a_card_detail:
                   type: array
-                  description: 'An array containing payment card information with the following fields: <dl> <dt> array <var>a_pay_address</var> </dt> <dd> Address information: <dl> <dt>bool <var>is_new</var></dt> <dd>`true` - add new address. `false` - use existing address.</dd> <dt>string <var>k_pay_address</var></dt> <dd>The chosen payment address ID. THis will be set even if the user decided to add a new address.</dd> <dt>string <var>k_geo_country</var></dt> <dd>The country key.</dd> <dt>string <var>k_geo_region</var></dt> <dd>The region key.</dd> <dt>string <var>s_city</var></dt> <dd>The city name.</dd> <dt>string <var>s_name</var></dt> <dd>The user name.</dd> <dt>string <var>s_street1</var></dt> <dd>The first address line.</dd> <dt>string <var>s_street2</var></dt> <dd>The second address line.</dd> <dt>string <var>s_phone</var></dt> <dd>The phone number.</dd> <dt>string <var>s_postal</var></dt> <dd>The postal code.</dd> </dl> </dd> <dt> int <var>i_csc</var> </dt> <dd> The payment card security code, also known as the CVC or CVV. </dd> <dt> int <var>i_month</var> </dt> <dd> The number of the month when the payment card expires. 1=January and 12=December. </dd> <dt> int <var>i_year</var> </dt> <dd> The last two digits of the year when the payment card expires. </dd> <dt> int <var>id_pay_actor</var> </dt> <dd> Pay actor id. One of {@link \RsPayActorSid} constants. </dd> <dt> string <var>k_pay_bank</var> </dt> <dd> Key of existing payment source in case of editing. Primary key from {@link \RsPayBankSql} table. Empty if new pay source is being added. </dd> <dt> string <var>s_name</var> </dt> <dd> The name as it appears on the payment card. </dd> <dt> string <var>s_number</var> </dt> <dd> The payment card number with no spaces or dashes. </dd> </dl>'
+                  description: 'An array containing payment card information with the following fields: <dl> <dt> array <var>a_pay_address</var> </dt> <dd> Address information: <dl> <dt>bool <var>is_new</var></dt> <dd>`true` - add new address. `false` - use existing address.</dd> <dt>string <var>k_pay_address</var></dt> <dd>The chosen payment address ID. THis will be set even if the user decided to add a new address.</dd> <dt>string <var>k_geo_country</var></dt> <dd>The country key.</dd> <dt>string <var>k_geo_region</var></dt> <dd>The region key.</dd> <dt>string <var>s_city</var></dt> <dd>The city name.</dd> <dt>string <var>s_name</var></dt> <dd>The user''s name.</dd> <dt>string <var>s_street1</var></dt> <dd>The first address line.</dd> <dt>string <var>s_street2</var></dt> <dd>The second address line.</dd> <dt>string <var>s_phone</var></dt> <dd>The phone number.</dd> <dt>string <var>s_postal</var></dt> <dd>The postal code.</dd> </dl> </dd> <dt> int <var>i_csc</var> </dt> <dd> The payment card security code, also known as the CVC or CVV. </dd> <dt> int <var>i_month</var> </dt> <dd> The number of the month when the payment card expires. 1=January and 12=December. </dd> <dt> int <var>i_year</var> </dt> <dd> The last two digits of the year when the payment card expires. </dd> <dt> int <var>id_pay_actor</var> </dt> <dd> Pay actor id. One of {@link \RsPayActorSid} constants. </dd> <dt> string <var>k_pay_bank</var> </dt> <dd> Key of existing payment source in case of editing. Primary key from {@link \RsPayBankSql} table. Empty if new pay source is being added. </dd> <dt> string <var>s_name</var> </dt> <dd> The name as it appears on the payment card. </dd> <dt> string <var>s_number</var> </dt> <dd> The payment card number with no spaces or dashes. </dd> </dl>'
       responses:
         200:
           description: 'Response always comes with status 200. Inspect the rest of the response body to determine the result.'
@@ -19945,6 +20373,9 @@ tags:
     name: Cid-Rename
     description: 'Allows to rename a class associated with a CID. This API endpoint is only available for Studio personnel and bots.'
   -
+    name: Claim-BusinessClaim
+    description: 'Business trial verification API.'
+  -
     name: ClassList-BookList
     description: 'An endpoint to get all the classes for a location.'
   -
@@ -19989,9 +20420,6 @@ tags:
   -
     name: CouponList-List
     description: 'Retrieves a list of gift cards.'
-  -
-    name: Create-BusinessTrialHistory
-    description: 'Handles requests to the trial history API.'
   -
     name: Credential-Credential
     description: 'Manages credentials for the application.'
@@ -20148,6 +20576,9 @@ tags:
   -
     name: Instance-Instance
     description: 'Manage `Studio Deploy Instance`.'
+  -
+    name: Jwt-JwtToken
+    description: 'Endpoint to get JWT token.'
   -
     name: Layout-Layout
     description: 'Displays information about an asset layout.'
@@ -20460,6 +20891,12 @@ tags:
   -
     name: SignOut-SignOut
     description: 'Signs user out.'
+  -
+    name: Source-LeadSourceElement
+    description: 'Retrieves Lead Source element.'
+  -
+    name: Source-LeadSourceList
+    description: 'Retrieves a list of Lead Sources.'
   -
     name: Staff-List
     description: 'Retrieves information about staff members for the current service.'

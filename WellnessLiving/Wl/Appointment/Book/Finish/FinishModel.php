@@ -198,24 +198,6 @@ class FinishModel extends WlModelAbstract
    *   </dd>
    *   <dt>string [<var>m_tip_appointment</var>]</dt>
    *   <dd>The amount of selected tips.</dd>
-   *   <dt>
-   *     string [<var>uid_staff</var>]
-   *   </dt>
-   *   <dd>
-   *     User ID staff member conducting the appointment.
-   *     Specify this for appointment bookings only.
-   *
-   *   </dd>
-   *   <dt>
-   *     string [<var>uid_staff_date</var>]
-   *   </dt>
-   *   <dd>
-   *     User ID staff member conducting the appointment.
-   *     The difference between this an <var>uid_staff</var> is that this value must be set only in cases
-   *     when you want to add a customer to an appointment that already exists.
-   *     Specify this for appointment bookings only.
-   *
-   *   </dd>
    * </dl>
    *
    * @post get

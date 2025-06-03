@@ -259,10 +259,22 @@ class ResourceModel extends WlModelAbstract
   public $id_mode = 0;
 
   /**
+   * `true` to book unpaid.
+   * `false` otherwise.
+   *
+   * Allows booking unpaid when client has a login promotion that can be used to pay for the service.
+   * Allowed in {@link ModeSid::WIDGET} mode only.
+   *
+   * @post post
+   * @var bool
+   */
+  public $is_book_unpaid = false;
+
+  /**
    * Checking whether the client has a credit card (if configured in the business) will be skipped if this flag is set to `false`.
    *
    * Use this field with caution.
-   * The final booking will not use this flag and the check will still be performed.
+   * The final booking will not use this flag, and the check will still be performed.
    *
    * @get get
    * @post get

@@ -5,7 +5,7 @@ namespace WellnessLiving\Wl;
 /**
  * Wellnessliving-wide privileges.
  *
- * Last Used ID: 213.
+ * Last Used ID: 214.
  */
 abstract class WlPrivilegeSid
 {
@@ -534,6 +534,11 @@ abstract class WlPrivilegeSid
    * Receive new lead capture widget notification.
    */
   const NOTIFICATION_LEAD_CAPTURE = 159;
+
+  /**
+   * Staff with this role will receive the membership cancel mails.
+   */
+  const NOTIFICATION_MEMBERSHIP_CANCEL = 214;
 
   /**
    * Staff with this role will receive emails about reward prizes.

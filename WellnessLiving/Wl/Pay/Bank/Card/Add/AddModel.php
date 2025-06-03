@@ -39,7 +39,7 @@ class AddModel extends WlModelAbstract
    *       <dt>string <var>s_city</var></dt>
    *       <dd>The city name.</dd>
    *       <dt>string <var>s_name</var></dt>
-   *       <dd>The user name.</dd>
+   *       <dd>The user's name.</dd>
    *       <dt>string <var>s_street1</var></dt>
    *       <dd>The first address line.</dd>
    *       <dt>string <var>s_street2</var></dt>

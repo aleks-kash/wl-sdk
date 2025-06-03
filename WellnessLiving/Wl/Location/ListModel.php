@@ -80,6 +80,18 @@ class ListModel extends WlModelAbstract
    *     Region key.
    *   </dd>
    *   <dt>
+   *     string <var>s_mail</var>
+   *   </dt>
+   *   <dd>
+   *     The location email address.
+   *   </dd>
+   *   <dt>
+   *     string <var>s_phone</var>
+   *   </dt>
+   *   <dd>
+   *     The location phone number.
+   *   </dd>
+   *   <dt>
    *     string <var>s_title</var>
    *   </dt>
    *   <dd>

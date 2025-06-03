@@ -22,6 +22,32 @@ class ClassListModel extends WlModelAbstract
   public $a_calendar = [];
 
   /**
+   * The list of classes keys to filter.
+   * A comma separated list of class keys.
+   * Return sessions with matching class IDs.
+   *
+   * If it's empty, all classes/events will be returned.
+   *
+   * @get get
+   * @var string[]
+   */
+  public $a_class = [];
+
+  /**
+   * Class filter by day of the week.
+   * Array of number representing the days of the week.
+   * Return sessions matching the given weekdays.
+   * (7 = Sunday, 1 = Monday, ..., 6 = Saturday)
+   *
+   * Empty array means no filtering.
+   *
+   * @get get
+   * @var int[]
+   * @see ADateWeekSid
+   */
+  public $a_day = [];
+
+  /**
    * The list of location keys to filter results.
    * If it's empty, schedule for all locations will be returned.
    * All given locations should be from the same business, which is sent in {@link ClassListModel::$k_business}.
@@ -191,6 +217,28 @@ class ClassListModel extends WlModelAbstract
   public $a_session;
 
   /**
+   * Class filter by time of day.
+   * Array with start and end time in "HH:MM" format (24h).
+   * Include sessions that start between the specified time range.
+   *
+   * List of time parameters:
+   * <dl>
+   *    <dt>string <var>tl_start</var></dt>
+   *    <dd>Time when the session starts.</dd>
+   *    <dt>string <var>tl_end</var></dt>
+   *    <dd>Time when the session ends.</dd>
+   * </dl>
+   *
+   * Example: <tt>[`tl_start` => `06:00`, `tl_end` => `14:00`]</tt>.
+   *
+   * Empty array means no filtering.
+   *
+   * @get get
+   * @var string[]
+   */
+  public $a_time = [];
+
+  /**
    * The list start date in UTC and in MySQL format.
    *
    * @get get
@@ -231,6 +279,19 @@ class ClassListModel extends WlModelAbstract
    * @var bool
    */
   public $is_timezone_different;
+
+  /**
+   * Class filter by type.
+   * The class is virtual.
+   *
+   * `true`: Only virtual classes.
+   * `false`: Only in-person.
+   * `null` or not set: No filtering.
+   *
+   * @get get
+   * @var bool|null
+   */
+  public $is_virtual = null;
 
   /**
    * If `true`, there exists at least one virtual service by a specified
@@ -292,7 +353,7 @@ class ClassListModel extends WlModelAbstract
    * @get get
    * @var string
    */
-  public $uid;
+  public $uid = '';
 }
 
 ?>

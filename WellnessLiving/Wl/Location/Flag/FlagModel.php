@@ -18,9 +18,9 @@ class FlagModel extends WlModelAbstract
    * </dl>
    * <tt>null</tt> until loaded or when <var>a_uid</var> was not set.
    *
-   * @depreated This is old property, which is left for back-compatibility. Use {@link FlagModel::$a_restrictions_multiple} instead.
    * @get result
    * @var array
+   * @deprecated This is old property, which is left for back-compatibility. Use {@link FlagModel::$a_restrictions_multiple} instead.
    */
   public $a_flag;
 
@@ -66,9 +66,9 @@ class FlagModel extends WlModelAbstract
    *
    * <tt>null</tt> until loaded or when {@link FlagModel::$a_uid} was not set.
    *
-   * @depreated This is old property, which is left for back-compatibility. Use {@link FlagModel::$a_restrictions_single} instead.
    * @get result
    * @var bool
+   * @deprecated This is old property, which is left for back-compatibility. Use {@link FlagModel::$a_restrictions_single} instead.
    */
   public $is_flag;
 

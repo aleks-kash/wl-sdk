@@ -196,7 +196,7 @@ class InfoModel extends WlModelAbstract
    * Such as previously prepaid or free sessions.
    *
    * Each its item has the key of following format: <dl>
-   *   <dt>string <var>dt_date</var>::<var>k_class_period</var></dt><dd>Composite key of the array.</dd>
+   *   <dt>string <var>dt_date::k_class_period</var></dt><dd>Composite key of the array.</dd>
    * </dl>
    * and the value of following structure: <dl>
    *   <dt>string <var>dt_date</var></dt><dd>Session date.</dd>
@@ -418,6 +418,18 @@ class InfoModel extends WlModelAbstract
   public $is_book_repeat_no_end_date;
 
   /**
+   * `true` to book unpaid.
+   * `false` otherwise.
+   *
+   * Allows booking unpaid when client has a login promotion that can be used to pay for the service.
+   * Allowed in {@link ModeSid::WIDGET} mode only.
+   *
+   * @post post
+   * @var bool
+   */
+  public $is_book_unpaid = false;
+
+  /**
    * If client must authorize credit card.
    *
    * @post result
@@ -429,7 +441,7 @@ class InfoModel extends WlModelAbstract
    * Checking whether the client has a credit card (if configured in the business) will be skipped if this flag is set to `false`.
    *
    * Use this field with caution.
-   * The final booking will not use this flag and the check will still be performed.
+   * The final booking will not use this flag, and the check will still be performed.
    *
    * @get get
    * @post get
@@ -465,6 +477,14 @@ class InfoModel extends WlModelAbstract
    * @var bool
    */
   public $is_force_pay_later = false;
+
+  /**
+   * `true` if need to display location phone number, `false` otherwise.
+   *
+   * @get result
+   * @var bool
+   */
+  public $is_location_phone = false;
 
   /**
    * `true` - next steps of the wizard are needed (for example, to purchase something to book the selected session).
@@ -609,6 +629,14 @@ class InfoModel extends WlModelAbstract
    * @var string
    */
   public $s_time;
+
+  /**
+   * Location phone number.
+   *
+   * @get result
+   * @var string
+   */
+  public $text_location_phone = '';
 
   /**
    * Room where session takes place.

@@ -3,7 +3,7 @@
 namespace WellnessLiving\Wl\Mode;
 
 /**
- * The source of visit.
+ * The source of a visit.
  *
  * Last used ID: 27.
  */

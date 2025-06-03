@@ -213,6 +213,13 @@ class ScheduleListModel extends WlModelAbstract
    *     `true` if has uncompleted quizzes, `false` otherwise.
    *   </dd>
    *   <dt>
+   *     int <var>i_addon</var>
+   *   </dt>
+   *   <dd>
+   *     The number of addons for the current appointment.
+   *     Set only if the current session is an appointment.
+   *   </dd>
+   *   <dt>
    *     int <var>i_book</var>
    *   </dt>
    *   <dd>
@@ -343,6 +350,18 @@ class ScheduleListModel extends WlModelAbstract
    *   </dt>
    *   <dd>
    *     `true` when need show quiz icon, `false` otherwise.
+   *   </dd>
+   *   <dt>
+   *     int <var>t_business_start</var>
+   *   </dt>
+   *   <dd>
+   *     The earliest time the business where the session takes place, opens. In Unix format.
+   *   </dd>
+   *   <dt>
+   *     int <var>t_business_end</var>
+   *   </dt>
+   *   <dd>
+   *     The latest time the business where the session takes place, closes. In Unix format.
    *   </dd>
    *   <dt>
    *     string <var>text_alert</var>

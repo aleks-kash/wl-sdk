@@ -72,6 +72,16 @@ class PromotionPayPauseModel extends WlModelAbstract
   public $dt_start = null;
 
   /**
+   * The date when the email notification was sent.
+   *
+   * `null` if it shouldn't be updated.
+   *
+   * @get result
+   * @var string|null
+   */
+  public $dtu_date_notification = null;
+
+  /**
    * Whether need to get all pause periods for the login promotion.
    * If <tt>true</tt> then {@link PromotionPayPauseModel::$a_pay_pause_list} will be returned.
    * If <tt>false</tt> then information about specified {@link PromotionPayPauseModel::$k_promotion_pay_pause} or
@@ -82,6 +92,42 @@ class PromotionPayPauseModel extends WlModelAbstract
    * @var bool
    */
   public $is_list = false;
+
+  /**
+   * Whether or not to send email notification.
+   *
+   * <tt>false</tt> if not initialized.
+   *
+   * @get result
+   * @post post
+   * @put post
+   * @var bool
+   */
+  public $is_mail = false;
+
+  /**
+   * Whether or not to send push notification.
+   *
+   * <tt>false</tt> if not initialized.
+   *
+   * @get result
+   * @post post
+   * @put post
+   * @var bool
+   */
+  public $is_push = false;
+
+  /**
+   * Whether or not to send SMS notification.
+   *
+   * <tt>false</tt> if not initialized.
+   *
+   * @get result
+   * @post post
+   * @put post
+   * @var bool
+   */
+  public $is_sms = false;
 
   /**
    * Key of business to which currently handled pause period or login promotion belongs.
@@ -110,6 +156,14 @@ class PromotionPayPauseModel extends WlModelAbstract
    * @var string|null
    */
   public $k_login_promotion = null;
+
+  /**
+   * Key of the email pattern.
+   *
+   * @get result
+   * @var string/null
+   */
+  public $k_mail_pattern = null;
 
   /**
    * The promotion payment hold key. If this key is used, it will edit an existing hold.

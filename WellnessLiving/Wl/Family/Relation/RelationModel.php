@@ -3,6 +3,7 @@
 namespace WellnessLiving\Wl\Family\Relation;
 
 use WellnessLiving\WlModelAbstract;
+use WellnessLiving\Wl\Mode\ModeSid;
 
 /**
  * Returns data about a user's relationships.
@@ -44,6 +45,16 @@ class RelationModel extends WlModelAbstract
    * @var array[]
    */
   public $a_relation;
+
+  /**
+   * ID of source mode.
+   * One of {@link ModeSid} constants.
+   *
+   * @delete post
+   * @post post
+   * @var int
+   */
+  public $id_mode = 0;
 
   /**
    * The business key.

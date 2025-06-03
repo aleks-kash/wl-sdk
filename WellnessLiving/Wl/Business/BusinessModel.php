@@ -26,6 +26,7 @@ class BusinessModel extends WlModelAbstract
    *  </dl>
    *
    * @post post
+   * @put post
    * @var array
    */
   public $a_staff_member = [];
@@ -34,7 +35,6 @@ class BusinessModel extends WlModelAbstract
    * The business locale.
    *
    * @post post
-   * @put post
    * @var int
    * @see LocaleSid
    */
@@ -50,9 +50,17 @@ class BusinessModel extends WlModelAbstract
   public $is_location_create = false;
 
   /**
-   * The key of the created business.
+   * @post post
+   * @put post
+   * @var bool
+   */
+  public $is_mail_send = false;
+
+  /**
+   * The key of the business.
    *
    * @post result
+   * @put post,result
    * @var string
    */
   public $k_business = '';
@@ -64,6 +72,16 @@ class BusinessModel extends WlModelAbstract
    * @var string
    */
   public $k_business_type = '';
+
+  /**
+   * The key of the location for update or after creating.
+   * `null` if location is not created.
+   *
+   * @post result
+   * @put post,result
+   * @var string|null
+   */
+  public $k_location = null;
 
   /**
    * The city key of the business.
@@ -118,6 +136,26 @@ class BusinessModel extends WlModelAbstract
    * @var string
    */
   public $text_title = '';
+
+  /**
+   * The UID of the created staff member or `null` if no staff member should be created.
+   *
+   * @post result
+   * @put result
+   * @var string|null
+   */
+  public $uid = null;
+
+  /**
+   * Url for password change page.
+   *
+   * Filled only when creating staff member, otherwise `null`.
+   *
+   * @post result
+   * @put result
+   * @var string|null
+   */
+  public $url_password_change = null;
 
   /**
    * The URL of the business website.

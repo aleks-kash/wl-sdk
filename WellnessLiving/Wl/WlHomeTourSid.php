@@ -3,12 +3,17 @@
 namespace WellnessLiving\Wl;
 
 /**
- * List of different types  for landing pages based on business types.
+ * List of different types for landing pages based on business types.
  *
- * Last ID: 26
+ * Last ID: 33
  */
 abstract class WlHomeTourSid
 {
+  /**
+   * Barbershops.
+   */
+  const BARBERSHOP = 26;
+
   /**
    * Boot camps.
    */
@@ -50,6 +55,11 @@ abstract class WlHomeTourSid
   const FITNESS = 6;
 
   /**
+   * Functional fitness also known as functional training or functional movement.
+   */
+  const FUNCTIONAL_FITNESS = 29;
+
+  /**
    * Fitness gyms.
    */
   const GYM = 22;
@@ -60,6 +70,11 @@ abstract class WlHomeTourSid
   const HEALTH_CLUB = 23;
 
   /**
+   * Health and beauty salons at one place.
+   */
+  const INTEGRATIVE_HEALTH_CENTER = 30;
+
+  /**
    * Martial arts.
    */
   const MARTIAL_ART = 8;
@@ -68,6 +83,11 @@ abstract class WlHomeTourSid
    * Massage salons.
    */
   const MASSAGE = 4;
+
+  /**
+   * Massage salons.
+   */
+  const MEDICAL_SPA = 28;
 
   /**
    * Alternative medical offices.
@@ -95,6 +115,11 @@ abstract class WlHomeTourSid
   const PILATES = 7;
 
   /**
+   * Play cafes.
+   */
+  const PLAY_CAFE = 32;
+
+  /**
    * Pole dancing studios.
    */
   const POLE_DANCING = 18;
@@ -113,6 +138,16 @@ abstract class WlHomeTourSid
    * Spinning.
    */
   const SPINNING = 17;
+
+  /**
+   * Swim schools
+   */
+  const SWIM_SCHOOL = 33;
+
+  /**
+   * Tattoo salons.
+   */
+  const TATTOO = 31;
 
   /**
    * Tours and events.

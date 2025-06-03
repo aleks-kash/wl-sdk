@@ -18,9 +18,11 @@ class GoogleLoginModel extends WlModelAbstract
   public $k_business = '';
 
   /**
-   * The application ID.
+   * The application id.
    *
-   * This will be `null` for application use, which makes the request. Use the application credential from
+   * When application not passed, credential loaded from the application, which makes the request,
+   *
+   * When application passed, the credential loaded by application id.
    *
    * @post post
    * @var string|null

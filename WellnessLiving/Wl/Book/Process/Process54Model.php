@@ -24,9 +24,9 @@ class Process54Model extends WlModelAbstract
    *
    * This will be `null` if clients aren't allowed to book for their relationships.
    *
-   * @depreated Use {@link ProcessModel::$is_family_relation_book} instead. Full list of relatives available, see {@link WlFamilyRelationSid}.
    * @get result
    * @var int[]|null
+   * @deprecated Use {@link ProcessModel::$is_family_relation_book} instead. Full list of relatives available, see {@link WlFamilyRelationSid}.
    */
   public $a_family_relation_login_allow;
 
@@ -158,6 +158,18 @@ class Process54Model extends WlModelAbstract
   public $is_age_require;
 
   /**
+   * `true` to book unpaid.
+   * `false` otherwise.
+   *
+   * Allows booking unpaid when client has a login promotion that can be used to pay for the service.
+   * Allowed in {@link ModeSid::WIDGET} mode only.
+   *
+   * @post post
+   * @var bool
+   */
+  public $is_book_unpaid = false;
+
+  /**
    * Determines if the client must authorize the credit card.
    *
    * @get result
@@ -169,7 +181,7 @@ class Process54Model extends WlModelAbstract
    * Checking whether the client has a credit card (if configured in the business) will be skipped if this flag is set to `false`.
    *
    * Use this field with caution.
-   * The final booking will not use this flag and the check will still be performed.
+   * The final booking will not use this flag, and the check will still be performed.
    *
    * @get get
    * @post get

@@ -129,6 +129,26 @@ class StaffListModel extends WlModelAbstract
   public $a_staff;
 
   /**
+   * Determines that only staff members which the current user has access to should be retrieved.
+   *
+   *  `true` if only staff members which the current user has access to should be retrieved.
+   *  `false` otherwise.
+   *
+   * @get get
+   * @var bool
+   */
+  public $is_check_staff_access = false;
+
+  /**
+   * Whether inactive and removed staff members are available.
+   * If `true` inactive and removed staff members are available. `false` otherwise.
+   *
+   * @get get
+   * @var bool
+   */
+  public $is_staff_inactive = false;
+
+  /**
    * The key of the business to show information for.
    *
    * @get get

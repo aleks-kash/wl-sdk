@@ -10,32 +10,30 @@ namespace WellnessLiving\Wl\Business;
 abstract class BusinessCategorySid
 {
   /**
-   * Dental businesses.
+   * Musician schools.
+   *
+   * @title Education & Specialty
    */
-  const DENTIST = 4;
-
-  /**
-   * Complementary and alternative medicine.
-   */
-  const MEDICINE_ALTERNATIVE = 5;
+  const EDUCATION = 6;
 
   /**
    * Traditional medicine
+   *
+   * @title Health & Beauty
    */
-  const MEDICINE_CLASSIC = 3;
-
-  /**
-   * Musician schools.
-   */
-  const MUSIC = 6;
+  const HEALTH = 3;
 
   /**
    * Spa saloons.
+   *
+   * @title Sports & Recreation
    */
-  const SPA = 2;
+  const RECREATION = 2;
 
   /**
    * Yoga and Fitness studios and gyms.
+   *
+   * @title Fitness
    */
   const SPORT = 1;
 }

@@ -74,6 +74,14 @@ class BranchModel extends WlModelAbstract
   public $k_deploy_instance = '';
 
   /**
+   * A microservice key.
+   *
+   * @post get
+   * @var string
+   */
+  public $k_microservice = '';
+
+  /**
    * Task key within which a branch should be created/deleted.
    *
    * @delete get
@@ -83,6 +91,15 @@ class BranchModel extends WlModelAbstract
    * @var string
    */
   public $k_task = '';
+
+  /**
+   * A microservice environment for create branch.
+   *
+   * @max-length 128
+   * @post get
+   * @var string
+   */
+  public $s_environment = '';
 
   /**
    * Url to build page.

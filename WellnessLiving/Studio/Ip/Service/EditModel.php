@@ -32,6 +32,18 @@ class EditModel extends WlModelAbstract
   public $id_service_type;
 
   /**
+   * Indicates whether automatic session renewal for IP-based access is restricted.
+   *
+   * If set to `1`, access by IP is restricted and automatic session renewal is disabled
+   * if `0`, access by IP is allowed and session can be automatically renewed.
+   *
+   * @get result
+   * @post post
+   * @var bool
+   */
+  public $is_auto_restricted = false;
+
+  /**
    * If a service is edited, its key is stored here.
    *
    * <tt>null</tt> if a new service should be created.

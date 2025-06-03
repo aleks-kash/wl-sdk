@@ -10,7 +10,7 @@ use WellnessLiving\WlModelAbstract;
 class AgreeModel extends WlModelAbstract
 {
   /**
-   * Formatted text of business liability release. Not empty if business has liability release and if user did not agree to this liability release.
+   * Formatted text of business liability release. Not empty if the business has a liability release and if the user did not agree to this liability release.
    *
    * @get result
    * @var string
@@ -18,8 +18,8 @@ class AgreeModel extends WlModelAbstract
   public $html_contract = '';
 
   /**
-   * <tt>false</tt> if user has not agreed to use Electronic Signatures,
-   * <tt>true</tt> if user has agreed to use Electronic Signatures,
+   * <tt>false</tt> if the user has not agreed to use Electronic Signatures,
+   * <tt>true</tt> if the user has agreed to use Electronic Signatures,
    * <tt>null</tt> otherwise.
    *
    * @post post

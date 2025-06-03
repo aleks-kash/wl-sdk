@@ -13,11 +13,9 @@ class CredentialModel extends WlModelAbstract
    * The CID of the credential.
    * Accepted values: <ul>
    *   <li>
-   *     <tt>972</tt> - The Google credential.
    *
    *   </li>
    *   <li>
-   *     <tt>973</tt> - The Facebook credential.
    *
    *   </li>
    * </ul>

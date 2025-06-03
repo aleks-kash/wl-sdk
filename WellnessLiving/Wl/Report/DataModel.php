@@ -22,6 +22,16 @@ class DataModel extends \WellnessLiving\Custom\Wl\Report\DataModel
   public $a_data;
 
   /**
+   * The report total.
+   *
+   * Contents of this array can vary based on the report that's loaded.
+   *
+   * @get result
+   * @var array
+   */
+  public $a_total;
+
+  /**
    * The page of results to show, starting at zero. The API will return 256 results per page.
    *
    * @get get
