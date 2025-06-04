@@ -52,6 +52,7 @@ class LeadSourceElementModel extends WlModelAbstract
    *
    * @delete post
    * @post post
+   * @put post
    * @var string
    */
   public $k_business = '';
@@ -60,6 +61,7 @@ class LeadSourceElementModel extends WlModelAbstract
    * Key of the lead source.
    *
    * @delete post
+   * @put result
    * @var string
    */
   public $k_lead_source = '';
@@ -71,6 +73,14 @@ class LeadSourceElementModel extends WlModelAbstract
    * @var string
    */
   public $k_lead_source_replace = '';
+
+  /**
+   * Name of new lead source item.
+   *
+   * @put post
+   * @var string
+   */
+  public $text_lead_source = '';
 
   /**
    * Lead Source field title.

@@ -1,16 +1,118 @@
 openapi: 3.1.0
 info:
   title: 'WellnessLiving public API'
-  version: 1.1.20250603080204
+  version: 1.1.20250604001548
   description: |
     WellnessLiving API is a RESTful way to access and manage your business data.
-    Last updated at: 2025-06-03 08:02:04
+    Last updated at: 2025-06-04 00:15:48
 servers:
   - url: https://us.wellnessliving.com
     description: 'WellnessLiving server for businesses served from the United States data center'
   - url: https://au.wellnessliving.com
     description: 'WellnessLiving server for businesses served from the Australia data center'
 paths:
+  '/Studio/Stand/Stand.json':
+    get:
+      summary: ''
+      parameters:
+        - name: id_stand_status
+          in: query
+          description: 'Stand status, one of {@link StandStatusSid}. `null` if not initialized and will be ignored.'
+          schema:
+            type: [number, "null"]
+        - name: s_stand
+          in: query
+          description: 'Stand name.'
+          schema:
+            type: string
+      responses:
+        200:
+          description: 'Response always comes with status 200. Inspect the rest of the response body to determine the result.'
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - type: object
+                    description: 'Successful response.'
+                    properties:
+                      a_stand_data:
+                        type: [array, string, "null"]
+                        description: 'Information about entities necessary for the functioning of the stand. Has an arbitrary structure. `string` if it needs to set an empty value. `null` will not change.'
+                      id_stand_status:
+                        type: [number, "null"]
+                        description: 'Stand status, one of {@link StandStatusSid}. `null` if not initialized and will be ignored.'
+      tags:
+        - Stand-Stand
+    post:
+      summary: 'Registers a new stand and creates a URL to create a new stand.'
+      parameters:
+        - name: k_task
+          in: query
+          description: 'Task key within which a stand should be created. Empty string if the stand name is specified manually. Primary key in the {@link \StudioTaskSql} table.'
+          schema:
+            type: string
+        - name: s_stand
+          in: query
+          description: 'Stand name.'
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                a_stand_data:
+                  type: [array, string, "null"]
+                  description: 'Information about entities necessary for the functioning of the stand. Has an arbitrary structure. `string` if it needs to set an empty value. `null` will not change.'
+                json_stand_environment:
+                  type: string
+                  description: 'A microservice environment for create stand. Each element of the array contains <dl> <dt>string <var>k_microservice</var></dt> <dd>Microservice key. Primary key in {@link MicroserviceSql} table.</dd> <dt>string <var>s_environment</var></dt> <dd>Environment name. See {@link MicroserviceSql}.`json_path`.</dd> </dl>'
+      responses:
+        200:
+          description: 'Response always comes with status 200. Inspect the rest of the response body to determine the result.'
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - type: object
+                    description: 'Successful response.'
+                    properties:
+                      url_redirect:
+                        type: string
+                        description: 'Link to redirect for stand creation.'
+      tags:
+        - Stand-Stand
+    put:
+      summary: ''
+      parameters:
+        - name: id_stand_status
+          in: query
+          description: 'Stand status, one of {@link StandStatusSid}. `null` if not initialized and will be ignored.'
+          schema:
+            type: [number, "null"]
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                a_stand_data:
+                  type: [array, string, "null"]
+                  description: 'Information about entities necessary for the functioning of the stand. Has an arbitrary structure. `string` if it needs to set an empty value. `null` will not change.'
+      responses:
+        200:
+          description: 'Response always comes with status 200. Inspect the rest of the response body to determine the result.'
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - type: object
+                    description: 'Successful response. Full description is not available yet.'
+      tags:
+        - Stand-Stand
   '/Core/Request/Example.json':
     get:
       summary: ''
@@ -3401,11 +3503,6 @@ paths:
     get:
       summary: ''
       parameters:
-        - name: id_stand_status
-          in: query
-          description: 'Stand status, one of {@link StandStatusSid}. `null` if not initialized and will be ignored.'
-          schema:
-            type: [number, "null"]
         - name: k_task
           in: query
           description: 'Task key within which a branch should be created/deleted. Primary key in the {@link \StudioTaskSql} table.'
@@ -3424,9 +3521,6 @@ paths:
                       a_branch_data:
                         type: [array, string, "null"]
                         description: 'Addition information about branch and related entities. Has an arbitrary structure. `string` if it needs to set an empty value. `null` will not change.'
-                      a_stand_data:
-                        type: [array, string, "null"]
-                        description: 'Information about entities necessary for the functioning of the stand. Has an arbitrary structure. `string` if it needs to set an empty value. `null` will not change.'
                       id_branch_status:
                         type: [number, "null"]
                         description: 'Branch status, one of {@link BranchStatusSid}.'
@@ -3471,9 +3565,6 @@ paths:
                 a_branch_data:
                   type: [array, string, "null"]
                   description: 'Addition information about branch and related entities. Has an arbitrary structure. `string` if it needs to set an empty value. `null` will not change.'
-                a_stand_data:
-                  type: [array, string, "null"]
-                  description: 'Information about entities necessary for the functioning of the stand. Has an arbitrary structure. `string` if it needs to set an empty value. `null` will not change.'
       responses:
         200:
           description: 'Response always comes with status 200. Inspect the rest of the response body to determine the result.'
@@ -3492,11 +3583,6 @@ paths:
     put:
       summary: ''
       parameters:
-        - name: id_stand_status
-          in: query
-          description: 'Stand status, one of {@link StandStatusSid}. `null` if not initialized and will be ignored.'
-          schema:
-            type: [number, "null"]
         - name: k_task
           in: query
           description: 'Task key within which a branch should be created/deleted. Primary key in the {@link \StudioTaskSql} table.'
@@ -3512,9 +3598,6 @@ paths:
                 a_branch_data:
                   type: [array, string, "null"]
                   description: 'Addition information about branch and related entities. Has an arbitrary structure. `string` if it needs to set an empty value. `null` will not change.'
-                a_stand_data:
-                  type: [array, string, "null"]
-                  description: 'Information about entities necessary for the functioning of the stand. Has an arbitrary structure. `string` if it needs to set an empty value. `null` will not change.'
       responses:
         200:
           description: 'Response always comes with status 200. Inspect the rest of the response body to determine the result.'
@@ -5778,7 +5861,7 @@ paths:
       parameters:
         - name: a_class
           in: query
-          description: 'The list of classes keys to filter. A comma separated list of class keys. Primary keys in {@link \RsClassSql} table. Return sessions with matching class IDs. If it''s empty, all classes/events will be returned.'
+          description: 'The list of classes keys to filter. Primary keys in {@link \RsClassSql} table. Return sessions with matching class IDs. If it''s empty, all classes/events will be returned.'
           schema:
             type: array
         - name: a_day
@@ -5793,7 +5876,7 @@ paths:
             type: array
         - name: a_time
           in: query
-          description: 'Class filter by time of day. Array with start and end time in "HH:MM" format (24h). Include sessions that start between the specified time range. List of time parameters: <dl> <dt>string <var>tl_start</var></dt> <dd>Time when the session starts.</dd> <dt>string <var>tl_end</var></dt> <dd>Time when the session ends.</dd> </dl> Example: <tt>[`tl_start` => `06:00`, `tl_end` => `14:00`]</tt>. Empty array means no filtering.'
+          description: 'Class filter by time of day. Array with start and end time in "HH:MM" format (24h). Include sessions that start between the specified time range. List of time parameters: <dl> <dt>string <var>tl_start</var></dt> <dd>Time when the session starts. Example: value `''06:00''`.</dd> <dt>string <var>tl_end</var></dt> <dd>Time when the session ends. Example: value `''14:00''`.</dd> </dl> Empty array means no filtering.'
           schema:
             type: array
         - name: dt_date
@@ -9053,7 +9136,7 @@ paths:
                     description: 'Successful response.'
                     properties:
                       url_microsite:
-                        type: string
+                        type: [string, "null"]
                         description: ''
       tags:
         - Claim-BusinessClaim
@@ -13175,7 +13258,7 @@ paths:
       parameters:
         - name: k_lead_source_replace
           in: query
-          description: 'Key of the lead source. Primary key in {@link LeadSourceSql} table.'
+          description: 'Key of the lead source.'
           schema:
             type: string
       responses:
@@ -13209,7 +13292,7 @@ paths:
                   description: 'List of Lead Sources. <dl> <dt>int <var>i_sort</var></dt> <dd> Sorting order. </dd> <dt>int|null <var>id_lead_source</var></dt> <dd> System-defined Lead Source ID. One of the {@link LeadSourceSql} constants. `null` if it is a custom Lead Source. </dd> <dt>string <var>k_lead_source</var></dt> <dd> Key of the lead source. Primary key in {@link LeadSourceSql} table. </dd> <dt>string [<var>k_skin</var>]</dt> <dd> Key of the lead skin. Primary key in {@link \RsSkinSql} table. Will be set only in case if <var>id_lead_source</var> is {@link LeadSourceSid::WIDGET} and widget can''t be used for "Add Lead" form. `false` - otherwise. </dd> <dt>string <var>text_title</var></dt> <dd> Name of the Lead Source. </dd> </dl>'
                 k_business:
                   type: string
-                  description: 'Business key. Primary key in {@link \RsBusinessSql} table.'
+                  description: 'Business key.'
       responses:
         200:
           description: 'Response always comes with status 200. Inspect the rest of the response body to determine the result.'
@@ -13219,6 +13302,36 @@ paths:
                 oneOf:
                   - type: object
                     description: 'Successful response. Full description is not available yet.'
+      tags:
+        - Source-LeadSourceElement
+    put:
+      summary: 'Adds one lead source.'
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                k_business:
+                  type: string
+                  description: 'Business key.'
+                text_lead_source:
+                  type: string
+                  description: 'Name of new lead source item.'
+      responses:
+        200:
+          description: 'Response always comes with status 200. Inspect the rest of the response body to determine the result.'
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - type: object
+                    description: 'Successful response.'
+                    properties:
+                      k_lead_source:
+                        type: string
+                        description: 'Key of the lead source.'
       tags:
         - Source-LeadSourceElement
   '/Wl/Gym/Visit/VisitAdd.json':
@@ -20918,6 +21031,9 @@ tags:
   -
     name: StaffView-StaffView
     description: 'Returns information about a specified staff member. This method can accept one staff key {@link StaffViewApi::$k_staff} or a staff list {@link StaffViewApi::$a_staff_list} but not both (an exception would be thrown).'
+  -
+    name: Stand-Stand
+    description: 'Prepare creation a new stand.'
   -
     name: Store-Store
     description: 'Manages the booking wizard for the "Purchase Options" page.'

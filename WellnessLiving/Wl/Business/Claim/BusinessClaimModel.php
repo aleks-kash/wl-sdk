@@ -58,9 +58,9 @@ class BusinessClaimModel extends WlModelAbstract
 
   /**
    * @post result
-   * @var string
+   * @var string|null
    */
-  public $url_microsite = '';
+  public $url_microsite = null;
 }
 
 ?>

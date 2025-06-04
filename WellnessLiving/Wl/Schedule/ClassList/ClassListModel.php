@@ -23,7 +23,7 @@ class ClassListModel extends WlModelAbstract
 
   /**
    * The list of classes keys to filter.
-   * A comma separated list of class keys.
+   *
    * Return sessions with matching class IDs.
    *
    * If it's empty, all classes/events will be returned.
@@ -224,17 +224,15 @@ class ClassListModel extends WlModelAbstract
    * List of time parameters:
    * <dl>
    *    <dt>string <var>tl_start</var></dt>
-   *    <dd>Time when the session starts.</dd>
+   *    <dd>Time when the session starts. Example: value `'06:00'`.</dd>
    *    <dt>string <var>tl_end</var></dt>
-   *    <dd>Time when the session ends.</dd>
+   *    <dd>Time when the session ends. Example: value `'14:00'`.</dd>
    * </dl>
-   *
-   * Example: <tt>[`tl_start` => `06:00`, `tl_end` => `14:00`]</tt>.
    *
    * Empty array means no filtering.
    *
    * @get get
-   * @var string[]
+   * @var array
    */
   public $a_time = [];
 

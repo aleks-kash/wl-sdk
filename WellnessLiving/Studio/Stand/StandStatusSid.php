@@ -1,6 +1,6 @@
 <?php
 
-namespace WellnessLiving\Studio\Task\Branch;
+namespace WellnessLiving\Studio\Stand;
 
 /**
  * Stand statuses.

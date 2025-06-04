@@ -2,6 +2,7 @@
 
 namespace WellnessLiving\Studio\Task\Branch;
 
+use WellnessLiving\Studio\Stand\StandStatusSid;
 use WellnessLiving\WlModelAbstract;
 
 /**
@@ -24,20 +25,6 @@ class BranchModel extends WlModelAbstract
   public $a_branch_data = null;
 
   /**
-   * Information about entities necessary for the functioning of the stand.
-   * Has an arbitrary structure.
-   *
-   * `string` if it needs to set an empty value.
-   * `null` will not change.
-   *
-   * @get result
-   * @post post
-   * @put post
-   * @var array|string|null
-   */
-  public $a_stand_data = null;
-
-  /**
    * Branch status, one of {@link BranchStatusSid}.
    *
    * @get result
@@ -58,8 +45,7 @@ class BranchModel extends WlModelAbstract
    *
    * `null` if not initialized and will be ignored.
    *
-   * @get get,result
-   * @put get
+   * @get result
    * @var int|null
    */
   public $id_stand_status = null;
