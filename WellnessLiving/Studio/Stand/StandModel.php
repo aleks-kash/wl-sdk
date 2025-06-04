@@ -61,6 +61,7 @@ class StandModel extends WlModelAbstract
    *
    * @get get
    * @post get
+   * @put get
    * @var string
    */
   public $s_stand = '';
