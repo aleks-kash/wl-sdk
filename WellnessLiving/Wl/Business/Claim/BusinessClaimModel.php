@@ -35,6 +35,8 @@ class BusinessClaimModel extends WlModelAbstract
   /**
    * The email address of the location.
    *
+   * Urlencoded email address is expected.
+   *
    * @get get
    * @var string
    */
@@ -42,6 +44,8 @@ class BusinessClaimModel extends WlModelAbstract
 
   /**
    * The phone number of the business, staff and location.
+   *
+   * Urlencoded phone number is expected.
    *
    * @get get
    * @var string

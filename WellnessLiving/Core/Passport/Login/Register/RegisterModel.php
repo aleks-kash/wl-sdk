@@ -36,6 +36,16 @@ class RegisterModel extends WlModelAbstract
   public $a_data = [];
 
   /**
+   * ID of source mode.
+   *
+   * `null` if not initialized or the api is not called in the Wellnessliving project.
+   *
+   * @post post
+   * @var int|null
+   */
+  public $id_mode = null;
+
+  /**
    * The application ID. This is a business specific ID required to register clients.
    *
    * @post post

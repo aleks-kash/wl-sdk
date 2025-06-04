@@ -12,15 +12,23 @@ class DebugTokenServiceModel extends WlModelAbstract
   /**
     * Debug token to check and if valid to return `true` otherwise `false`.
     *
-    * @get result
+    * @post result
     * @var bool
     */
   public $is_valid = false;
 
   /**
+   * Customer login who sends request to check token.
+   *
+   * @post post
+   * @var string
+   */
+  public $s_passport_bot_login = '';
+
+  /**
     * Debug token to check.
     *
-    * @get get
+    * @post post
     * @var string
     */
   public $s_token = '';
@@ -28,7 +36,7 @@ class DebugTokenServiceModel extends WlModelAbstract
   /**
    * URL of the application that has made request to check token.
    *
-   * @get get
+   * @post post
    * @var string
    */
   public $s_url = '';

@@ -1,10 +1,10 @@
 openapi: 3.1.0
 info:
   title: 'WellnessLiving public API'
-  version: 1.1.20250604015608
+  version: 1.1.20250604133855
   description: |
     WellnessLiving API is a RESTful way to access and manage your business data.
-    Last updated at: 2025-06-04 01:56:08
+    Last updated at: 2025-06-04 13:38:55
 servers:
   - url: https://us.wellnessliving.com
     description: 'WellnessLiving server for businesses served from the United States data center'
@@ -3823,19 +3823,24 @@ paths:
       tags:
         - Instance-Instance
   '/Studio/Personnel/DebugToken/DebugTokenService.json':
-    get:
+    post:
       summary: 'Return information is the debug token is valid.'
-      parameters:
-        - name: s_token
-          in: query
-          description: 'Debug token to check.'
-          schema:
-            type: string
-        - name: s_url
-          in: query
-          description: 'URL of the application that has made request to check token.'
-          schema:
-            type: string
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                s_passport_bot_login:
+                  type: string
+                  description: 'Customer login who sends request to check token.'
+                s_token:
+                  type: string
+                  description: 'Debug token to check.'
+                s_url:
+                  type: string
+                  description: 'URL of the application that has made request to check token.'
       responses:
         200:
           description: 'Response always comes with status 200. Inspect the rest of the response body to determine the result.'
@@ -9093,12 +9098,12 @@ paths:
       parameters:
         - name: text_mail
           in: query
-          description: 'The email address of the location.'
+          description: 'The email address of the location. Urlencoded email address is expected.'
           schema:
             type: string
         - name: text_phone
           in: query
-          description: 'The phone number of the business, staff and location.'
+          description: 'The phone number of the business, staff and location. Urlencoded phone number is expected.'
           schema:
             type: string
       responses:
@@ -13748,6 +13753,9 @@ paths:
                 a_data:
                   type: array
                   description: 'The additional data about new users. <dl> <dt>string <var>[k_business]</var></dt> <dd> The key of the business for the WellnessLiving project to register the user in. The behavior may vary for different applications. If the application is connected to a given business, this property can always be empty (all clients will be registered in the connected business). If the business is set for such an application and is different from the business from the application settings, an error will occur. If the application isn''t connected to the business, any business key can be set. This doesn''t require any special privileges, as registration is a publicly available action. </dd> </dl>'
+                id_mode:
+                  type: [number, "null"]
+                  description: 'ID of source mode. `null` if not initialized or the api is not called in the Wellnessliving project.'
                 s_application:
                   type: string
                   description: 'The application ID. This is a business specific ID required to register clients.'
