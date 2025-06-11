@@ -19,38 +19,34 @@ use WellnessLiving\Wl\WlSaleSid;
 class PurchaseListElementModel extends WlModelAbstract
 {
   /**
-   * A list of components. This won't be empty if this purchase element is a package. Every element has keys:
+   * A list of components. This won't be empty if this purchase element is a package or a coupon.
+   * In the case of a package, every element has keys:
    * <dl>
-   *   <dt>
-   *     string [<var>k_enrollment_book</var>]
-   *   </dt>
-   *   <dd>
-   *     The booking enrollment key.
-   *   </dd>
-   *   <dt>
-   *     string [<var>k_login_product</var>]
-   *   </dt>
-   *   <dd>
-   *     The key referencing the product a user purchased.
-   *   </dd>
-   *   <dt>
-   *     string [<var>k_login_promotion</var>]
-   *   </dt>
-   *   <dd>
-   *     The key of a user's Purchase Option.
-   *   </dd>
-   *   <dt>
-   *     string [<var>k_session_pass</var>]
-   *   </dt>
-   *   <dd>
-   *     The key of a user's session pass.
-   *   </dd>
+   * <dt> string [<var>k_enrollment_book</var>]</dt>
+   * <dd>The booking enrollment key.</dd>
+   * <dt>string [<var>k_login_product</var>]</dt>
+   * <dd>The key referencing the product a user purchased.</dd>
+   * <dt>string [<var>k_login_promotion</var>]</dt>
+   * <dd>The key of a user's Purchase Option.</dd>
+   * <dt>string [<var>k_session_pass</var>]</dt>
+   * <dd>The key of a user's session pass.</dd>
+   * </dl>
+   *
+   * In the case of a coupon, every element has keys:
+   *
+   * <dl>
+   * <dt>int <var>id_purchase_item</var></dt>
+   * <dd>Purchase item type. One of {@link WlPurchaseItemSid} constants.</dd>
+   * <dt>string <var>k_id</var></dt>
+   * <dd>ID of the item. Will be different for different {@link WlPurchaseItemSid} constants.</dd>
+   * <dt>string <var>text_title</var></dt>
+   * <dd>Title of the coupon component.</dd>
    * </dl>
    *
    * @get result
    * @var array[]
    */
-  public $a_component;
+  public $a_component = [];
 
   /**
    * An array containing information about the image of the purchased item. Every element has the following keys:
@@ -560,7 +556,8 @@ class PurchaseListElementModel extends WlModelAbstract
   public $is_transfer;
 
   /**
-   * The business key. Currently used only with {@link PurchaseListElementModel::$k_session_pass} variable.
+   * The business key. Used with {@link PurchaseListElementModel::$k_session_pass} variable and
+   * also with gift card components.
    *
    * @get get
    * @var string|null

@@ -232,7 +232,7 @@ class ClassListModel extends WlModelAbstract
    * Empty array means no filtering.
    *
    * @get get
-   * @var array
+   * @var array[]
    */
   public $a_time = [];
 

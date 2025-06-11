@@ -10,6 +10,11 @@ use WellnessLiving\WlModelAbstract;
 class BusinessClaimModel extends WlModelAbstract
 {
   /**
+   * The Self-Setup wizard form data to be saved in the business claim log.
+   *
+   * The structure is conditionally arbitrary.
+   * It is used only for logging.
+   *
    * @put post
    * @var array
    */
@@ -61,6 +66,8 @@ class BusinessClaimModel extends WlModelAbstract
   public $uid_verified = '';
 
   /**
+   * Location microsite URL.
+   *
    * @post result
    * @var string|null
    */

@@ -1,10 +1,10 @@
 openapi: 3.1.0
 info:
   title: 'WellnessLiving public API'
-  version: 1.1.20250604133855
+  version: 1.1.20250611005006
   description: |
     WellnessLiving API is a RESTful way to access and manage your business data.
-    Last updated at: 2025-06-04 13:38:55
+    Last updated at: 2025-06-11 00:50:06
 servers:
   - url: https://us.wellnessliving.com
     description: 'WellnessLiving server for businesses served from the United States data center'
@@ -15,11 +15,6 @@ paths:
     get:
       summary: ''
       parameters:
-        - name: id_stand_status
-          in: query
-          description: 'Stand status, one of {@link StandStatusSid}. `null` if not initialized and will be ignored.'
-          schema:
-            type: [number, "null"]
         - name: s_stand
           in: query
           description: 'Stand name.'
@@ -46,6 +41,11 @@ paths:
     post:
       summary: 'Registers a new stand and creates a URL to create a new stand.'
       parameters:
+        - name: k_microservice_primary
+          in: query
+          description: 'Primary microservice for the stand. Primary key in the {@link MicroserviceSql} table. The main microservice from which the stand is created; other microservices can be added if they are compatible with the primary one, see {@link StandApi::$json_stand_environment}.'
+          schema:
+            type: string
         - name: k_task
           in: query
           description: 'Task key within which a stand should be created. Empty string if the stand name is specified manually. Primary key in the {@link \StudioTaskSql} table.'
@@ -2525,6 +2525,11 @@ paths:
             type: array
         - name: a_staff
           in: query
+          description: 'TODO wl-72248: remove this property when external developers confirm that they do not use it. A list of staff members who appear in videos.'
+          schema:
+            type: array
+        - name: a_uid_staff
+          in: query
           description: 'A list of staff members who appear in videos.'
           schema:
             type: array
@@ -4913,6 +4918,9 @@ paths:
                       id_locale:
                         type: [number, "null"]
                         description: 'The locale ID of the business.'
+                      is_save_optional:
+                        type: boolean
+                        description: '`true` if clients can choose whether their banking and credit card information is saved at checkout, `false` if this information is always saved.'
                       is_save_source:
                         type: boolean
                         description: 'Determines whether newly added payment sources should be saved. This will be `true` if payment sources should be saved, `false` if otherwise.'
@@ -4988,6 +4996,9 @@ paths:
                       id_locale:
                         type: [number, "null"]
                         description: 'The locale ID of the business.'
+                      is_save_optional:
+                        type: boolean
+                        description: '`true` if clients can choose whether their banking and credit card information is saved at checkout, `false` if this information is always saved.'
                       is_save_source:
                         type: boolean
                         description: 'Determines whether newly added payment sources should be saved. This will be `true` if payment sources should be saved, `false` if otherwise.'
@@ -5867,7 +5878,7 @@ paths:
         - Score-Score
   '/Wl/Schedule/ClassList/ClassList.json':
     get:
-      summary: ''
+      summary: 'This method is called to process a GET query.'
       parameters:
         - name: a_class
           in: query
@@ -7194,7 +7205,7 @@ paths:
             format: int32
         - name: k_business
           in: query
-          description: 'The business key. Currently used only with {@link \Wl\Profile\PurchaseList\PurchaseListElementApi::$k_session_pass} variable.'
+          description: 'The business key. Used with {@link \Wl\Profile\PurchaseList\PurchaseListElementApi::$k_session_pass} variable and also with gift card components.'
           schema:
             type: [string, "null"]
         - name: k_code
@@ -7239,7 +7250,7 @@ paths:
                     properties:
                       a_component:
                         type: array
-                        description: 'A list of components. This won''t be empty if this purchase element is a package. Every element has keys: <dl> <dt> string [<var>k_enrollment_book</var>] </dt> <dd> The booking enrollment key. </dd> <dt> string [<var>k_login_product</var>] </dt> <dd> The key referencing the product a user purchased. </dd> <dt> string [<var>k_login_promotion</var>] </dt> <dd> The key of a user''s Purchase Option. </dd> <dt> string [<var>k_session_pass</var>] </dt> <dd> The key of a user''s session pass. </dd> </dl>'
+                        description: 'A list of components. This won''t be empty if this purchase element is a package or a coupon. In the case of a package, every element has keys: <dl> <dt> string [<var>k_enrollment_book</var>]</dt> <dd>The booking enrollment key.</dd> <dt>string [<var>k_login_product</var>]</dt> <dd>The key referencing the product a user purchased.</dd> <dt>string [<var>k_login_promotion</var>]</dt> <dd>The key of a user''s Purchase Option.</dd> <dt>string [<var>k_session_pass</var>]</dt> <dd>The key of a user''s session pass.</dd> </dl> In the case of a coupon, every element has keys: <dl> <dt>int <var>id_purchase_item</var></dt> <dd>Purchase item type. One of {@link \RsPurchaseItemSid} constants.</dd> <dt>string <var>k_id</var></dt> <dd>ID of the item. Will be different for different {@link \RsPurchaseItemSid} constants.</dd> <dt>string <var>text_title</var></dt> <dd>Title of the coupon component.</dd> </dl>'
                       a_logo:
                         type: array
                         description: 'An array containing information about the image of the purchased item. Every element has the following keys: <dl> <dt> int <var>i_height</var> </dt> <dd> The height of the image. </dd> <dt> int <var>i_width</var> </dt> <dd> The width of the image. </dd> <dt> bool <var>is_empty</var> </dt> <dd> If `true`, then the purchased item doesn''t have an image. If `false`, then the item has an image. </dd> </dl>'
@@ -9147,7 +9158,33 @@ paths:
                     properties:
                       url_microsite:
                         type: [string, "null"]
-                        description: ''
+                        description: 'Location microsite URL. Result of {@link rs_microsite_url()} function.'
+      tags:
+        - Claim-BusinessClaim
+    put:
+      summary: 'Saves the Self-Setup wizard form data in the business claim log.'
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                a_form:
+                  type: array
+                  description: 'The Self-Setup wizard form data to be saved in the business claim log. The structure is conditionally arbitrary. It is used only for logging.'
+                k_business:
+                  type: string
+                  description: 'The key of the business to be verified.'
+      responses:
+        200:
+          description: 'Response always comes with status 200. Inspect the rest of the response body to determine the result.'
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - type: object
+                    description: 'Successful response. Full description is not available yet.'
       tags:
         - Claim-BusinessClaim
   '/Wl/Coupon/CouponList/List.json':

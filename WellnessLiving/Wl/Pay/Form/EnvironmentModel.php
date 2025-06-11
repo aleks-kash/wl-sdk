@@ -148,6 +148,15 @@ class EnvironmentModel extends WlModelAbstract
   public $id_locale;
 
   /**
+   * `true` if clients can choose whether their banking and credit card information is saved at checkout,
+   * `false` if this information is always saved.
+   *
+   * @get result
+   * @var bool
+   */
+  public $is_save_optional = false;
+
+  /**
    * Determines whether newly added payment sources should be saved. This will be `true` if payment sources should be saved,
    * `false` if otherwise.
    *

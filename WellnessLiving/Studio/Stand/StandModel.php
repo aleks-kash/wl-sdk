@@ -28,7 +28,7 @@ class StandModel extends WlModelAbstract
    *
    * `null` if not initialized and will be ignored.
    *
-   * @get get,result
+   * @get result
    * @put get
    * @var int|null
    */
@@ -46,6 +46,16 @@ class StandModel extends WlModelAbstract
    * @var string
    */
   public $json_stand_environment = '';
+
+  /**
+   * Primary microservice for the stand.
+   * The main microservice from which the stand is created; other microservices can be added
+   * if they are compatible with the primary one, see {@link StandModel::$json_stand_environment}.
+   *
+   * @post get
+   * @var string
+   */
+  public $k_microservice_primary = '';
 
   /**
    * Task key within which a stand should be created.
