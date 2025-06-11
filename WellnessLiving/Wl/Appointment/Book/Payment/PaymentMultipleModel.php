@@ -147,6 +147,14 @@ class PaymentMultipleModel extends WlModelAbstract
   public $a_book_data_post = [];
 
   /**
+   * Activities for the purchases made.
+   *
+   * @post result
+   * @var array
+   */
+  public $a_login_activity_purchase = [];
+
+  /**
    * The list of redeemed prizes.
    *
    * @post result
@@ -462,7 +470,7 @@ class PaymentMultipleModel extends WlModelAbstract
    * @post result
    * @var string
    */
-  public $k_login_activity_purchase;
+  public $k_login_activity_purchase = '0';
 
   /**
    * The gift card amount.
@@ -470,7 +478,7 @@ class PaymentMultipleModel extends WlModelAbstract
    * @get result
    * @var string
    */
-  public $m_coupon;
+  public $m_coupon = '0.00';
 
   /**
    * The discount amount.
@@ -478,7 +486,7 @@ class PaymentMultipleModel extends WlModelAbstract
    * @get result
    * @var string
    */
-  public $m_discount;
+  public $m_discount = '0.00';
 
   /**
    * Surcharge amount calculated for credit cards (Virtual Terminal and Card Swiper).
@@ -502,7 +510,7 @@ class PaymentMultipleModel extends WlModelAbstract
    * @get result
    * @var string
    */
-  public $m_tax;
+  public $m_tax = '0.00';
 
   /**
    * The price of the service, with taxes and without surcharges.
@@ -510,7 +518,7 @@ class PaymentMultipleModel extends WlModelAbstract
    * @get result
    * @var string
    */
-  public $m_total;
+  public $m_total = '0.00';
 
   /**
    * The gift card code.
