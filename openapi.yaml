@@ -1,10 +1,10 @@
 openapi: 3.1.0
 info:
   title: 'WellnessLiving public API'
-  version: 1.1.20250611235514
+  version: 1.1.20250612004146
   description: |
     WellnessLiving API is a RESTful way to access and manage your business data.
-    Last updated at: 2025-06-11 23:55:14
+    Last updated at: 2025-06-12 00:41:46
 servers:
   - url: https://us.wellnessliving.com
     description: 'WellnessLiving server for businesses served from the United States data center'
@@ -14,6 +14,12 @@ paths:
   '/Studio/Stand/Stand.json':
     delete:
       summary: ''
+      parameters:
+        - name: s_stand
+          in: query
+          description: 'Stand name.'
+          schema:
+            type: string
       responses:
         200:
           description: 'Response always comes with status 200. Inspect the rest of the response body to determine the result.'

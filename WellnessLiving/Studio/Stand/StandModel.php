@@ -69,6 +69,7 @@ class StandModel extends WlModelAbstract
   /**
    * Stand name.
    *
+   * @delete get
    * @get get
    * @post get
    * @put get
