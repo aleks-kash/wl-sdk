@@ -194,6 +194,13 @@ class FinishMultipleModel extends WlModelAbstract
    *   <dd>The amount of selected tips.</dd>
    *   <dt>sting <var>k_timezone</var></dt>
    *   <dd>The time zone key. This will be 'null' if the time zone used matches the time zone of the location.</dd>
+   *   <dt>
+   *     string [<var>uid</var>]
+   *   </dt>
+   *   <dd>
+   *
+   *     Specify only in a case of booking for a lof of different users.
+   *   </dd>
    * </dl>
    *
    * @post post

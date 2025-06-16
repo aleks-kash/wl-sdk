@@ -1,6 +1,6 @@
 <?php
 
-namespace WellnessLiving\Wl\Pay\Owner;
+namespace WellnessLiving\Thoth\WlPay\Owner;
 
 use WellnessLiving\WlModelAbstract;
 use WellnessLiving\Wl\WlPayOwnerSid;

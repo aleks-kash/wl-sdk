@@ -1,10 +1,10 @@
 <?php
 
-namespace WellnessLiving\Wl\Pay\Bank\Card\Add;
+namespace WellnessLiving\Thoth\WlPay\Bank\Card\Add;
 
+use WellnessLiving\Thoth\WlPay\Owner\OwnerModel;
 use WellnessLiving\WlModelAbstract;
 use WellnessLiving\Wl\Business\BusinessPaymentCaptcha;
-use WellnessLiving\Wl\Pay\Owner\OwnerModel;
 
 /**
  * Adds a payment card to a user’s account.

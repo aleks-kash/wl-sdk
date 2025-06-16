@@ -5,8 +5,8 @@ namespace WellnessLiving\Studio\Personnel\DebugToken;
 use WellnessLiving\WlModelAbstract;
 
 /**
-* Allows checking the validity of a debug token.
-**/
+ * Allows checking the validity of a debug token.
+ */
 class DebugTokenServiceModel extends WlModelAbstract
 {
   /**
@@ -18,7 +18,7 @@ class DebugTokenServiceModel extends WlModelAbstract
   public $is_valid = false;
 
   /**
-   * Customer login who sends request to check token.
+   * Passport bot login that sends the request to check the token.
    *
    * @post post
    * @var string
@@ -39,7 +39,7 @@ class DebugTokenServiceModel extends WlModelAbstract
    * @post post
    * @var string
    */
-  public $s_url = '';
+  public $url_request = '';
 }
 
 ?>

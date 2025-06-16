@@ -1,6 +1,6 @@
 <?php
 
-namespace WellnessLiving\Wl\Pay\Bank\Card;
+namespace WellnessLiving\Thoth\WlPay\Bank\Card;
 
 use WellnessLiving\Core\a\ACardSystemSid;
 use WellnessLiving\WlModelAbstract;

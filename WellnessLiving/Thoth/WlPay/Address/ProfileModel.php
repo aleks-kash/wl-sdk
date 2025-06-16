@@ -1,6 +1,6 @@
 <?php
 
-namespace WellnessLiving\Wl\Pay\Address;
+namespace WellnessLiving\Thoth\WlPay\Address;
 
 use WellnessLiving\WlModelAbstract;
 

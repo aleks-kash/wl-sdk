@@ -1,6 +1,6 @@
 <?php
 
-namespace WellnessLiving\Wl\Pay\Account;
+namespace WellnessLiving\Thoth\WlPay\Account;
 
 use WellnessLiving\Core\Locale\CurrencySid;
 use WellnessLiving\WlModelAbstract;

@@ -1,6 +1,6 @@
 <?php
 
-namespace WellnessLiving\Wl\Pay\Form;
+namespace WellnessLiving\Thoth\WlPay\Form;
 
 use WellnessLiving\Core\Locale\LocaleSid;
 use WellnessLiving\Core\a\ACardSystemSid;

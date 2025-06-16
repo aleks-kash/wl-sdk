@@ -1,6 +1,6 @@
 <?php
 
-namespace WellnessLiving\Wl\Pay\Account\Charge;
+namespace WellnessLiving\Thoth\WlPay\Account\Charge;
 
 use WellnessLiving\WlModelAbstract;
 use WellnessLiving\Wl\Business\BusinessPaymentCaptcha;

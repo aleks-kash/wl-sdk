@@ -113,6 +113,13 @@ class PaymentMultipleModel extends WlModelAbstract
    *         The data is returned from the canvas HTML element or the signature pad.
    *         This won't be empty if the Purchase Option requires contract signing.
    *       </dd>
+   *       <dt>
+   *         string [<var>uid</var>]
+   *       </dt>
+   *       <dd>
+   *
+   *         Specify only in a case of booking for a lof of different users.
+   *       </dd>
    *     </dl>
    *   </dd>
    *   <dt>
