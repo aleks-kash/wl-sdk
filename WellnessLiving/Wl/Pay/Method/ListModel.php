@@ -1,6 +1,6 @@
 <?php
 
-namespace WellnessLiving\Thoth\WlPay\Method;
+namespace WellnessLiving\Wl\Pay\Method;
 
 use WellnessLiving\WlModelAbstract;
 use WellnessLiving\Wl\WlPayMethodSid;

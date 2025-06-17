@@ -1,6 +1,6 @@
 <?php
 
-namespace WellnessLiving\Thoth\WlPay\Transaction\Report;
+namespace WellnessLiving\Wl\Pay\Transaction\Report;
 
 use WellnessLiving\WlModelAbstract;
 
