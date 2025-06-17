@@ -326,6 +326,8 @@ class ElementModel extends WlModelAbstract
 
   /**
    * Datetime of the session.
+   * Is not `null` only if we need to get information for an event with a specific class period and datetime.
+   * If this is `null`, then the {@link ElementModel::$k_class_period} should be `null` too.
    *
    * @get get
    * @var string|null
@@ -533,6 +535,9 @@ class ElementModel extends WlModelAbstract
 
   /**
    * Key of a class period to show information for.
+   *
+   * Is not `null` only if we need to get information for an event with a specific class period and datetime.
+   * If this is `null`, then the {@link ElementModel::$dtu_session} should be `null` too.
    *
    * @get get
    * @var string|null

@@ -1,10 +1,10 @@
 openapi: 3.1.0
 info:
   title: 'WellnessLiving public API'
-  version: 1.1.20250617200326
+  version: 1.1.20250617205305
   description: |
     WellnessLiving API is a RESTful way to access and manage your business data.
-    Last updated at: 2025-06-17 20:03:26
+    Last updated at: 2025-06-17 20:53:05
 servers:
   - url: https://us.wellnessliving.com
     description: 'WellnessLiving server for businesses served from the United States data center'
@@ -14452,7 +14452,7 @@ paths:
             type: [string, "null"]
         - name: dtu_session
           in: query
-          description: 'Datetime of the session.'
+          description: 'Datetime of the session. Is not `null` only if we need to get information for an event with a specific class period and datetime. If this is `null`, then the {@link ElementApi::$k_class_period} should be `null` too.'
           schema:
             type: [string, "null"]
         - name: i_image_height
@@ -14491,7 +14491,7 @@ paths:
             type: [string, "null"]
         - name: k_class_period
           in: query
-          description: 'Key of a class period to show information for. Primary key in {@link \RsClassPeriodSql}.'
+          description: 'Key of a class period to show information for. Primary key in {@link \RsClassPeriodSql}. Is not `null` only if we need to get information for an event with a specific class period and datetime. If this is `null`, then the {@link ElementApi::$dtu_session} should be `null` too.'
           schema:
             type: [string, "null"]
         - name: k_event
