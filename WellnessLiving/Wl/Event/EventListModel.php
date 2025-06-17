@@ -178,6 +178,8 @@ class EventListModel extends WlModelAbstract
    *   <dd>`true` if the event is open to be booked, `false` if the event is not.</dd>
    *   <dt>bool <var>is_prorate</var></dt>
    *   <dd>`true` if the event is prorated, `false` if the event is not.</dd>
+   *   <dt>bool <var>is_single_buy</var></dt>
+   *   <dd>`true` if the event sessions can be paid with single session, `false` single sessions disabled.</dd>
    *   <dt>bool <var>is_virtual</var></dt>
    *   <dd>`true` if the event is only held virtually, `false` if the event is not.</dd>
    *   <dt>string <var>k_class</var></dt>

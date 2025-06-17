@@ -1,10 +1,10 @@
 openapi: 3.1.0
 info:
   title: 'WellnessLiving public API'
-  version: 1.1.20250617125651
+  version: 1.1.20250617200326
   description: |
     WellnessLiving API is a RESTful way to access and manage your business data.
-    Last updated at: 2025-06-17 12:56:51
+    Last updated at: 2025-06-17 20:03:26
 servers:
   - url: https://us.wellnessliving.com
     description: 'WellnessLiving server for businesses served from the United States data center'
@@ -685,7 +685,7 @@ paths:
                         description: 'List of available enrollment blocks correspond to requested parameters.'
                       a_event_list:
                         type: array
-                        description: 'A list of events corresponding to requested parameters. Each event will have the following keys: <dl> <dt>array <var>a_class_tab</var></dt> <dd>The list of class tab keys that contain this event. Each key is a primary key in the {@link \Wl\Classes\Tab\Sql\ClassTab\Sql} table.</dd> <dt>array <var>a_logo</var></dt> <dd>Information about the event''s logo. It will contain the following keys: <dl> <dt>int <var>i_height</var></dt> <dd>The image height.</dd> <dt>int <var>i_height_src</var></dt> <dd>The source image''s height.</dd> <dt>int <var>i_rotate</var></dt> <dd>The angle which image was rotated compared to the original.</dd> <dt>int <var>i_width</var></dt> <dd>The image width.</dd> <dt>int <var>i_width_src</var></dt> <dd>The source image''s width.</dd> <dt>int <var>id_type_src</var></dt> <dd>The image type ID. One of the {@link \Core\Drive\DriveTypeSid} constants.</dd> <dt>bool <var>is_resize</var></dt> <dd>This will be `true` if the image has been resized. `false` otherwise.</dd> <dt>bool <var>is_old</var></dt> <dd>This will be `true` if the image is old. `false` otherwise.</dd> <dt>string <var>s_url</var></dt> <dd>The URL to the image.</dd> <dt>string <var>url-view</var></dt> <dd>The URL to the image.</dd> <dt>string <var>url-thumbnail</var></dt> <dd>The URL to the image''s thumbnail.</dd> </dl> </dd> <dt>array <var>a_schedule</var></dt> <dd>Information about the event''s schedule. It is a list of instances, each instance will contain the following keys: <dl> <dt>array <var>a_day</var></dt> <dd>The days when the event is scheduled (0 - Sunday, 6 - Saturday).</dd> <dt>array <var>a_staff_member</var></dt> <dd>Information about the staff member(s) conducting the event. This is a list of staff, each element is an array with the following keys <dl> <dt>string <var>k_staff_member</var></dt> <dd>The staff member key. The primary key in the {@link \RsStaffBusinessSql} table.</dd> <dt>string <var>text_business_role</var></dt> <dd>The name of the staff member''s business role.</dd> <dt>string <var>text_mail</var></dt> <dd>The staff member''s email address.</dd> <dt>string <var>text_name_first</var></dt> <dd>The staff member''s first name.</dd> <dt>string <var>text_name_full</var></dt> <dd>The staff member''s full name.</dd> <dt>string <var>text_name_last</var></dt> <dd>The staff member''s last name.</dd> <dt>string <var>uid</var></dt> <dd>The staff member''s user key. The primary key in the {@link \PassportLoginSql} table.</dd> </dl> </dd> <dt>string <var>dl_end</var></dt> <dd>The ending date of the event series.</dd> <dt>string <var>dl_start</var></dt> <dd>The starting date of the event series.</dd> <dt>bool <var>is_day</var></dt> <dd>This will be `true` if the event starts and ends on the same day.</dd> <dt>string <var>k_class_period</var></dt> <dd>The class period key. The primary key in the {@link \RsClassPeriodSql} table.</dd> <dt>string <var>k_location</var></dt> <dd>The location key. The primary key in the {@link \RsLocationSql} table.</dd> <dt>string <var>text_location</var></dt> <dd>The name of the location.</dd> <dt>string <var>text_time</var></dt> <dd>The human readable version of the event time.</dd> </dl> </dd> <dt>array <var>a_search_tag</var></dt> <dd>The list of search tags for this event.</dd> <dt>bool <var>can_book</var></dt> <dd> Whether event can be booked or not. `true` - there are no restrictions to book this event in general. `false` - for some reason event cannot be booked. The reason can be found in the following fields: `html_reason`, `id_reason`, `sid_reason`. This field can be used instead of `is_bookable` and covers a significant number of checks under its value. </dd> <dt>bool <var>can_cancel</var></dt> <dd>Whether the current user can cancel already booked event.</dd> <dt>string <var>dl_early</var></dt> <dd>The early cancel date</dd> <dt>string <var>dl_end</var></dt> <dd>The ending date of the event.</dd> <dt>string <var>dl_start</var></dt> <dd>The starting date of the event.</dd> <dt>string <var>dl_session</var></dt> <dd>Local date of the closest session of the event.</dd> <dt>string <var>dtu_session</var></dt> <dd>Date of the closest session of the event.</dd> <dt>int <var>i_session_all</var></dt> <dd>Number of all sessions in the event.</dd> <dt>int <var>i_session_future</var></dt> <dd>Number of all sessions in the future.</dd> <dt>int <var>i_session_past</var></dt> <dd>Number of all sessions in the past.</dd> <dt>bool <var>is_age_restrict</var></dt> <dd>`true` if the event is age restricted, `false` if the event is not.</dd> <dt>bool <var>is_age_restrict_only</var></dt> <dd> `true` if this event booking is restricted and restricted because of client''s age only. `false` otherwise. </dd> <dt>bool <var>is_block</var></dt> <dd>`true` if the event is a block event, `false` if the event is not.</dd> <dt>bool <var>is_bookable</var></dt> <dd> Whether event is bookable. `true` - there are no restrictions to book this event in general. `false` - for some reason event cannot be booked. <b>Attention!!!</b> Historically, the value of this field may not cover all expected checks, and may be confusing to someone. It is properly used in combination with a number of other flags. If you need a flag that covers most of the checks please use `can_book` field. </dd> <dt>bool <var>is_booked</var></dt> <dd>`true` if the user has booked the event, `false` if the event is not.</dd> <dt>bool <var>is_closed</var></dt> <dd>`true` if booking the event is closed, `false` if the event is not.</dd> <dt>bool <var>is_full</var></dt> <dd>`true` if the event is full, `false` if the event is not.</dd> <dt>bool <var>is_online</var></dt> <dd>`true` if the event is available online, `false` if the event is not.</dd> <dt>bool <var>is_online_private</var></dt> <dd>`true` if the event is online and private, `false` if the event is not.</dd> <dt>bool <var>is_open</var></dt> <dd>`true` if the event is open to be booked, `false` if the event is not.</dd> <dt>bool <var>is_prorate</var></dt> <dd>`true` if the event is prorated, `false` if the event is not.</dd> <dt>bool <var>is_virtual</var></dt> <dd>`true` if the event is only held virtually, `false` if the event is not.</dd> <dt>string <var>k_class</var></dt> <dd>The class key. The primary key in the {@link \RsClassSql} table.</dd> <dt>string <var>k_class_period</var></dt> <dd>The class period key. The primary key in the {@link \RsClassPeriodSql} table.</dd> <dt>string <var>k_enrollment_block</var></dt> <dd>The enrollment block key.The primary key in the {@link \RsEnrollmentBlockSql} table.</dd> <dt>string <var>k_location</var></dt> <dd>The location key. The primary key in the {@link \RsLocationSql} table.</dd> <dt>string <var>m_price_max</var></dt> <dd>Maximum price per session in the event.</dd> <dt>string <var>m_price_min</var></dt> <dd>Minimum price per session in the event.</dd> <dt>string <var>m_price_total</var></dt> <dd>The total price of booking a session.</dd> <dt>string <var>m_price_total_early</var></dt> <dd>The total price if booked early.</dd> <dt>string <var>text_age_restrict</var></dt> <dd>The age description.</dd> <dt>string <var>text_title</var></dt> <dd>The name of the event.</dd> <dt>string <var>url_book</var></dt> <dd>The direct booking url.</dd> <dt>string <var>xml_description</var></dt> <dd>The description of the event.</dd> </dl>'
+                        description: 'A list of events corresponding to requested parameters. Each event will have the following keys: <dl> <dt>array <var>a_class_tab</var></dt> <dd>The list of class tab keys that contain this event. Each key is a primary key in the {@link \Wl\Classes\Tab\Sql\ClassTab\Sql} table.</dd> <dt>array <var>a_logo</var></dt> <dd>Information about the event''s logo. It will contain the following keys: <dl> <dt>int <var>i_height</var></dt> <dd>The image height.</dd> <dt>int <var>i_height_src</var></dt> <dd>The source image''s height.</dd> <dt>int <var>i_rotate</var></dt> <dd>The angle which image was rotated compared to the original.</dd> <dt>int <var>i_width</var></dt> <dd>The image width.</dd> <dt>int <var>i_width_src</var></dt> <dd>The source image''s width.</dd> <dt>int <var>id_type_src</var></dt> <dd>The image type ID. One of the {@link \Core\Drive\DriveTypeSid} constants.</dd> <dt>bool <var>is_resize</var></dt> <dd>This will be `true` if the image has been resized. `false` otherwise.</dd> <dt>bool <var>is_old</var></dt> <dd>This will be `true` if the image is old. `false` otherwise.</dd> <dt>string <var>s_url</var></dt> <dd>The URL to the image.</dd> <dt>string <var>url-view</var></dt> <dd>The URL to the image.</dd> <dt>string <var>url-thumbnail</var></dt> <dd>The URL to the image''s thumbnail.</dd> </dl> </dd> <dt>array <var>a_schedule</var></dt> <dd>Information about the event''s schedule. It is a list of instances, each instance will contain the following keys: <dl> <dt>array <var>a_day</var></dt> <dd>The days when the event is scheduled (0 - Sunday, 6 - Saturday).</dd> <dt>array <var>a_staff_member</var></dt> <dd>Information about the staff member(s) conducting the event. This is a list of staff, each element is an array with the following keys <dl> <dt>string <var>k_staff_member</var></dt> <dd>The staff member key. The primary key in the {@link \RsStaffBusinessSql} table.</dd> <dt>string <var>text_business_role</var></dt> <dd>The name of the staff member''s business role.</dd> <dt>string <var>text_mail</var></dt> <dd>The staff member''s email address.</dd> <dt>string <var>text_name_first</var></dt> <dd>The staff member''s first name.</dd> <dt>string <var>text_name_full</var></dt> <dd>The staff member''s full name.</dd> <dt>string <var>text_name_last</var></dt> <dd>The staff member''s last name.</dd> <dt>string <var>uid</var></dt> <dd>The staff member''s user key. The primary key in the {@link \PassportLoginSql} table.</dd> </dl> </dd> <dt>string <var>dl_end</var></dt> <dd>The ending date of the event series.</dd> <dt>string <var>dl_start</var></dt> <dd>The starting date of the event series.</dd> <dt>bool <var>is_day</var></dt> <dd>This will be `true` if the event starts and ends on the same day.</dd> <dt>string <var>k_class_period</var></dt> <dd>The class period key. The primary key in the {@link \RsClassPeriodSql} table.</dd> <dt>string <var>k_location</var></dt> <dd>The location key. The primary key in the {@link \RsLocationSql} table.</dd> <dt>string <var>text_location</var></dt> <dd>The name of the location.</dd> <dt>string <var>text_time</var></dt> <dd>The human readable version of the event time.</dd> </dl> </dd> <dt>array <var>a_search_tag</var></dt> <dd>The list of search tags for this event.</dd> <dt>bool <var>can_book</var></dt> <dd> Whether event can be booked or not. `true` - there are no restrictions to book this event in general. `false` - for some reason event cannot be booked. The reason can be found in the following fields: `html_reason`, `id_reason`, `sid_reason`. This field can be used instead of `is_bookable` and covers a significant number of checks under its value. </dd> <dt>bool <var>can_cancel</var></dt> <dd>Whether the current user can cancel already booked event.</dd> <dt>string <var>dl_early</var></dt> <dd>The early cancel date</dd> <dt>string <var>dl_end</var></dt> <dd>The ending date of the event.</dd> <dt>string <var>dl_start</var></dt> <dd>The starting date of the event.</dd> <dt>string <var>dl_session</var></dt> <dd>Local date of the closest session of the event.</dd> <dt>string <var>dtu_session</var></dt> <dd>Date of the closest session of the event.</dd> <dt>int <var>i_session_all</var></dt> <dd>Number of all sessions in the event.</dd> <dt>int <var>i_session_future</var></dt> <dd>Number of all sessions in the future.</dd> <dt>int <var>i_session_past</var></dt> <dd>Number of all sessions in the past.</dd> <dt>bool <var>is_age_restrict</var></dt> <dd>`true` if the event is age restricted, `false` if the event is not.</dd> <dt>bool <var>is_age_restrict_only</var></dt> <dd> `true` if this event booking is restricted and restricted because of client''s age only. `false` otherwise. </dd> <dt>bool <var>is_block</var></dt> <dd>`true` if the event is a block event, `false` if the event is not.</dd> <dt>bool <var>is_bookable</var></dt> <dd> Whether event is bookable. `true` - there are no restrictions to book this event in general. `false` - for some reason event cannot be booked. <b>Attention!!!</b> Historically, the value of this field may not cover all expected checks, and may be confusing to someone. It is properly used in combination with a number of other flags. If you need a flag that covers most of the checks please use `can_book` field. </dd> <dt>bool <var>is_booked</var></dt> <dd>`true` if the user has booked the event, `false` if the event is not.</dd> <dt>bool <var>is_closed</var></dt> <dd>`true` if booking the event is closed, `false` if the event is not.</dd> <dt>bool <var>is_full</var></dt> <dd>`true` if the event is full, `false` if the event is not.</dd> <dt>bool <var>is_online</var></dt> <dd>`true` if the event is available online, `false` if the event is not.</dd> <dt>bool <var>is_online_private</var></dt> <dd>`true` if the event is online and private, `false` if the event is not.</dd> <dt>bool <var>is_open</var></dt> <dd>`true` if the event is open to be booked, `false` if the event is not.</dd> <dt>bool <var>is_prorate</var></dt> <dd>`true` if the event is prorated, `false` if the event is not.</dd> <dt>bool <var>is_single_buy</var></dt> <dd>`true` if the event sessions can be paid with single session, `false` single sessions disabled.</dd> <dt>bool <var>is_virtual</var></dt> <dd>`true` if the event is only held virtually, `false` if the event is not.</dd> <dt>string <var>k_class</var></dt> <dd>The class key. The primary key in the {@link \RsClassSql} table.</dd> <dt>string <var>k_class_period</var></dt> <dd>The class period key. The primary key in the {@link \RsClassPeriodSql} table.</dd> <dt>string <var>k_enrollment_block</var></dt> <dd>The enrollment block key.The primary key in the {@link \RsEnrollmentBlockSql} table.</dd> <dt>string <var>k_location</var></dt> <dd>The location key. The primary key in the {@link \RsLocationSql} table.</dd> <dt>string <var>m_price_max</var></dt> <dd>Maximum price per session in the event.</dd> <dt>string <var>m_price_min</var></dt> <dd>Minimum price per session in the event.</dd> <dt>string <var>m_price_total</var></dt> <dd>The total price of booking a session.</dd> <dt>string <var>m_price_total_early</var></dt> <dd>The total price if booked early.</dd> <dt>string <var>text_age_restrict</var></dt> <dd>The age description.</dd> <dt>string <var>text_title</var></dt> <dd>The name of the event.</dd> <dt>string <var>url_book</var></dt> <dd>The direct booking url.</dd> <dt>string <var>xml_description</var></dt> <dd>The description of the event.</dd> </dl>'
       tags:
         - Event-EventList
     put:
@@ -20361,6 +20361,114 @@ paths:
                     description: 'Successful response. Full description is not available yet.'
       tags:
         - Count-InventoryCount
+  '/Wl/Schedule/ClassList/ClassList68.json':
+    get:
+      summary: 'Gets list of classes and class information for a Class Tab.'
+      parameters:
+        - name: a_class
+          in: query
+          description: 'The list of classes keys to filter. Primary keys in {@link \RsClassSql} table. Return sessions with matching class IDs. If it''s empty, all classes/events will be returned.'
+          schema:
+            type: array
+        - name: a_day
+          in: query
+          description: 'Class filter by day of the week. Array of number representing the days of the week. Return sessions matching the given weekdays. (7 = Sunday, 1 = Monday, ..., 6 = Saturday) Empty array means no filtering.'
+          schema:
+            type: array
+        - name: a_location
+          in: query
+          description: 'The list of location keys to filter results. If it''s empty, schedule for all locations will be returned. All given locations should be from the same business, which is sent in {@link ClassListApi::$k_business}.'
+          schema:
+            type: array
+        - name: a_time
+          in: query
+          description: 'Class filter by time of day. List of arrays with start and end time in "HH:MM" format (24h). Include sessions that start between the specified time range. Each value is array with time parameters: <dl> <dt>string <var>tl_start</var></dt> <dd>Time when the session starts. Example: value `''06:00''`.</dd> <dt>string <var>tl_end</var></dt> <dd>Time when the session ends. Example: value `''14:00''`.</dd> </dl> Empty array means no filtering.'
+          schema:
+            type: array
+        - name: dt_date
+          in: query
+          description: 'The list start date in UTC and in MySQL format.'
+          schema:
+            type: string
+        - name: dt_end
+          in: query
+          description: 'The list end date in UTC and in MySQL format. <no-sdk> If left empty, the default duration is {@link ClassListApi::DEFAULT_PERIOD} days after {@link ClassListApi::$dt_date}. </no-sdk>'
+          schema:
+            type: string
+        - name: is_response_short
+          in: query
+          description: '`true` means to not generate {@link ClassListApi::$a_session} result. Can be used, if you do not need full information about existing classes and result in {@link ClassListApi::$a_calendar} is enough.'
+          schema:
+            type: boolean
+        - name: is_tab_all
+          in: query
+          description: 'If `true`, sessions from every class tab are returned. If `false`, use the {@link ClassListApi::$k_class_tab} value.'
+          schema:
+            type: boolean
+        - name: is_virtual
+          in: query
+          description: 'Class filter by type. The class is virtual. `true`: Only virtual classes. `false`: Only in-person. `null` or not set: No filtering.'
+          schema:
+            type: [boolean, "null"]
+        - name: k_business
+          in: query
+          description: 'The business key.'
+          schema:
+            type: string
+        - name: k_class_tab
+          in: query
+          description: 'The category tab key. This will be `null` if not set yet. This will be ignored if {@link ClassListApi::$is_tab_all} is `true`.'
+          schema:
+            type: string
+        - name: s_staff
+          in: query
+          description: 'The list of staff members to filter. A comma seperated list of staff keys. Primary keys in {@link \RsStaffSql} table.'
+          schema:
+            type: string
+        - name: show_cancel
+          in: query
+          description: 'If `true`, canceled sessions will be returned. If `false`, canceled sessions won''t be returned.'
+          schema:
+            type: boolean
+        - name: show_class
+          in: query
+          description: 'If `true`, classes will be included in the response. If `false`, only events are returned.'
+          schema:
+            type: boolean
+        - name: show_event
+          in: query
+          description: 'If `true`, events are also returned. If `false`, only classes are returned.'
+          schema:
+            type: boolean
+        - name: uid
+          in: query
+          description: 'The user key.'
+          schema:
+            type: string
+      responses:
+        200:
+          description: 'Response always comes with status 200. Inspect the rest of the response body to determine the result.'
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - type: object
+                    description: 'Successful response.'
+                    properties:
+                      a_calendar:
+                        type: array
+                        description: 'Keys are dates of the days inside requested date range, when there is at least one class in the business. If, locations are sent as a parameter, then at least one class in the given locations. Values are empty arrays for now. This is done to make possible to add some information about certain dates, if we need this.'
+                      a_session:
+                        type: array
+                        description: 'A list of classes sessions starting with the date {@link ClassListApi::$dt_date} and in the 62 days ahead (or up to {@link ClassListApi::$dt_end}). Every element has the following keys: <dl> <dt> string[] <var>a_class_tab</var> </dt> <dd> Keys of class tab. Primary keys in {@link \Wl\Classes\Tab\Sql\ClassTab\Sql} table. </dd> <dt> string[] <var>a_image</var> </dt> <dd> The class image. Empty array if there is no image. </dd> <dt> string[] <var>a_search_tag</var> </dt> <dd> Tags associated with an individual class. </dd> <dt> string[] <var>a_staff</var> </dt> <dd> The list of staff keys for the staff member conducting the session. Primary keys in {@link \RsStaffSql} table. </dd> <dt> string[] <var>a_virtual_location</var> </dt> <dd> The list of virtual locations keys. Each value is a location key. Primary keys in {@link \RsLocationSql} table. </dd> <dt> string <var>dt_date</var> </dt> <dd> The date/time of the session start in UTC. </dd> <dt> string <var>dt_time</var> </dt> <dd> The time of the session start in the local time zone. </dd> <dt> string <var>dtl_date</var> </dt> <dd> The date/time of session start in the location''s time zone. </dd> <dt> bool <var>hide_application</var> </dt> <dd> Specifies whether the class will be hidden in the White Label Achieve Client App. If `true`, it means that the class won''t be displayed. Otherwise, this will be `false` to indicate that the class will be displayed. </dd> <dt> string <var>html_description</var> </dt> <dd> The class description. </dd> <dt> int <var>i_book</var> </dt> <dd> Count of visits on this class. </dd> <dt> int|null <var>i_capacity</var> </dt> <dd> The capacity of the service. ''null'' indicates that the capacity is not set. </dd> <dt> int <var>i_day</var> </dt> <dd> The day of the week when session is occurred. Constant from {@link \ADateWeekSid}. </dd> <dt> int <var>i_duration</var> </dt> <dd> The duration of the session in minutes. </dd> <dt> int <var>i_wait</var> </dt> <dd> Number of clients in wait list. </dd> <dt> bool <var>is_cancel</var> </dt> <dd> If `true`, this class period was canceled. Otherwise, this will be `false`. </dd> <dt> bool <var>is_event</var> </dt> <dd> If `true`, this is an event. Otherwise, this will be `false`. </dd> <dt> bool <var>is_virtual</var> </dt> <dd> If `true`, this class is virtual. Otherwise, this will be `false`. </dd> <dt> bool <var>is_wait_list_enabled</var> </dt> <dd> This will be `true` if user is only on the wait-list. Otherwise, this will be `false`. </dd> <dt> string <var>k_class</var> </dt> <dd> The class key. Primary key in {@link \RsClassSql} table. </dd> <dt> string <var>k_class_period</var> </dt> <dd> The class period key. Primary key in {@link \RsClassPeriodSql} table. </dd> <dt> string <var>k_location</var> </dt> <dd> The key of the session''s location. Primary key in {@link \RsLocationSql} table. </dd> <dt> string <var>s_title</var> </dt> <dd> The title of the session. </dd> <dt> string <var>url_book</var> </dt> <dd> The direct link to start booking on the WellnessLiving website. </dd> </dl>'
+                      is_timezone_different:
+                        type: boolean
+                        description: 'If `true`, the list of sessions contains sessions from different time zones. Otherwise, this will be `false`.'
+                      is_virtual_service:
+                        type: boolean
+                        description: 'If `true`, there exists at least one virtual service by a specified {@link ClassListApi::$k_business} and {@link ClassListApi::$k_class_tab}, Otherwise, this will be `false`.'
+      tags:
+        - ClassList-ClassList68
 tags:
   -
     name: Account-Account
@@ -20565,6 +20673,9 @@ tags:
     description: 'An endpoint to get all the classes for a location.'
   -
     name: ClassList-ClassList
+    description: 'Retrieves a list of classes and class information for a Class Tab.'
+  -
+    name: ClassList-ClassList68
     description: 'Retrieves a list of classes and class information for a Class Tab.'
   -
     name: ClassView-ClassView
