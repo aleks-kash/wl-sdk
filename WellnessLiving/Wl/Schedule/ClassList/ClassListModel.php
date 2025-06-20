@@ -7,6 +7,8 @@ use WellnessLiving\WlModelAbstract;
 
 /**
  * Retrieves a list of classes and class information for a Class Tab.
+ *
+ * @deprecated Use {@link ClassList68Model} instead.
  */
 class ClassListModel extends WlModelAbstract
 {
@@ -336,6 +338,14 @@ class ClassListModel extends WlModelAbstract
    * @var bool
    */
   public $show_cancel = false;
+
+  /**
+   * If `true`, classes will be included in the response. `false` - otherwise.
+   *
+   * @get get
+   * @var bool
+   */
+  public $show_class = true;
 
   /**
    * If `true`, events are also returned. If `false`, only classes are returned.

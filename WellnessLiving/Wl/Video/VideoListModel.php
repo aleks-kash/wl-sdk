@@ -90,7 +90,7 @@ class VideoListModel extends WlModelAbstract
    *
    * @get get
    * @var string[]
-   * @deprecated This property will be removed in the future.
+   * @deprecated This property will be removed in the future. Use {@link VideoListModel::$a_staff_uid} instead.
    */
   public $a_staff = [];
 
@@ -100,7 +100,7 @@ class VideoListModel extends WlModelAbstract
    * @get get
    * @var string[]
    */
-  public $a_uid_staff = [];
+  public $a_staff_uid = [];
 
   /**
    * A list of video categories to show videos from.

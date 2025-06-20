@@ -1,10 +1,10 @@
 openapi: 3.1.0
 info:
   title: 'WellnessLiving public API'
-  version: 1.1.20250617205305
+  version: 1.1.20250620144811
   description: |
     WellnessLiving API is a RESTful way to access and manage your business data.
-    Last updated at: 2025-06-17 20:53:05
+    Last updated at: 2025-06-20 14:48:11
 servers:
   - url: https://us.wellnessliving.com
     description: 'WellnessLiving server for businesses served from the United States data center'
@@ -2308,7 +2308,10 @@ paths:
                         description: 'TODO wl-71918: remove this property when external developers confirm that they do not use it. The keys of the staff members who are on the video.'
                       a_staff_info:
                         type: array
-                        description: 'A list of staff members associated with the video. Every item has the following structure:<dl> <dt>string <var>k_staff</var></dt> <dd>The staff member key. Primary key in {@link \RsStaffSql} table.</dd> <dt>string <var>text_name</var></dt> <dd>The staff member''s full name.</dd> <dt>string <var>uid_staff</var></dt> <dd>The staff user ID. Primary key in {@link \PassportLoginSql}.`uid`.</dd> </dl>'
+                        description: 'A list of staff members associated with the video. Every item has the following structure:<dl> <dt>string <var>k_staff</var> <b>(deprecated)</b></dt> <dd>The staff member key. Primary key in {@link \RsStaffSql} table.</dd> <dt>string <var>text_name</var></dt> <dd>The staff member''s full name.</dd> <dt>string <var>uid_staff</var></dt> <dd>The staff user ID. Primary key in {@link \PassportLoginSql}.`uid`.</dd> </dl>'
+                      a_staff_uid:
+                        type: array
+                        description: 'The user IDs of the staff members who are on the video.'
                       a_video_category:
                         type: array
                         description: 'The video category keys where this video can be found.'
@@ -2324,6 +2327,9 @@ paths:
                       dtl_upload:
                         type: string
                         description: 'The date when the video was uploaded.'
+                      html_embed:
+                        type: string
+                        description: 'The video embed code.'
                       i_calorie:
                         type: number
                         format: int32
@@ -2348,6 +2354,10 @@ paths:
                         type: number
                         format: int32
                         description: '{@link YesNoSid::NO} if the video is available in all locations. {@link YesNoSid::YES} if the video is available only in certain locations.'
+                      id_source:
+                        type: number
+                        format: int32
+                        description: 'Source of the video. One of {@link VideoSourceSid} constants.'
                       is_calorie:
                         type: boolean
                         description: 'If `true`, the calorie count will be displayed on the video. If `false`, the calorie count will be hidden on the video.'
@@ -2440,9 +2450,9 @@ paths:
                 a_staff:
                   type: array
                   description: 'TODO wl-71918: remove this property when external developers confirm that they do not use it. The keys of the staff members who are on the video.'
-                a_staff_info:
+                a_staff_uid:
                   type: array
-                  description: 'A list of staff members associated with the video. Every item has the following structure:<dl> <dt>string <var>k_staff</var></dt> <dd>The staff member key. Primary key in {@link \RsStaffSql} table.</dd> <dt>string <var>text_name</var></dt> <dd>The staff member''s full name.</dd> <dt>string <var>uid_staff</var></dt> <dd>The staff user ID. Primary key in {@link \PassportLoginSql}.`uid`.</dd> </dl>'
+                  description: 'The user IDs of the staff members who are on the video.'
                 a_video_category:
                   type: array
                   description: 'The video category keys where this video can be found.'
@@ -2458,6 +2468,9 @@ paths:
                 file_video:
                   type: array
                   description: 'Video file. This property is not used, but need for correct generate model.'
+                html_embed:
+                  type: string
+                  description: 'The video embed code.'
                 i_calorie:
                   type: number
                   format: int32
@@ -2473,6 +2486,10 @@ paths:
                   type: number
                   format: int32
                   description: '{@link YesNoSid::NO} if the video is available in all locations. {@link YesNoSid::YES} if the video is available only in certain locations.'
+                id_source:
+                  type: number
+                  format: int32
+                  description: 'Source of the video. One of {@link VideoSourceSid} constants.'
                 is_calorie:
                   type: boolean
                   description: 'If `true`, the calorie count will be displayed on the video. If `false`, the calorie count will be hidden on the video.'
@@ -2547,7 +2564,7 @@ paths:
           description: 'TODO wl-72248: remove this property when external developers confirm that they do not use it. A list of staff members who appear in videos.'
           schema:
             type: array
-        - name: a_uid_staff
+        - name: a_staff_uid
           in: query
           description: 'A list of staff members who appear in videos.'
           schema:
@@ -3704,6 +3721,9 @@ paths:
                 a_link:
                   type: array
                   description: 'Link list to the file.'
+                json_list:
+                  type: string
+                  description: 'Link list to the file as JSON string.'
       responses:
         200:
           description: 'Response always comes with status 200. Inspect the rest of the response body to determine the result.'
@@ -5962,6 +5982,11 @@ paths:
         - name: show_cancel
           in: query
           description: 'If `true`, canceled sessions will be returned. If `false`, canceled sessions won''t be returned.'
+          schema:
+            type: boolean
+        - name: show_class
+          in: query
+          description: 'If `true`, classes will be included in the response. `false` - otherwise.'
           schema:
             type: boolean
         - name: show_event
@@ -16573,9 +16598,6 @@ paths:
                   - type: object
                     description: 'Successful response.'
                     properties:
-                      a_login_activity_purchase:
-                        type: array
-                        description: 'Activities for the purchases made. Primary keys in {@link \RsLoginActivitySql} table.'
                       a_login_prize:
                         type: array
                         description: 'The list of redeemed prizes. Each value is a primary key in {@link \RsLoginPrizeSql} table.'
@@ -20363,7 +20385,7 @@ paths:
         - Count-InventoryCount
   '/Wl/Schedule/ClassList/ClassList68.json':
     get:
-      summary: 'Gets list of classes and class information for a Class Tab.'
+      summary: 'This method is called to process a GET query.'
       parameters:
         - name: a_class
           in: query
@@ -20432,7 +20454,7 @@ paths:
             type: boolean
         - name: show_class
           in: query
-          description: 'If `true`, classes will be included in the response. If `false`, only events are returned.'
+          description: 'If `true`, classes will be included in the response. `false` - otherwise.'
           schema:
             type: boolean
         - name: show_event
@@ -20469,6 +20491,100 @@ paths:
                         description: 'If `true`, there exists at least one virtual service by a specified {@link ClassListApi::$k_business} and {@link ClassListApi::$k_class_tab}, Otherwise, this will be `false`.'
       tags:
         - ClassList-ClassList68
+  '/Wl/Profile/Edit/Email/EditEmail67.json':
+    get:
+      summary: 'Checks if specified email address is busy.'
+      parameters:
+        - name: is_backend
+          in: query
+          description: 'If `true`, the API is being used from backend. Otherwise, this will be `false`.'
+          schema:
+            type: boolean
+        - name: k_business
+          in: query
+          description: 'The business key where the check must be performed.'
+          schema:
+            type: string
+        - name: text_mail
+          in: query
+          description: 'The email address to be checked.'
+          schema:
+            type: string
+        - name: uid_want
+          in: query
+          description: 'The key of user whose email will be edited. This will be `0` in the case of a new user creation.'
+          schema:
+            type: string
+      responses:
+        200:
+          description: 'Response always comes with status 200. Inspect the rest of the response body to determine the result.'
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - type: object
+                    description: 'Successful response.'
+                    properties:
+                      a_business_member_key:
+                        type: array
+                        description: 'List of business keys where a user is already a member. Primary keys in {@link \RsBusinessSql} table.'
+                      a_user:
+                        type: array
+                        description: 'Information about the user who occupies the specified email. This will be empty if the email is free or if the rate limit has been reached. Otherwise, has next keys: <dl> <dt> string <var>text_firstname</var> </dt> <dd> First name. </dd> <dt> string <var>text_lastname</var> </dt> <dd> Last name. </dd> <dt> string <var>text_phone</var> </dt> <dd> Phone. </dd> <dt> string <var>url_photo</var> </dt> <dd> URL to photo. </dd> </dl>'
+                      is_added:
+                        type: boolean
+                        description: 'Shows, whether client was registered in the business: <tt>true</tt> if user was added to the business, <tt>false</tt> if staff only received temporary access, because mandatory fields must be specified first.'
+                      is_current_member:
+                        type: boolean
+                        description: 'If `true`, user is already a member of current business, `false` - otherwise.'
+                      is_limit:
+                        type: boolean
+                        description: 'If `true`, then the number of requests has exceeded the rate limit. Otherwise, this will be `false`.'
+                      is_password_set:
+                        type: boolean
+                        description: 'If `true`, user, who has the specified email, has password set, `false` - otherwise.'
+                      is_staff:
+                        type: boolean
+                        description: 'If `true`, user, who has the specified email, is staff in current business, `false` - otherwise.'
+                      is_staff_any_business:
+                        type: boolean
+                        description: 'If `true`, user, who has the specified email, is staff in any business, `false` - otherwise.'
+                      is_use:
+                        type: boolean
+                        description: 'If `true`, then the specified email is in use. Otherwise, this will be `false`.'
+                      uid_result:
+                        type: string
+                        description: 'The key of user who has the specified email. This will be `0` if the email is free or if the rate limit has been reached.'
+      tags:
+        - Email-EditEmail67
+    post:
+      summary: 'Adds user to business.'
+      parameters:
+        - name: k_business
+          in: query
+          description: 'The business key where the check must be performed.'
+          schema:
+            type: string
+        - name: uid_want
+          in: query
+          description: 'The key of user whose email will be edited. This will be `0` in the case of a new user creation.'
+          schema:
+            type: string
+      responses:
+        200:
+          description: 'Response always comes with status 200. Inspect the rest of the response body to determine the result.'
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - type: object
+                    description: 'Successful response.'
+                    properties:
+                      is_added:
+                        type: boolean
+                        description: 'Shows, whether client was registered in the business: <tt>true</tt> if user was added to the business, <tt>false</tt> if staff only received temporary access, because mandatory fields must be specified first.'
+      tags:
+        - Email-EditEmail67
 tags:
   -
     name: Account-Account
@@ -20767,6 +20883,9 @@ tags:
   -
     name: Email-EditEmail
     description: 'Checks if a user''s email address is already used or changes a user’s login email address. This endpoint is rate limited. If the rate limit is exceeded, it won''t return user information. While `get` request allows to check, whether user with the given email exists on the site, `post` allows to add it to the certain business, if it''s not added yet. If client has all required by this business fields filled, it will be added right away. Otherwise it will add temporary access to this client, and you need to send all necessary fields with {@link EditApi} endpoint.'
+  -
+    name: Email-EditEmail67
+    description: 'Checks if a user''s email address is already used or changes a user’s login email address. This endpoint is rate limited. If the rate limit is exceeded, it won''t return user information. While `get` request allows to check whether a user with the given email exists on the site, `post` allows adding it to the certain business, if it''s not added yet. If client has all required by this business fields filled, it will be added right away. Otherwise, it will add temporary access to this client, and you need to send all necessary fields with {@link EditApi} endpoint.'
   -
     name: Email-EmailExist
     description: 'Checks if the email address exists in the system.'

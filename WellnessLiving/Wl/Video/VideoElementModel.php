@@ -26,13 +26,13 @@ class VideoElementModel extends WlModelAbstract
    * @get result
    * @post post
    * @var string[]
-   * @deprecated This property will be removed in the future.
+   * @deprecated This property will be removed in the future. Use {@link VideoElementModel::$a_staff_uid} instead.
    */
-  public $a_staff;
+  public $a_staff = [];
 
   /**
    * A list of staff members associated with the video. Every item has the following structure:<dl>
-   *   <dt>string <var>k_staff</var></dt>
+   *   <dt>string <var>k_staff</var> <b>(deprecated)</b></dt>
    *   <dd>The staff member key.</dd>
    *   <dt>string <var>text_name</var></dt>
    *   <dd>The staff member's full name.</dd>
@@ -41,10 +41,18 @@ class VideoElementModel extends WlModelAbstract
    * </dl>
    *
    * @get result
-   * @post post
    * @var array
    */
   public $a_staff_info = [];
+
+  /**
+   * The user IDs of the staff members who are on the video.
+   *
+   * @get result
+   * @post post
+   * @var string[]
+   */
+  public $a_staff_uid = [];
 
   /**
    * The video category keys where this video can be found.
@@ -102,6 +110,15 @@ class VideoElementModel extends WlModelAbstract
    * @var array
    */
   public $file_video;
+
+  /**
+   * The video embed code.
+   *
+   * @get result
+   * @post post
+   * @var string
+   */
+  public $html_embed = '';
 
   /**
    * The count of burned calories associated with the video.
@@ -166,6 +183,15 @@ class VideoElementModel extends WlModelAbstract
    * @var int
    */
   public $id_location_select;
+
+  /**
+   * Source of the video.
+   *
+   * @get result
+   * @post post
+   * @var int
+   */
+  public $id_source = 1;
 
   /**
    * If `true`, the API is being used from backend. Otherwise, this will be `false`.

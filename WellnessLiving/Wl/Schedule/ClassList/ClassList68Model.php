@@ -338,7 +338,7 @@ class ClassList68Model extends WlModelAbstract
   public $show_cancel = false;
 
   /**
-   * If `true`, classes will be included in the response. If `false`, only events are returned.
+   * If `true`, classes will be included in the response. `false` - otherwise.
    *
    * @get get
    * @var bool

@@ -154,14 +154,6 @@ class PaymentMultipleModel extends WlModelAbstract
   public $a_book_data_post = [];
 
   /**
-   * Activities for the purchases made.
-   *
-   * @post result
-   * @var array
-   */
-  public $a_login_activity_purchase = [];
-
-  /**
    * The list of redeemed prizes.
    *
    * @post result

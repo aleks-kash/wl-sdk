@@ -24,6 +24,14 @@ class DriveGenericInfoModel extends WlModelAbstract
    * @var array
    */
   public $a_link = [];
+
+  /**
+   * Link list to the file as JSON string.
+   *
+   * @post post
+   * @var string
+   */
+  public $json_list = '';
 }
 
 ?>

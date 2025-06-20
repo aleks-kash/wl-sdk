@@ -10,14 +10,12 @@ use WellnessLiving\Wl\Profile\Edit\EditModel;
  *
  * This endpoint is rate limited. If the rate limit is exceeded, it won't return user information.
  *
- * While `get` request allows to check, whether user with the given email exists on the site, `post` allows to add it
+ * While `get` request allows to check whether a user with the given email exists on the site, `post` allows adding it
  *   to the certain business, if it's not added yet. If client has all required by this business fields filled, it will
- *   be added right away. Otherwise it will add temporary access to this client, and you need to send all necessary fields
+ *   be added right away. Otherwise, it will add temporary access to this client, and you need to send all necessary fields
  *   with {@link EditModel} endpoint.
- *
- * @deprecated Use {@link EditEmail67Model} instead.
  */
-class EditEmailModel extends WlModelAbstract
+class EditEmail67Model extends WlModelAbstract
 {
   /**
    * List of business keys where a user is already a member.
@@ -61,7 +59,7 @@ class EditEmailModel extends WlModelAbstract
    * @get result
    * @var array
    */
-  public $a_user;
+  public $a_user = null;
 
   /**
    * Shows, whether client was registered in the business: <tt>true</tt> if user was added to the business,
@@ -95,7 +93,7 @@ class EditEmailModel extends WlModelAbstract
    * @get result
    * @var bool
    */
-  public $is_limit;
+  public $is_limit = null;
 
   /**
    * If `true`, user, who has the specified email, has password set, `false` - otherwise.
@@ -127,7 +125,7 @@ class EditEmailModel extends WlModelAbstract
    * @get result
    * @var bool
    */
-  public $is_use;
+  public $is_use = null;
 
   /**
    * The business key where the check must be performed.
@@ -153,7 +151,7 @@ class EditEmailModel extends WlModelAbstract
    * @get result
    * @var string
    */
-  public $uid_result;
+  public $uid_result = null;
 
   /**
    * The key of user whose email will be edited.
