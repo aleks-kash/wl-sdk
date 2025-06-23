@@ -1,10 +1,10 @@
 openapi: 3.1.0
 info:
   title: 'WellnessLiving public API'
-  version: 1.1.20250620144811
+  version: 1.1.20250623164153
   description: |
     WellnessLiving API is a RESTful way to access and manage your business data.
-    Last updated at: 2025-06-20 14:48:11
+    Last updated at: 2025-06-23 16:41:53
 servers:
   - url: https://us.wellnessliving.com
     description: 'WellnessLiving server for businesses served from the United States data center'
@@ -1513,6 +1513,9 @@ paths:
                       is_quiz_available:
                         type: boolean
                         description: 'Determines whether quizzes are available in the business.'
+                      is_test:
+                        type: boolean
+                        description: 'Determines if the business operates in testing mode.'
                       is_tip:
                         type: boolean
                         description: 'If `true`, tips are available in the business. Otherwise, this will be `false`.'
@@ -2535,6 +2538,29 @@ paths:
                         description: 'The video key. *Be careful, when use this property in code, use {@link VideoElementApi::$k_video_binary} instead.* In this property can be key in next format: * [Deprecated] String key in old format. See {@link DbShardKey::keyString()}. * String key in new format. See {@link DbShardKey::keyBinary()} or {@link DbKey::generate()}.'
       tags:
         - Video-VideoElement
+    put:
+      summary: 'Validates video embed code.'
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                html_embed:
+                  type: string
+                  description: 'The video embed code.'
+      responses:
+        200:
+          description: 'Response always comes with status 200. Inspect the rest of the response body to determine the result.'
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - type: object
+                    description: 'Successful response. Full description is not available yet.'
+      tags:
+        - Video-VideoElement
   '/Wl/Video/VideoList.json':
     get:
       summary: ''
@@ -2957,7 +2983,7 @@ paths:
                   description: 'A list of fields containing the lead information. The keys are the field keys and values are field values. If field key is `Address` field key, value may be an array or string. Can be a string if only address field is used. Will be an array if city and postal code are used, with the following keys: <dl> <dt>string <var>text_address</var></dt> <dd>Address.</dd> <dt>string <var>k_city</var></dt> <dd>City key. Primary key in {@link \AGeoSql}.</dd> <dt>string <var>text_postal</var></dt> <dd>Postal code.</dd> </dl>'
                 k_lead_source:
                   type: [string, "null"]
-                  description: 'Key of the lead source. Primary key in {@link LeadSourceSql} table. Must be `null` if <var>text_lead_source</var> is set. If both parameters are empty, the {@link LeadSourceSid::ENDPOINT} lead source will be used.'
+                  description: 'Key of the lead source. Primary key in {@link LeadSourceSql} table. Must be `null` if <var>text_lead_source</var> is set. If both parameters are empty, the {@link LeadSourceSid::ENDPOINT} lead source will be used. {@link LeadSourceElementApi::LEAD_SOURCE_REPLACE_NONE} if Lead Source is to be unselected for the user.'
                 s_captcha:
                   type: string
                   description: 'The characters entered by the lead for the captcha test. This isn''t necessary if the GET method returned an empty {@link LeadApi::$url_captcha}. This field isn''t necessary if the GET method returned an empty {@link LeadApi::$url_captcha}.'
@@ -2976,7 +3002,7 @@ paths:
                     properties:
                       k_lead_source:
                         type: [string, "null"]
-                        description: 'Key of the lead source. Primary key in {@link LeadSourceSql} table. Must be `null` if <var>text_lead_source</var> is set. If both parameters are empty, the {@link LeadSourceSid::ENDPOINT} lead source will be used.'
+                        description: 'Key of the lead source. Primary key in {@link LeadSourceSql} table. Must be `null` if <var>text_lead_source</var> is set. If both parameters are empty, the {@link LeadSourceSid::ENDPOINT} lead source will be used. {@link LeadSourceElementApi::LEAD_SOURCE_REPLACE_NONE} if Lead Source is to be unselected for the user.'
                       uid:
                         type: string
                         description: 'The key of the new user. Typing is not added because the variable is an integer. Specifying typing may break third party integration.'
@@ -6023,6 +6049,114 @@ paths:
                         description: 'If `true`, there exists at least one virtual service by a specified {@link ClassListApi::$k_business} and {@link ClassListApi::$k_class_tab}, Otherwise, this will be `false`.'
       tags:
         - ClassList-ClassList
+  '/Wl/Schedule/ClassList/ClassList68.json':
+    get:
+      summary: 'This method is called to process a GET query.'
+      parameters:
+        - name: a_class
+          in: query
+          description: 'The list of classes keys to filter. Primary keys in {@link \RsClassSql} table. Return sessions with matching class IDs. If it''s empty, all classes/events will be returned.'
+          schema:
+            type: array
+        - name: a_day
+          in: query
+          description: 'Class filter by day of the week. Array of number representing the days of the week. Return sessions matching the given weekdays. (7 = Sunday, 1 = Monday, ..., 6 = Saturday) Empty array means no filtering.'
+          schema:
+            type: array
+        - name: a_location
+          in: query
+          description: 'The list of location keys to filter results. If it''s empty, schedule for all locations will be returned. All given locations should be from the same business, which is sent in {@link ClassListApi::$k_business}.'
+          schema:
+            type: array
+        - name: a_time
+          in: query
+          description: 'Class filter by time of day. List of arrays with start and end time in "HH:MM" format (24h). Include sessions that start between the specified time range. Each value is array with time parameters: <dl> <dt>string <var>tl_start</var></dt> <dd>Time when the session starts. Example: value `''06:00''`.</dd> <dt>string <var>tl_end</var></dt> <dd>Time when the session ends. Example: value `''14:00''`.</dd> </dl> Empty array means no filtering.'
+          schema:
+            type: array
+        - name: dt_date
+          in: query
+          description: 'The list start date in UTC and in MySQL format.'
+          schema:
+            type: string
+        - name: dt_end
+          in: query
+          description: 'The list end date in UTC and in MySQL format. <no-sdk> If left empty, the default duration is {@link ClassListApi::DEFAULT_PERIOD} days after {@link ClassListApi::$dt_date}. </no-sdk>'
+          schema:
+            type: string
+        - name: is_response_short
+          in: query
+          description: '`true` means to not generate {@link ClassListApi::$a_session} result. Can be used, if you do not need full information about existing classes and result in {@link ClassListApi::$a_calendar} is enough.'
+          schema:
+            type: boolean
+        - name: is_tab_all
+          in: query
+          description: 'If `true`, sessions from every class tab are returned. If `false`, use the {@link ClassListApi::$k_class_tab} value.'
+          schema:
+            type: boolean
+        - name: is_virtual
+          in: query
+          description: 'Class filter by type. The class is virtual. `true`: Only virtual classes. `false`: Only in-person. `null` or not set: No filtering.'
+          schema:
+            type: [boolean, "null"]
+        - name: k_business
+          in: query
+          description: 'The business key.'
+          schema:
+            type: string
+        - name: k_class_tab
+          in: query
+          description: 'The category tab key. This will be `null` if not set yet. This will be ignored if {@link ClassListApi::$is_tab_all} is `true`.'
+          schema:
+            type: string
+        - name: s_staff
+          in: query
+          description: 'The list of staff members to filter. A comma seperated list of staff keys. Primary keys in {@link \RsStaffSql} table.'
+          schema:
+            type: string
+        - name: show_cancel
+          in: query
+          description: 'If `true`, canceled sessions will be returned. If `false`, canceled sessions won''t be returned.'
+          schema:
+            type: boolean
+        - name: show_class
+          in: query
+          description: 'If `true`, classes will be included in the response. `false` - otherwise.'
+          schema:
+            type: boolean
+        - name: show_event
+          in: query
+          description: 'If `true`, events are also returned. If `false`, only classes are returned.'
+          schema:
+            type: boolean
+        - name: uid
+          in: query
+          description: 'The user key.'
+          schema:
+            type: string
+      responses:
+        200:
+          description: 'Response always comes with status 200. Inspect the rest of the response body to determine the result.'
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - type: object
+                    description: 'Successful response.'
+                    properties:
+                      a_calendar:
+                        type: array
+                        description: 'Keys are dates of the days inside requested date range, when there is at least one class in the business. If, locations are sent as a parameter, then at least one class in the given locations. Values are empty arrays for now. This is done to make possible to add some information about certain dates, if we need this.'
+                      a_session:
+                        type: array
+                        description: 'A list of classes sessions starting with the date {@link ClassListApi::$dt_date} and in the 62 days ahead (or up to {@link ClassListApi::$dt_end}). Every element has the following keys: <dl> <dt> string[] <var>a_class_tab</var> </dt> <dd> Keys of class tab. Primary keys in {@link \Wl\Classes\Tab\Sql\ClassTab\Sql} table. </dd> <dt> string[] <var>a_image</var> </dt> <dd> The class image. Empty array if there is no image. </dd> <dt> string[] <var>a_search_tag</var> </dt> <dd> Tags associated with an individual class. </dd> <dt> string[] <var>a_staff</var> </dt> <dd> The list of staff keys for the staff member conducting the session. Primary keys in {@link \RsStaffSql} table. </dd> <dt> string[] <var>a_virtual_location</var> </dt> <dd> The list of virtual locations keys. Each value is a location key. Primary keys in {@link \RsLocationSql} table. </dd> <dt> string <var>dt_date</var> </dt> <dd> The date/time of the session start in UTC. </dd> <dt> string <var>dt_time</var> </dt> <dd> The time of the session start in the local time zone. </dd> <dt> string <var>dtl_date</var> </dt> <dd> The date/time of session start in the location''s time zone. </dd> <dt> bool <var>hide_application</var> </dt> <dd> Specifies whether the class will be hidden in the White Label Achieve Client App. If `true`, it means that the class won''t be displayed. Otherwise, this will be `false` to indicate that the class will be displayed. </dd> <dt> string <var>html_description</var> </dt> <dd> The class description. </dd> <dt> int <var>i_book</var> </dt> <dd> Count of visits on this class. </dd> <dt> int|null <var>i_capacity</var> </dt> <dd> The capacity of the service. ''null'' indicates that the capacity is not set. </dd> <dt> int <var>i_day</var> </dt> <dd> The day of the week when session is occurred. Constant from {@link \ADateWeekSid}. </dd> <dt> int <var>i_duration</var> </dt> <dd> The duration of the session in minutes. </dd> <dt> int <var>i_wait</var> </dt> <dd> Number of clients in wait list. </dd> <dt> bool <var>is_cancel</var> </dt> <dd> If `true`, this class period was canceled. Otherwise, this will be `false`. </dd> <dt> bool <var>is_event</var> </dt> <dd> If `true`, this is an event. Otherwise, this will be `false`. </dd> <dt> bool <var>is_virtual</var> </dt> <dd> If `true`, this class is virtual. Otherwise, this will be `false`. </dd> <dt> bool <var>is_wait_list_enabled</var> </dt> <dd> This will be `true` if user is only on the wait-list. Otherwise, this will be `false`. </dd> <dt> string <var>k_class</var> </dt> <dd> The class key. Primary key in {@link \RsClassSql} table. </dd> <dt> string <var>k_class_period</var> </dt> <dd> The class period key. Primary key in {@link \RsClassPeriodSql} table. </dd> <dt> string <var>k_location</var> </dt> <dd> The key of the session''s location. Primary key in {@link \RsLocationSql} table. </dd> <dt> string <var>s_title</var> </dt> <dd> The title of the session. </dd> <dt> string <var>url_book</var> </dt> <dd> The direct link to start booking on the WellnessLiving website. </dd> </dl>'
+                      is_timezone_different:
+                        type: boolean
+                        description: 'If `true`, the list of sessions contains sessions from different time zones. Otherwise, this will be `false`.'
+                      is_virtual_service:
+                        type: boolean
+                        description: 'If `true`, there exists at least one virtual service by a specified {@link ClassListApi::$k_business} and {@link ClassListApi::$k_class_tab}, Otherwise, this will be `false`.'
+      tags:
+        - ClassList-ClassList68
   '/Wl/Schedule/Page/PageElement.json':
     get:
       summary: 'Retrieves information about one element of schedule.'
@@ -14973,6 +15107,100 @@ paths:
                         description: 'Shows, whether client was registered in the business: <tt>true</tt> if user was added to the business, <tt>false</tt> if staff only received temporary access, because mandatory fields must be specified first.'
       tags:
         - Email-EditEmail
+  '/Wl/Profile/Edit/Email/EditEmail67.json':
+    get:
+      summary: 'Checks if specified email address is busy.'
+      parameters:
+        - name: is_backend
+          in: query
+          description: 'If `true`, the API is being used from backend. Otherwise, this will be `false`.'
+          schema:
+            type: boolean
+        - name: k_business
+          in: query
+          description: 'The business key where the check must be performed.'
+          schema:
+            type: string
+        - name: text_mail
+          in: query
+          description: 'The email address to be checked.'
+          schema:
+            type: string
+        - name: uid_want
+          in: query
+          description: 'The key of user whose email will be edited. This will be `0` in the case of a new user creation.'
+          schema:
+            type: string
+      responses:
+        200:
+          description: 'Response always comes with status 200. Inspect the rest of the response body to determine the result.'
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - type: object
+                    description: 'Successful response.'
+                    properties:
+                      a_business_member_key:
+                        type: array
+                        description: 'List of business keys where a user is already a member. Primary keys in {@link \RsBusinessSql} table.'
+                      a_user:
+                        type: array
+                        description: 'Information about the user who occupies the specified email. This will be empty if the email is free or if the rate limit has been reached. Otherwise, has next keys: <dl> <dt> string <var>text_firstname</var> </dt> <dd> First name. </dd> <dt> string <var>text_lastname</var> </dt> <dd> Last name. </dd> <dt> string <var>text_phone</var> </dt> <dd> Phone. </dd> <dt> string <var>url_photo</var> </dt> <dd> URL to photo. </dd> </dl>'
+                      is_added:
+                        type: boolean
+                        description: 'Shows, whether client was registered in the business: <tt>true</tt> if user was added to the business, <tt>false</tt> if staff only received temporary access, because mandatory fields must be specified first.'
+                      is_current_member:
+                        type: boolean
+                        description: 'If `true`, user is already a member of current business, `false` - otherwise.'
+                      is_limit:
+                        type: boolean
+                        description: 'If `true`, then the number of requests has exceeded the rate limit. Otherwise, this will be `false`.'
+                      is_password_set:
+                        type: boolean
+                        description: 'If `true`, user, who has the specified email, has password set, `false` - otherwise.'
+                      is_staff:
+                        type: boolean
+                        description: 'If `true`, user, who has the specified email, is staff in current business, `false` - otherwise.'
+                      is_staff_any_business:
+                        type: boolean
+                        description: 'If `true`, user, who has the specified email, is staff in any business, `false` - otherwise.'
+                      is_use:
+                        type: boolean
+                        description: 'If `true`, then the specified email is in use. Otherwise, this will be `false`.'
+                      uid_result:
+                        type: string
+                        description: 'The key of user who has the specified email. This will be `0` if the email is free or if the rate limit has been reached.'
+      tags:
+        - Email-EditEmail67
+    post:
+      summary: 'Adds user to business.'
+      parameters:
+        - name: k_business
+          in: query
+          description: 'The business key where the check must be performed.'
+          schema:
+            type: string
+        - name: uid_want
+          in: query
+          description: 'The key of user whose email will be edited. This will be `0` in the case of a new user creation.'
+          schema:
+            type: string
+      responses:
+        200:
+          description: 'Response always comes with status 200. Inspect the rest of the response body to determine the result.'
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - type: object
+                    description: 'Successful response.'
+                    properties:
+                      is_added:
+                        type: boolean
+                        description: 'Shows, whether client was registered in the business: <tt>true</tt> if user was added to the business, <tt>false</tt> if staff only received temporary access, because mandatory fields must be specified first.'
+      tags:
+        - Email-EditEmail67
   '/Wl/Appointment/Book/Asset/AssetList.json':
     get:
       summary: 'Retrieves information about assets in the current asset category.'
@@ -20383,208 +20611,6 @@ paths:
                     description: 'Successful response. Full description is not available yet.'
       tags:
         - Count-InventoryCount
-  '/Wl/Schedule/ClassList/ClassList68.json':
-    get:
-      summary: 'This method is called to process a GET query.'
-      parameters:
-        - name: a_class
-          in: query
-          description: 'The list of classes keys to filter. Primary keys in {@link \RsClassSql} table. Return sessions with matching class IDs. If it''s empty, all classes/events will be returned.'
-          schema:
-            type: array
-        - name: a_day
-          in: query
-          description: 'Class filter by day of the week. Array of number representing the days of the week. Return sessions matching the given weekdays. (7 = Sunday, 1 = Monday, ..., 6 = Saturday) Empty array means no filtering.'
-          schema:
-            type: array
-        - name: a_location
-          in: query
-          description: 'The list of location keys to filter results. If it''s empty, schedule for all locations will be returned. All given locations should be from the same business, which is sent in {@link ClassListApi::$k_business}.'
-          schema:
-            type: array
-        - name: a_time
-          in: query
-          description: 'Class filter by time of day. List of arrays with start and end time in "HH:MM" format (24h). Include sessions that start between the specified time range. Each value is array with time parameters: <dl> <dt>string <var>tl_start</var></dt> <dd>Time when the session starts. Example: value `''06:00''`.</dd> <dt>string <var>tl_end</var></dt> <dd>Time when the session ends. Example: value `''14:00''`.</dd> </dl> Empty array means no filtering.'
-          schema:
-            type: array
-        - name: dt_date
-          in: query
-          description: 'The list start date in UTC and in MySQL format.'
-          schema:
-            type: string
-        - name: dt_end
-          in: query
-          description: 'The list end date in UTC and in MySQL format. <no-sdk> If left empty, the default duration is {@link ClassListApi::DEFAULT_PERIOD} days after {@link ClassListApi::$dt_date}. </no-sdk>'
-          schema:
-            type: string
-        - name: is_response_short
-          in: query
-          description: '`true` means to not generate {@link ClassListApi::$a_session} result. Can be used, if you do not need full information about existing classes and result in {@link ClassListApi::$a_calendar} is enough.'
-          schema:
-            type: boolean
-        - name: is_tab_all
-          in: query
-          description: 'If `true`, sessions from every class tab are returned. If `false`, use the {@link ClassListApi::$k_class_tab} value.'
-          schema:
-            type: boolean
-        - name: is_virtual
-          in: query
-          description: 'Class filter by type. The class is virtual. `true`: Only virtual classes. `false`: Only in-person. `null` or not set: No filtering.'
-          schema:
-            type: [boolean, "null"]
-        - name: k_business
-          in: query
-          description: 'The business key.'
-          schema:
-            type: string
-        - name: k_class_tab
-          in: query
-          description: 'The category tab key. This will be `null` if not set yet. This will be ignored if {@link ClassListApi::$is_tab_all} is `true`.'
-          schema:
-            type: string
-        - name: s_staff
-          in: query
-          description: 'The list of staff members to filter. A comma seperated list of staff keys. Primary keys in {@link \RsStaffSql} table.'
-          schema:
-            type: string
-        - name: show_cancel
-          in: query
-          description: 'If `true`, canceled sessions will be returned. If `false`, canceled sessions won''t be returned.'
-          schema:
-            type: boolean
-        - name: show_class
-          in: query
-          description: 'If `true`, classes will be included in the response. `false` - otherwise.'
-          schema:
-            type: boolean
-        - name: show_event
-          in: query
-          description: 'If `true`, events are also returned. If `false`, only classes are returned.'
-          schema:
-            type: boolean
-        - name: uid
-          in: query
-          description: 'The user key.'
-          schema:
-            type: string
-      responses:
-        200:
-          description: 'Response always comes with status 200. Inspect the rest of the response body to determine the result.'
-          content:
-            application/json:
-              schema:
-                oneOf:
-                  - type: object
-                    description: 'Successful response.'
-                    properties:
-                      a_calendar:
-                        type: array
-                        description: 'Keys are dates of the days inside requested date range, when there is at least one class in the business. If, locations are sent as a parameter, then at least one class in the given locations. Values are empty arrays for now. This is done to make possible to add some information about certain dates, if we need this.'
-                      a_session:
-                        type: array
-                        description: 'A list of classes sessions starting with the date {@link ClassListApi::$dt_date} and in the 62 days ahead (or up to {@link ClassListApi::$dt_end}). Every element has the following keys: <dl> <dt> string[] <var>a_class_tab</var> </dt> <dd> Keys of class tab. Primary keys in {@link \Wl\Classes\Tab\Sql\ClassTab\Sql} table. </dd> <dt> string[] <var>a_image</var> </dt> <dd> The class image. Empty array if there is no image. </dd> <dt> string[] <var>a_search_tag</var> </dt> <dd> Tags associated with an individual class. </dd> <dt> string[] <var>a_staff</var> </dt> <dd> The list of staff keys for the staff member conducting the session. Primary keys in {@link \RsStaffSql} table. </dd> <dt> string[] <var>a_virtual_location</var> </dt> <dd> The list of virtual locations keys. Each value is a location key. Primary keys in {@link \RsLocationSql} table. </dd> <dt> string <var>dt_date</var> </dt> <dd> The date/time of the session start in UTC. </dd> <dt> string <var>dt_time</var> </dt> <dd> The time of the session start in the local time zone. </dd> <dt> string <var>dtl_date</var> </dt> <dd> The date/time of session start in the location''s time zone. </dd> <dt> bool <var>hide_application</var> </dt> <dd> Specifies whether the class will be hidden in the White Label Achieve Client App. If `true`, it means that the class won''t be displayed. Otherwise, this will be `false` to indicate that the class will be displayed. </dd> <dt> string <var>html_description</var> </dt> <dd> The class description. </dd> <dt> int <var>i_book</var> </dt> <dd> Count of visits on this class. </dd> <dt> int|null <var>i_capacity</var> </dt> <dd> The capacity of the service. ''null'' indicates that the capacity is not set. </dd> <dt> int <var>i_day</var> </dt> <dd> The day of the week when session is occurred. Constant from {@link \ADateWeekSid}. </dd> <dt> int <var>i_duration</var> </dt> <dd> The duration of the session in minutes. </dd> <dt> int <var>i_wait</var> </dt> <dd> Number of clients in wait list. </dd> <dt> bool <var>is_cancel</var> </dt> <dd> If `true`, this class period was canceled. Otherwise, this will be `false`. </dd> <dt> bool <var>is_event</var> </dt> <dd> If `true`, this is an event. Otherwise, this will be `false`. </dd> <dt> bool <var>is_virtual</var> </dt> <dd> If `true`, this class is virtual. Otherwise, this will be `false`. </dd> <dt> bool <var>is_wait_list_enabled</var> </dt> <dd> This will be `true` if user is only on the wait-list. Otherwise, this will be `false`. </dd> <dt> string <var>k_class</var> </dt> <dd> The class key. Primary key in {@link \RsClassSql} table. </dd> <dt> string <var>k_class_period</var> </dt> <dd> The class period key. Primary key in {@link \RsClassPeriodSql} table. </dd> <dt> string <var>k_location</var> </dt> <dd> The key of the session''s location. Primary key in {@link \RsLocationSql} table. </dd> <dt> string <var>s_title</var> </dt> <dd> The title of the session. </dd> <dt> string <var>url_book</var> </dt> <dd> The direct link to start booking on the WellnessLiving website. </dd> </dl>'
-                      is_timezone_different:
-                        type: boolean
-                        description: 'If `true`, the list of sessions contains sessions from different time zones. Otherwise, this will be `false`.'
-                      is_virtual_service:
-                        type: boolean
-                        description: 'If `true`, there exists at least one virtual service by a specified {@link ClassListApi::$k_business} and {@link ClassListApi::$k_class_tab}, Otherwise, this will be `false`.'
-      tags:
-        - ClassList-ClassList68
-  '/Wl/Profile/Edit/Email/EditEmail67.json':
-    get:
-      summary: 'Checks if specified email address is busy.'
-      parameters:
-        - name: is_backend
-          in: query
-          description: 'If `true`, the API is being used from backend. Otherwise, this will be `false`.'
-          schema:
-            type: boolean
-        - name: k_business
-          in: query
-          description: 'The business key where the check must be performed.'
-          schema:
-            type: string
-        - name: text_mail
-          in: query
-          description: 'The email address to be checked.'
-          schema:
-            type: string
-        - name: uid_want
-          in: query
-          description: 'The key of user whose email will be edited. This will be `0` in the case of a new user creation.'
-          schema:
-            type: string
-      responses:
-        200:
-          description: 'Response always comes with status 200. Inspect the rest of the response body to determine the result.'
-          content:
-            application/json:
-              schema:
-                oneOf:
-                  - type: object
-                    description: 'Successful response.'
-                    properties:
-                      a_business_member_key:
-                        type: array
-                        description: 'List of business keys where a user is already a member. Primary keys in {@link \RsBusinessSql} table.'
-                      a_user:
-                        type: array
-                        description: 'Information about the user who occupies the specified email. This will be empty if the email is free or if the rate limit has been reached. Otherwise, has next keys: <dl> <dt> string <var>text_firstname</var> </dt> <dd> First name. </dd> <dt> string <var>text_lastname</var> </dt> <dd> Last name. </dd> <dt> string <var>text_phone</var> </dt> <dd> Phone. </dd> <dt> string <var>url_photo</var> </dt> <dd> URL to photo. </dd> </dl>'
-                      is_added:
-                        type: boolean
-                        description: 'Shows, whether client was registered in the business: <tt>true</tt> if user was added to the business, <tt>false</tt> if staff only received temporary access, because mandatory fields must be specified first.'
-                      is_current_member:
-                        type: boolean
-                        description: 'If `true`, user is already a member of current business, `false` - otherwise.'
-                      is_limit:
-                        type: boolean
-                        description: 'If `true`, then the number of requests has exceeded the rate limit. Otherwise, this will be `false`.'
-                      is_password_set:
-                        type: boolean
-                        description: 'If `true`, user, who has the specified email, has password set, `false` - otherwise.'
-                      is_staff:
-                        type: boolean
-                        description: 'If `true`, user, who has the specified email, is staff in current business, `false` - otherwise.'
-                      is_staff_any_business:
-                        type: boolean
-                        description: 'If `true`, user, who has the specified email, is staff in any business, `false` - otherwise.'
-                      is_use:
-                        type: boolean
-                        description: 'If `true`, then the specified email is in use. Otherwise, this will be `false`.'
-                      uid_result:
-                        type: string
-                        description: 'The key of user who has the specified email. This will be `0` if the email is free or if the rate limit has been reached.'
-      tags:
-        - Email-EditEmail67
-    post:
-      summary: 'Adds user to business.'
-      parameters:
-        - name: k_business
-          in: query
-          description: 'The business key where the check must be performed.'
-          schema:
-            type: string
-        - name: uid_want
-          in: query
-          description: 'The key of user whose email will be edited. This will be `0` in the case of a new user creation.'
-          schema:
-            type: string
-      responses:
-        200:
-          description: 'Response always comes with status 200. Inspect the rest of the response body to determine the result.'
-          content:
-            application/json:
-              schema:
-                oneOf:
-                  - type: object
-                    description: 'Successful response.'
-                    properties:
-                      is_added:
-                        type: boolean
-                        description: 'Shows, whether client was registered in the business: <tt>true</tt> if user was added to the business, <tt>false</tt> if staff only received temporary access, because mandatory fields must be specified first.'
-      tags:
-        - Email-EditEmail67
 tags:
   -
     name: Account-Account

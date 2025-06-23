@@ -168,6 +168,14 @@ class DataModel extends WlModelAbstract
   public $is_quiz_available = false;
 
   /**
+   * Determines if the business operates in testing mode.
+   *
+   * @get result
+   * @var bool
+   */
+  public $is_test = false;
+
+  /**
    * If `true`, tips are available in the business. Otherwise, this will be `false`.
    *
    * @get result

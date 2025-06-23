@@ -116,6 +116,7 @@ class VideoElementModel extends WlModelAbstract
    *
    * @get result
    * @post post
+   * @put post
    * @var string
    */
   public $html_embed = '';
