@@ -143,6 +143,36 @@ class VisitStatusModel extends WlModelAbstract
   public $is_event = false;
 
   /**
+   * Whether or not to send email notification.
+   *
+   * <tt>false</tt> if not initialized.
+   *
+   * @post post
+   * @var bool
+   */
+  public $is_mail = false;
+
+  /**
+   * Whether or not to send push notification.
+   *
+   * <tt>false</tt> if not initialized.
+   *
+   * @post post
+   * @var bool
+   */
+  public $is_push = false;
+
+  /**
+   * Whether or not to send SMS notification.
+   *
+   * <tt>false</tt> if not initialized.
+   *
+   * @post post
+   * @var bool
+   */
+  public $is_sms = false;
+
+  /**
    * The business key.
    *
    * @get get

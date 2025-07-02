@@ -15,7 +15,12 @@ class BusinessConfigModel extends WlModelAbstract
    * All business policies connected to clients and bookings.
    *
    * <dl>
-   *   <dt>int <var>a_wait_service</var></dt>
+   *   <dt>array <var>a_family_relation</var></dt>
+   *   <dd>
+   *      List of allowed relation types specific to a given business.
+   *
+   *   </dd>
+   *   <dt>array <var>a_wait_service</var></dt>
    *   <dd>The keys are listed as IDs from {@link WlServiceSid}, and values are flags outlining whether wait listing is allowed.</dd>
    *   <dt>int <var>i_book_before</var></dt>
    *   <dd>The minimum hours|days|months before a class can be booked.</dd>

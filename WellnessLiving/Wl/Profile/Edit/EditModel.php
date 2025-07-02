@@ -55,8 +55,8 @@ class EditModel extends WlModelAbstract
    * List of errors.
    * `null` if there was no mistake.
    *
-   * @get result
-   * @post result
+   * @get result,error
+   * @post result,error
    * @var array|null
    */
   public $a_error_list;

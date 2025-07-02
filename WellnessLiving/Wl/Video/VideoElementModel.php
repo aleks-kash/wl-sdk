@@ -176,6 +176,16 @@ class VideoElementModel extends WlModelAbstract
   public $i_watch;
 
   /**
+   * Embedded video source.
+   *
+   * `null` if video is uploaded.
+   *
+   * @get result
+   * @var int|null
+   */
+  public $id_embed_source = null;
+
+  /**
    * {@link YesNoSid::NO} if the video is available in all locations.
    * {@link YesNoSid::YES} if the video is available only in certain locations.
    *
@@ -241,6 +251,24 @@ class VideoElementModel extends WlModelAbstract
    * @var bool
    */
   public $is_video_level;
+
+  /**
+   * Video.js media player initialization parameters in JSON format.
+   *
+   * Usage example:
+   *      <script>
+   *          videojs($('video'), {
+   *              "techOrder": ["Vimeo"],
+   *              "sources": [
+   *                  {"type": "video/vimeo", "src": "https://vimeo.com/123456789"}
+   *              ]
+   *          });
+   *      </script>
+   *
+   * @get result
+   * @var string
+   */
+  public $json_setup = '';
 
   /**
    * The business key.

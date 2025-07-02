@@ -5,10 +5,15 @@ namespace WellnessLiving\Wl\Mode;
 /**
  * The source of a visit.
  *
- * Last used ID: 27.
+ * Last used ID: 28.
  */
 class ModeSid
 {
+  /**
+   * Action made via Api Endpoint. Default for leads created via API, unless overridden.
+   */
+  const API = 28;
+
   /**
    * Registered through <tt>Azure</tt>.
    */

@@ -5,7 +5,7 @@ namespace WellnessLiving\Core\Locale;
 /**
  * A list of locales.
  *
- * Last used ID: 17
+ * Last used ID: 18
  */
 abstract class LocaleSid
 {
@@ -33,6 +33,11 @@ abstract class LocaleSid
    * Egypt.
    */
   const EGYPT = 8;
+
+  /**
+   * Republic of Ireland.
+   */
+  const IRELAND = 18;
 
   /**
    * Kuwait

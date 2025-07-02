@@ -3,9 +3,11 @@
 namespace WellnessLiving\Wl\Catalog\CatalogList;
 
 use WellnessLiving\Core\a\ADurationSid;
+use WellnessLiving\Core\a\AFlagSid;
 use WellnessLiving\WlModelAbstract;
 use WellnessLiving\Wl\Catalog\PurchaseOptionViewSid;
 use WellnessLiving\Wl\Purchase\Item\WlPurchaseItemSid;
+use WellnessLiving\Wl\Service\ServiceSid;
 use WellnessLiving\Wl\WlProgramSid;
 use WellnessLiving\Wl\WlSaleSid;
 
@@ -42,6 +44,15 @@ class ElementModel extends WlModelAbstract
    *
    * The structure may be different depending on the item category.
    * <dl>
+   *   <dt>array <var>a_service_access</var></dt>
+   *   <dd> Access to services for a purchase option.
+   *     Keys are one of the {@link ServiceSid} constants, values are one of the {@link AFlagSid}
+   *     constants. Set only for relevant purchase option service category.
+   *     {@link AFlagSid::ON} access to some services.
+   *     {@link AFlagSid::OFF} no access to services. It can be set only for classes and events.
+   *     {@link AFlagSid::ALL} access to all services. It can be set only for classes and events.
+   *     For purchase options with appointments and assets service category status is always {@link AFlagSid::ON}.
+   *   </dd>
    *   <dt>
    *     bool <var>is_renew_public</var>
    *   </dt>

@@ -1,10 +1,10 @@
 openapi: 3.1.0
 info:
   title: 'WellnessLiving public API'
-  version: 1.1.20250623164153
+  version: 1.1.20250702132032
   description: |
     WellnessLiving API is a RESTful way to access and manage your business data.
-    Last updated at: 2025-06-23 16:41:53
+    Last updated at: 2025-07-02 13:20:32
 servers:
   - url: https://us.wellnessliving.com
     description: 'WellnessLiving server for businesses served from the United States data center'
@@ -518,6 +518,15 @@ paths:
                 id_visit_from:
                   type: [string, "null"]
                   description: 'The status of the visit from which the transition is made. One of the {@link \Wl\Visit\VisitSid} constants. If the visit status is passed, it will be used to check with the actual status in the database. If `null`, the visit hasn''t yet passed. If the status of this parameter is out of date, the API call will refresh it.'
+                is_mail:
+                  type: boolean
+                  description: 'Whether or not to send email notification. <tt>false</tt> if not initialized.'
+                is_push:
+                  type: boolean
+                  description: 'Whether or not to send push notification. <tt>false</tt> if not initialized.'
+                is_sms:
+                  type: boolean
+                  description: 'Whether or not to send SMS notification. <tt>false</tt> if not initialized.'
       responses:
         200:
           description: 'Response always comes with status 200. Inspect the rest of the response body to determine the result.'
@@ -2353,6 +2362,9 @@ paths:
                         type: number
                         format: int32
                         description: 'The number of video views.'
+                      id_embed_source:
+                        type: [number, "null"]
+                        description: 'Embedded video source. One of {@link VideoEmbedSourceSid} constants. `null` if video is uploaded.'
                       id_location_select:
                         type: number
                         format: int32
@@ -2373,6 +2385,9 @@ paths:
                       is_video_level:
                         type: boolean
                         description: 'If `true`, the video level for the video is enabled. If `false`, the video level for the video is disabled.'
+                      json_setup:
+                        type: string
+                        description: 'Video.js media player initialization parameters in JSON format. Usage example: <script> videojs($(''video''), { "techOrder": ["Vimeo"], "sources": [ {"type": "video/vimeo", "src": "https://vimeo.com/123456789"} ] }); </script>'
                       k_video_binary:
                         type: string
                         description: 'The binary string video key.'
@@ -5301,7 +5316,7 @@ paths:
                         description: 'The age restriction configuration. Age restrictions for an item apply when they''re configured for a specific item and the API is requested from the backend or when age restriction are public. <dl> <dt>int|null <var>i_age_from</var></dt> <dd>The minimum age permitted for the event. This will be `null` if a minimum age isn''t set or available.</dd> <dt>int|null <var>i_age_to</var></dt> <dd>The maximum age permitted for the event. This will be `null` if a maximum age isn''t set or available.</dd> <dt>bool <var>is_age_public</var></dt> <dd>If `true`, age restrictions are public and available. Otherwise, this will be `false` if they''re hidden. When restrictions are hidden and the current user isn''t a staff member, the age range will be empty.</dd> </dl>'
                       a_data:
                         type: array
-                        description: 'Additional information specific for the item. The structure may be different depending on the item category. <dl> <dt> bool <var>is_renew_public</var> </dt> <dd> This applies only for promotions. <tt>true</tt> - clients can set promotion auto-renew.<br> <tt>false</tt> - clients can''t set promotion auto-renew. </dd> <dt> array[] <var>a_component</var> </dt> <dd> This applies only for coupons. Coupon components information. Each element will contain the following keys: <dl> <dt>int <var>id_program</var></dt> <dd>Program ID. One of {@link \RsProgramSid} ID''s. Only applies to promotions.</dd> <dt>int <var>id_purchase_item</var></dt> <dd>Purchase item ID. One of {@link \RsPurchaseItemSid} ID''s.</dd> <dt>int <var>id_sale</var></dt> <dd>Sale ID. One of {@link \RsSaleSid} ID''s.</dd> <dt>int <var>k_id</var></dt> <dd>The identifier of the item.</dd> <dt>string <var>text_title</var></dt> <dd>The title of the item.</dd> </dl> </dd> </dl> Consider the following examples: * For a product, this contains inventory information. * For a gift card, this contains possible amounts. * For a session pass/membership/package, this contains information about start and stop dates.'
+                        description: 'Additional information specific for the item. The structure may be different depending on the item category. <dl> <dt>array <var>a_service_access</var></dt> <dd> Access to services for a purchase option. Keys are one of the {@link ServiceSid} constants, values are one of the {@link \AFlagSid} constants. Set only for relevant purchase option service category. {@link \AFlagSid::ON} access to some services. {@link \AFlagSid::OFF} no access to services. It can be set only for classes and events. {@link \AFlagSid::ALL} access to all services. It can be set only for classes and events. For purchase options with appointments and assets service category status is always {@link \AFlagSid::ON}. </dd> <dt> bool <var>is_renew_public</var> </dt> <dd> This applies only for promotions. <tt>true</tt> - clients can set promotion auto-renew.<br> <tt>false</tt> - clients can''t set promotion auto-renew. </dd> <dt> array[] <var>a_component</var> </dt> <dd> This applies only for coupons. Coupon components information. Each element will contain the following keys: <dl> <dt>int <var>id_program</var></dt> <dd>Program ID. One of {@link \RsProgramSid} ID''s. Only applies to promotions.</dd> <dt>int <var>id_purchase_item</var></dt> <dd>Purchase item ID. One of {@link \RsPurchaseItemSid} ID''s.</dd> <dt>int <var>id_sale</var></dt> <dd>Sale ID. One of {@link \RsSaleSid} ID''s.</dd> <dt>int <var>k_id</var></dt> <dd>The identifier of the item.</dd> <dt>string <var>text_title</var></dt> <dd>The title of the item.</dd> </dl> </dd> </dl> Consider the following examples: * For a product, this contains inventory information. * For a gift card, this contains possible amounts. * For a session pass/membership/package, this contains information about start and stop dates.'
                       a_image:
                         type: array
                         description: 'Image information: <dl> <dt> int <var>i_height</var> </dt> <dd> The height in pixels. </dd> <dt> int <var>i_width</var> </dt> <dd> The width in pixels. </dd> <dt> bool <var>is_empty</var> </dt> <dd> <tt>true</tt> - the item has no image (in this case, ignore the other keys of this array).<br> <tt>false</tt> - the item has an image. </dd> <dt> string <var>s_url</var> </dt> <dd> The image URL. </dd> </dl> Use {@link ElementApi::$a_image_list} instead.'
@@ -7788,6 +7803,12 @@ paths:
                       uid_inherit_address:
                         type: [string, "null"]
                         description: 'UID of the user, whose address was inherited by the existing client we want to add. Empty if non-existent user is being added or user to add is the one, whose address is inherited. `null` If the address is not inherited.'
+                  - type: object
+                    description: 'Error response.'
+                    properties:
+                      a_error_list:
+                        type: [array, "null"]
+                        description: 'List of errors. `null` if there was no mistake.'
       tags:
         - Edit-Edit
     post:
@@ -7909,6 +7930,12 @@ paths:
                       uid:
                         type: string
                         description: 'The key of the user to edit. If empty, an empty form will be displayed to add a new user.'
+                  - type: object
+                    description: 'Error response.'
+                    properties:
+                      a_error_list:
+                        type: [array, "null"]
+                        description: 'List of errors. `null` if there was no mistake.'
       tags:
         - Edit-Edit
     put:
@@ -8777,6 +8804,11 @@ paths:
           description: 'Key of session which is booked.'
           schema:
             type: string
+        - name: show_relation
+          in: query
+          description: '`true` to show "book for" option in booking wizard. `false` for default behavior.'
+          schema:
+            type: boolean
         - name: uid
           in: query
           description: 'The client key for which the booking is being made. Primary key from {@link \PassportLoginSql}.'
@@ -9057,7 +9089,7 @@ paths:
                     properties:
                       a_business_policy:
                         type: array
-                        description: 'All business policies connected to clients and bookings. <dl> <dt>int <var>a_wait_service</var></dt> <dd>The keys are listed as IDs from {@link \RsServiceSid}, and values are flags outlining whether wait listing is allowed.</dd> <dt>int <var>i_book_before</var></dt> <dd>The minimum hours|days|months before a class can be booked.</dd> <dt>int <var>i_book_future</var></dt> <dd>The maximum hours|days|months after a class can be booked.</dd> <dt>int <var>i_cancel</var></dt> <dd>The minimum hours|days|months before a class can be canceled without penalty.</dd> <dt>int <var>i_promote</var></dt> <dd>The minimum hours|days|months before a class can be promoted from a wait list.</dd> <dt>int <var>i_reattempt_count</var></dt> <dd>The number of failed auto-payment reattempts.</dd> <dt>int <var>id_book_before</var></dt> <dd>The hours|days|months from {@link \ADurationSid}.</dd> <dt>int <var>id_book_future</var></dt> <dd>The hours|days|months from {@link \ADurationSid}.</dd> <dt>int <var>id_cancel</var></dt> <dd>The hours|days|months from {@link \ADurationSid}.</dd> <dt>int <var>id_promote</var></dt> <dd>The hours|days|months from {@link \ADurationSid}.</dd> <dt>bool <var>is_book_inside_active_pay_period</var></dt> <dd> `true` - clients with Purchase Options are only allowed to book sessions within their current paid period.<br> `false` - clients with Purchase Options are only allowed to book sessions during the Purchase Option''s duration. </dd> <dt>int <var>is_disable_promotion</var></dt> <dd> If `true`, a client''s automatic payment fails, their account shouldn''t be debited, and their Purchase Option becomes inactive. Otherwise, this will be `false` (the default value). </dd> <dt>bool <var>is_enable_payment_penalty</var></dt> <dd>Determines whether to charge a penalty after the final auto-payment attempt.</dd> <dt>bool <var>is_enable_payment_reattempt</var></dt> <dd>Determines whether to reattempt failed auto-payments.</dd> <dt>bool <var>is_enable_staff_ip_restriction</var></dt> <dd>Determines whether to restrict which IP addresses staff can login from.</dd> <dt>int <var>is_prevent_booking</var></dt> <dd>If `true`, booking for a client with negative balance is disabled. Otherwise, this will be `false` (the default value).</dd> <dt>bool <var>is_staff_restrict</var></dt> <dd>If true, clients can''t choose a provider in the appointment wizard. Otherwise, this will be `false`.</dd> <dt>bool <var>is_wait</var></dt> <dd>Determines whether to enable or disable the wait list.</dd> <dt>int <var>k_currency</var></dt> <dd>The currency.</dd> <dt>int <var>k_timezone</var></dt> <dd>The time zone.</dd> <dt>string <var>m_payment_penalty</var></dt> <dd>The penalty amount to charge after the final auto-payment attempt.</dd> <dt>string <var>url_custom</var></dt> <dd>The custom URL from Business URLs.</dd> </dl>'
+                        description: 'All business policies connected to clients and bookings. <dl> <dt>array <var>a_family_relation</var></dt> <dd> List of allowed relation types specific to a given business. Result of {@link \RsFamilyRelationSid::allByBusiness()} method. </dd> <dt>array <var>a_wait_service</var></dt> <dd>The keys are listed as IDs from {@link \RsServiceSid}, and values are flags outlining whether wait listing is allowed.</dd> <dt>int <var>i_book_before</var></dt> <dd>The minimum hours|days|months before a class can be booked.</dd> <dt>int <var>i_book_future</var></dt> <dd>The maximum hours|days|months after a class can be booked.</dd> <dt>int <var>i_cancel</var></dt> <dd>The minimum hours|days|months before a class can be canceled without penalty.</dd> <dt>int <var>i_promote</var></dt> <dd>The minimum hours|days|months before a class can be promoted from a wait list.</dd> <dt>int <var>i_reattempt_count</var></dt> <dd>The number of failed auto-payment reattempts.</dd> <dt>int <var>id_book_before</var></dt> <dd>The hours|days|months from {@link \ADurationSid}.</dd> <dt>int <var>id_book_future</var></dt> <dd>The hours|days|months from {@link \ADurationSid}.</dd> <dt>int <var>id_cancel</var></dt> <dd>The hours|days|months from {@link \ADurationSid}.</dd> <dt>int <var>id_promote</var></dt> <dd>The hours|days|months from {@link \ADurationSid}.</dd> <dt>bool <var>is_book_inside_active_pay_period</var></dt> <dd> `true` - clients with Purchase Options are only allowed to book sessions within their current paid period.<br> `false` - clients with Purchase Options are only allowed to book sessions during the Purchase Option''s duration. </dd> <dt>int <var>is_disable_promotion</var></dt> <dd> If `true`, a client''s automatic payment fails, their account shouldn''t be debited, and their Purchase Option becomes inactive. Otherwise, this will be `false` (the default value). </dd> <dt>bool <var>is_enable_payment_penalty</var></dt> <dd>Determines whether to charge a penalty after the final auto-payment attempt.</dd> <dt>bool <var>is_enable_payment_reattempt</var></dt> <dd>Determines whether to reattempt failed auto-payments.</dd> <dt>bool <var>is_enable_staff_ip_restriction</var></dt> <dd>Determines whether to restrict which IP addresses staff can login from.</dd> <dt>int <var>is_prevent_booking</var></dt> <dd>If `true`, booking for a client with negative balance is disabled. Otherwise, this will be `false` (the default value).</dd> <dt>bool <var>is_staff_restrict</var></dt> <dd>If true, clients can''t choose a provider in the appointment wizard. Otherwise, this will be `false`.</dd> <dt>bool <var>is_wait</var></dt> <dd>Determines whether to enable or disable the wait list.</dd> <dt>int <var>k_currency</var></dt> <dd>The currency.</dd> <dt>int <var>k_timezone</var></dt> <dd>The time zone.</dd> <dt>string <var>m_payment_penalty</var></dt> <dd>The penalty amount to charge after the final auto-payment attempt.</dd> <dt>string <var>url_custom</var></dt> <dd>The custom URL from Business URLs.</dd> </dl>'
                       is_location_select:
                         type: boolean
                         description: 'Determines whether staff members should select a location at checkout. If `true`, staff members should select a location at checkout. Otherwise, this will be `false`.'
@@ -13471,7 +13503,7 @@ paths:
                     properties:
                       a_lead_source:
                         type: array
-                        description: 'List of Lead Sources. <dl> <dt>int|null <var>i_sort</var></dt> <dd> Sorting order. Only used in the Lead Source widget option. `null` is a temporary value that exists for a short time during the process of inserting of a new row. </dd> <dt>int|null <var>id_lead_source</var></dt> <dd> System-defined Lead Source ID. One of the {@link LeadSourceSid} constants. `null` if it is a custom Lead Source. </dd> <dt>bool <var>is_add_lead</var></dt> <dd> `true` if this skin will be used for "Add Lead" form or `false` otherwise. Only one skin in the business can be used for "Add Lead" form. </dd> <dt>bool <var>is_use</var></dt> <dd> Determines whether Lead Source is being used. `true` if Lead Source is being used. `false` - otherwise. </dd> <dt>string <var>k_lead_source</var></dt> <dd> Key of the lead source. Primary key in {@link LeadSourceSql} table. </dd> <dt>string <var>k_skin</var></dt> <dd> Key of the lead skin. Primary key in {@link \RsSkinSql} table. </dd> <dt>string <var>text_title</var></dt> <dd> Name of the Lead Source. </dd> </dl>'
+                        description: 'List of Lead Sources. <dl> <dt>int|null <var>i_sort</var></dt> <dd> Sorting order. Only used in the Lead Source widget option. `null` is a temporary value that exists for a short time during the process of inserting of a new row. </dd> <dt>int|null <var>id_lead_source</var></dt> <dd> System-defined Lead Source ID. One of the {@link ModeSid} constants. `null` if it is a custom Lead Source. </dd> <dt>bool <var>is_add_lead</var></dt> <dd> `true` if this skin will be used for "Add Lead" form or `false` otherwise. Only one skin in the business can be used for "Add Lead" form. </dd> <dt>bool <var>is_use</var></dt> <dd> Determines whether Lead Source is being used. `true` if Lead Source is being used. `false` - otherwise. </dd> <dt>string <var>k_lead_source</var></dt> <dd> Key of the lead source. Primary key in {@link LeadSourceSql} table. </dd> <dt>string <var>k_skin</var></dt> <dd> Key of the lead skin. Primary key in {@link \RsSkinSql} table. </dd> <dt>string <var>text_title</var></dt> <dd> Name of the Lead Source. </dd> </dl>'
                       text_lead_source_field:
                         type: string
                         description: 'Lead Source field title.'
@@ -13514,7 +13546,7 @@ paths:
               properties:
                 a_lead_source:
                   type: array
-                  description: 'List of Lead Sources. <dl> <dt>int <var>i_sort</var></dt> <dd> Sorting order. </dd> <dt>int|null <var>id_lead_source</var></dt> <dd> System-defined Lead Source ID. One of the {@link LeadSourceSql} constants. `null` if it is a custom Lead Source. </dd> <dt>string <var>k_lead_source</var></dt> <dd> Key of the lead source. Primary key in {@link LeadSourceSql} table. </dd> <dt>string [<var>k_skin</var>]</dt> <dd> Key of the lead skin. Primary key in {@link \RsSkinSql} table. Will be set only in case if <var>id_lead_source</var> is {@link LeadSourceSid::WIDGET} and widget can''t be used for "Add Lead" form. `false` - otherwise. </dd> <dt>string <var>text_title</var></dt> <dd> Name of the Lead Source. </dd> </dl>'
+                  description: 'List of Lead Sources. <dl> <dt>int <var>i_sort</var></dt> <dd> Sorting order. </dd> <dt>int|null <var>id_lead_source</var></dt> <dd> System-defined Lead Source ID. One of the {@link LeadSourceSql} constants. `null` if it is a custom Lead Source. </dd> <dt>string <var>k_lead_source</var></dt> <dd> Key of the lead source. Primary key in {@link LeadSourceSql} table. </dd> <dt>string [<var>k_skin</var>]</dt> <dd> Key of the lead skin. Primary key in {@link \RsSkinSql} table. Will be set only in case if <var>id_lead_source</var> is {@link ModeSid::WIDGET} and widget can''t be used for "Add Lead" form. `false` - otherwise. </dd> <dt>string <var>text_title</var></dt> <dd> Name of the Lead Source. </dd> </dl>'
                 k_business:
                   type: string
                   description: 'Business key.'
