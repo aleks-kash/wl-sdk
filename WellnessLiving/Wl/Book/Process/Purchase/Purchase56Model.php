@@ -483,6 +483,15 @@ class Purchase56Model extends WlModelAbstract
   public $k_session_pass = '';
 
   /**
+   * `true` to show "book for" option in booking wizard. `false` for default behavior.
+   *
+   * @get get
+   * @post get
+   * @var bool
+   */
+  public $show_relation = false;
+
+  /**
    * The client key for which the booking is being made.
    *
    * @get get

@@ -404,6 +404,15 @@ class PaymentModel extends WlModelAbstract
   public $k_session_pass = '';
 
   /**
+   * `true` to show "book for" option in booking wizard. `false` for default behavior.
+   *
+   * @get get
+   * @post get
+   * @var bool
+   */
+  public $show_relation = false;
+
+  /**
    * The discount code to be applied to the purchase.
    *
    * @post post
