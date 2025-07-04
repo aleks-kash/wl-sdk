@@ -12,6 +12,7 @@ class PartnerCodeModel extends WlModelAbstract
   /**
    * Business key.
    *
+   * @get get
    * @post get
    * @var string
    */

@@ -154,6 +154,8 @@ class PurchaseModel extends WlModelAbstract
    *   <dd>This is only set for Purchase Options. A list of limits on booking by the Purchase Option. Every element has the next keys:<dl>
    *     <dt>string <var>s_title</var></dt>
    *     <dd>The limit description.</dd></dl></dd>
+   *   <dt>string <var>dl_client_prorate</var></dt>
+   *   <dd>The client prorate date.</dd>
    *   <dt>string <var>f_price</var></dt>
    *   <dd>The price.</dd>
    *   <dt>string [<var>f_price_early</var>]</dt>
