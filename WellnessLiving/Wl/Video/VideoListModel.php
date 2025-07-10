@@ -129,6 +129,17 @@ class VideoListModel extends WlModelAbstract
   public $i_page = null;
 
   /**
+   * Embedded video source.
+   *
+   * `null` if video is uploaded.
+   *
+   * @get result
+   * @put result
+   * @var int|null
+   */
+  public $id_embed_source = null;
+
+  /**
    * Sort order ID. One of {@link SortOrderSid} constants. `null` or 0 if order is undefined and depends on sort order.
    *
    * @get get,result
@@ -153,6 +164,25 @@ class VideoListModel extends WlModelAbstract
    * @var bool
    */
   public $is_backend = false;
+
+  /**
+   * Video.js media player initialization parameters in JSON format.
+   *
+   * Usage example:
+   *      <script>
+   *          videojs($('video'), {
+   *              "techOrder": ["Vimeo"],
+   *              "sources": [
+   *                  {"type": "video/vimeo", "src": "https://vimeo.com/123456789"}
+   *              ]
+   *          });
+   *      </script>
+   *
+   * @get result
+   * @put result
+   * @var string
+   */
+  public $json_setup = '';
 
   /**
    * The business key.

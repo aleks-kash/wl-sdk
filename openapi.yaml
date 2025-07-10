@@ -1,10 +1,10 @@
 openapi: 3.1.0
 info:
   title: 'WellnessLiving public API'
-  version: 1.1.20250710194843
+  version: 1.1.20250710202356
   description: |
     WellnessLiving API is a RESTful way to access and manage your business data.
-    Last updated at: 2025-07-10 19:48:43
+    Last updated at: 2025-07-10 20:23:56
 servers:
   - url: https://us.wellnessliving.com
     description: 'WellnessLiving server for businesses served from the United States data center'
@@ -2678,12 +2678,18 @@ paths:
                       a_page:
                         type: array
                         description: 'Pagination data.'
+                      id_embed_source:
+                        type: [number, "null"]
+                        description: 'Embedded video source. One of {@link VideoEmbedSourceSid} constants. `null` if video is uploaded.'
                       id_order:
                         type: [number, "null"]
                         description: 'Sort order ID. One of {@link \Core\Sid\SortOrderSid} constants. `null` or 0 if order is undefined and depends on sort order.'
                       id_sort:
                         type: [number, "null"]
                         description: 'The sorting type. A constant from {@link \Wl\Video\Catalog\Filter\Sort\FilterSortSid}. `null` or 0 if sort is undefined and custom sort order is used.'
+                      json_setup:
+                        type: string
+                        description: 'Video.js media player initialization parameters in JSON format. Usage example: <script> videojs($(''video''), { "techOrder": ["Vimeo"], "sources": [ {"type": "video/vimeo", "src": "https://vimeo.com/123456789"} ] }); </script>'
       tags:
         - Video-VideoList
     put:
@@ -2717,7 +2723,14 @@ paths:
               schema:
                 oneOf:
                   - type: object
-                    description: 'Successful response. Full description is not available yet.'
+                    description: 'Successful response.'
+                    properties:
+                      id_embed_source:
+                        type: [number, "null"]
+                        description: 'Embedded video source. One of {@link VideoEmbedSourceSid} constants. `null` if video is uploaded.'
+                      json_setup:
+                        type: string
+                        description: 'Video.js media player initialization parameters in JSON format. Usage example: <script> videojs($(''video''), { "techOrder": ["Vimeo"], "sources": [ {"type": "video/vimeo", "src": "https://vimeo.com/123456789"} ] }); </script>'
       tags:
         - Video-VideoList
   '/Wl/Location/List.json':
