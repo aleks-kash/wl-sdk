@@ -145,7 +145,8 @@ class VisitStatusModel extends WlModelAbstract
   /**
    * Whether or not to send email notification.
    *
-   * <tt>false</tt> if not initialized.
+   * `true` - email notification will be sent.
+   * `false` - email notification will not be sent.
    *
    * @post post
    * @var bool
@@ -155,7 +156,8 @@ class VisitStatusModel extends WlModelAbstract
   /**
    * Whether or not to send push notification.
    *
-   * <tt>false</tt> if not initialized.
+   * `true` - push notification will be sent.
+   * `false` - push notification will not be sent.
    *
    * @post post
    * @var bool
@@ -163,9 +165,10 @@ class VisitStatusModel extends WlModelAbstract
   public $is_push = false;
 
   /**
-   * Whether or not to send SMS notification.
+   * Whether or not to send sms notification.
    *
-   * <tt>false</tt> if not initialized.
+   * `true` - sms notification will be sent.
+   * `false` - sms notification will not be sent.
    *
    * @post post
    * @var bool

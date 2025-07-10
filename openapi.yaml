@@ -1,10 +1,10 @@
 openapi: 3.1.0
 info:
   title: 'WellnessLiving public API'
-  version: 1.1.20250704123815
+  version: 1.1.20250710194843
   description: |
     WellnessLiving API is a RESTful way to access and manage your business data.
-    Last updated at: 2025-07-04 12:38:15
+    Last updated at: 2025-07-10 19:48:43
 servers:
   - url: https://us.wellnessliving.com
     description: 'WellnessLiving server for businesses served from the United States data center'
@@ -520,13 +520,13 @@ paths:
                   description: 'The status of the visit from which the transition is made. One of the {@link \Wl\Visit\VisitSid} constants. If the visit status is passed, it will be used to check with the actual status in the database. If `null`, the visit hasn''t yet passed. If the status of this parameter is out of date, the API call will refresh it.'
                 is_mail:
                   type: boolean
-                  description: 'Whether or not to send email notification. <tt>false</tt> if not initialized.'
+                  description: 'Whether or not to send email notification. `true` - email notification will be sent. `false` - email notification will not be sent.'
                 is_push:
                   type: boolean
-                  description: 'Whether or not to send push notification. <tt>false</tt> if not initialized.'
+                  description: 'Whether or not to send push notification. `true` - push notification will be sent. `false` - push notification will not be sent.'
                 is_sms:
                   type: boolean
-                  description: 'Whether or not to send SMS notification. <tt>false</tt> if not initialized.'
+                  description: 'Whether or not to send sms notification. `true` - sms notification will be sent. `false` - sms notification will not be sent.'
       responses:
         200:
           description: 'Response always comes with status 200. Inspect the rest of the response body to determine the result.'
@@ -2522,7 +2522,7 @@ paths:
                   description: 'The video level key. This will be `0` if `All Levels` is selected.'
                 s_command:
                   type: string
-                  description: 'The name of the command that has been executing when the exception occurred.'
+                  description: 'The action that must be performed to the video thumbnail image.'
                 s_file_upload_id:
                   type: string
                   description: 'ID of the uploaded file. If the file will be uploaded in parts, upload ID will be set. In this case, the file will not be uploaded to this API. Method {@link VideoElementApi::_fileVideoGet()} will not return the result.'
@@ -2573,7 +2573,14 @@ paths:
               schema:
                 oneOf:
                   - type: object
-                    description: 'Successful response. Full description is not available yet.'
+                    description: 'Successful response.'
+                    properties:
+                      id_embed_source:
+                        type: [number, "null"]
+                        description: 'Embedded video source. One of {@link VideoEmbedSourceSid} constants. `null` if video is uploaded.'
+                      json_setup:
+                        type: string
+                        description: 'Video.js media player initialization parameters in JSON format. Usage example: <script> videojs($(''video''), { "techOrder": ["Vimeo"], "sources": [ {"type": "video/vimeo", "src": "https://vimeo.com/123456789"} ] }); </script>'
       tags:
         - Video-VideoElement
   '/Wl/Video/VideoList.json':

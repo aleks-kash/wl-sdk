@@ -181,6 +181,7 @@ class VideoElementModel extends WlModelAbstract
    * `null` if video is uploaded.
    *
    * @get result
+   * @put result
    * @var int|null
    */
   public $id_embed_source = null;
@@ -266,6 +267,7 @@ class VideoElementModel extends WlModelAbstract
    *      </script>
    *
    * @get result
+   * @put result
    * @var string
    */
   public $json_setup = '';
@@ -323,7 +325,7 @@ class VideoElementModel extends WlModelAbstract
   public $k_video_level;
 
   /**
-   * The name of the command that has been executing when the exception occurred.
+   * The action that must be performed to the video thumbnail image.
    *
    * @post post
    * @var string
