@@ -1,10 +1,10 @@
 openapi: 3.1.0
 info:
   title: 'WellnessLiving public API'
-  version: 1.1.20250710202356
+  version: 1.1.20250710203202
   description: |
     WellnessLiving API is a RESTful way to access and manage your business data.
-    Last updated at: 2025-07-10 20:23:56
+    Last updated at: 2025-07-10 20:32:02
 servers:
   - url: https://us.wellnessliving.com
     description: 'WellnessLiving server for businesses served from the United States data center'
@@ -3891,6 +3891,31 @@ paths:
                         description: 'A pre-signed URL to download a file with restricted access rights.'
       tags:
         - Api-DriveUrlSign
+  '/Thoth/DriveMs/Api/DriveCopyInstance.json':
+    post:
+      summary: ''
+      parameters:
+        - name: s_instance_destination
+          in: query
+          description: 'Instance ID from which links must be copied.'
+          schema:
+            type: string
+        - name: s_instance_source
+          in: query
+          description: 'Instance ID from which links must be copied.'
+          schema:
+            type: string
+      responses:
+        200:
+          description: 'Response always comes with status 200. Inspect the rest of the response body to determine the result.'
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - type: object
+                    description: 'Successful response. Full description is not available yet.'
+      tags:
+        - Api-DriveCopyInstance
   '/Studio/Microservice/Editor/List.json':
     get:
       summary: 'Gets a list of microservices.'
@@ -20909,6 +20934,9 @@ tags:
   -
     name: Api-DriveCopy
     description: 'Copy file between two links.'
+  -
+    name: Api-DriveCopyInstance
+    description: 'Copies all files from one instance to another.'
   -
     name: Api-DriveDelete
     description: 'Deletes a link to a physical file from the database.'
