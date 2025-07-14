@@ -710,7 +710,8 @@ class WlModelAbstract
         else
           $this->$s_field=null;
       }
-      throw WlUserException::createApi($o_request);
+
+      throw $o_request->o_config->exceptionCreate($o_request);
     }
 
     foreach($a_field as $s_field => $a_method)

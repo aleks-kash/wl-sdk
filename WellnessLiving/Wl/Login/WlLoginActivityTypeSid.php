@@ -5,7 +5,7 @@ namespace WellnessLiving\Wl\Login;
 /**
  * Manages identifiers of user activity.
  *
- * Last ID: 54.
+ * Last ID: 56.
  */
 abstract class WlLoginActivityTypeSid
 {
@@ -237,9 +237,14 @@ abstract class WlLoginActivityTypeSid
   const REWARD_MANUAL = 55;
 
   /**
-   * All reward points have been reset.
+   * All-time earned reward points have been reset.
    */
   const REWARD_RESET = 36;
+
+  /**
+   * Current available reward points have been reset.
+   */
+  const REWARD_RESET_AVAILABLE = 56;
 
   /**
    * Client attended several visits.

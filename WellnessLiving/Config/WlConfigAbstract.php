@@ -4,7 +4,9 @@ namespace WellnessLiving\Config;
 
 use WellnessLiving\Wl\WlRegionSid;
 use WellnessLiving\WlAssertException;
+use WellnessLiving\WlModelRequest;
 use WellnessLiving\WlTool;
+use WellnessLiving\WlUserException;
 
 /**
  * Contains WellnessLiving SDK configuration.
@@ -320,6 +322,17 @@ abstract class WlConfigAbstract
   {
     $t_time = time();
     return hash('sha3-512',$s_session_key.'::'.$this::AUTHORIZE_CODE.'::'.$t_time).'.'.$t_time.'.'.substr($s_session_key,0,5);
+  }
+
+  /**
+   * Creates an exception for the current request.
+   *
+   * @param WlModelRequest $o_request The request object.
+   * @return \Exception Exception object.
+   */
+  public function exceptionCreate(WlModelRequest $o_request)
+  {
+      return WlUserException::createApi($o_request);
   }
 
   /**

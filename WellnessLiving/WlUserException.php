@@ -57,7 +57,7 @@ class WlUserException extends \Exception
   /**
    * Name of server-side exception class.
    *
-   * <tt>null</tt> if information is not provided.
+   * `null` if information is not provided.
    *
    * @var string|null
    */
@@ -72,7 +72,7 @@ class WlUserException extends \Exception
    * If error originates from API request, this code contains value returned by
    * {@link \WellnessLiving\WlUserException::sid()} by default (for error with index 0).
    *
-   * <tt>null</tt> if error code was not provided.
+   * `null` if error code was not provided.
    *
    * @var string|null
    */
@@ -121,6 +121,17 @@ class WlUserException extends \Exception
   }
 
   /**
+   * Gets name of server-side exception class.
+   *
+   * @return string|null Name of server-side exception class.
+   *   `null` if information is not provided.
+   */
+  public function classGet()
+  {
+    return $this->s_class;
+  }
+
+  /**
    * Creates a new API model exception object.
    *
    * @param WlModelRequest $o_request Request object.
@@ -157,7 +168,7 @@ class WlUserException extends \Exception
    *
    * @param int $i_index Index of error to return error code for.
    * @return string|null String representation of a error code of the very first error in the exception.
-   * <tt>null</tt> if no errors were added.
+   * `null` if no errors were added.
    */
   public function sid($i_index = 0)
   {
