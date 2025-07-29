@@ -250,6 +250,16 @@ class ElementModel extends WlModelAbstract
   public $a_staff_logo;
 
   /**
+   * Information about timezones.
+   *
+   * Key is timezone key, value is array with timezone information.
+   *
+   * @get result
+   * @var array[]
+   */
+  public $a_timezone_info = [];
+
+  /**
    * A list of classes and events that clients should attend before this one.
    *
    * <dl>

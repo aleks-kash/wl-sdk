@@ -43,6 +43,7 @@ class ProfileCreateModel extends WlModelAbstract
 
   /**
    * Email of the user.
+   * Required if {@link ProfileCreateModel::$text_phone} not provided.
    *
    * @post post
    * @var string
@@ -51,6 +52,7 @@ class ProfileCreateModel extends WlModelAbstract
 
   /**
    * Phone of the user.
+   * Required if {@link ProfileCreateModel::$text_mail} not provided.
    *
    * @post post
    * @var string

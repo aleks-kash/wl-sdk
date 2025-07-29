@@ -102,6 +102,14 @@ class ResourceModel extends WlModelAbstract
    *     A list of available assets. Every element has next keys:
    *     <dl>
    *       <dt>
+   *           array [`a_class_period`]
+   *       </dt>
+   *       <dd>
+   *           List of class/event sessions that occupies the resource.
+   *           The field structure is `Session_key => Session_UTC_date_and_time => Quantity_of_occupied_spots`.
+   *           This field is present only if the resource is occupied by any class/event sessions.
+   *       </dd>
+   *       <dt>
    *         array <var>a_image</var>
    *       </dt>
    *       <dd>
@@ -112,6 +120,12 @@ class ResourceModel extends WlModelAbstract
    *       </dt>
    *       <dd>
    *         The asset number. Actual for assets with a quantity more than <tt>1</tt>.
+   *       </dd>
+   *       <dt>
+   *         int `i_quantity`
+   *       </dt>
+   *       <dd>
+   *         Total number of the asset spots.
    *       </dd>
    *       <dt>
    *         bool <var>is_current</var>

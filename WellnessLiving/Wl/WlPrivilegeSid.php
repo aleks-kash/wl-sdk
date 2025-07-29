@@ -270,6 +270,8 @@ abstract class WlPrivilegeSid
 
   /**
    * Allows to manage leaderboard in the `FitBuilder` addon.
+   *
+   * @deprecated Use {@link WlPrivilegeSid::FITBUILDER_WORKOUT_MANAGE} instead.
    */
   const FITBUILDER_LEADERBOARD = 190;
 
@@ -280,6 +282,8 @@ abstract class WlPrivilegeSid
 
   /**
    * Allows to assign workouts from the `FitBuilder` addon to different services.
+   *
+   * @deprecated Use {@link WlPrivilegeSid::FITBUILDER_WORKOUT_MANAGE} instead.
    */
   const FITBUILDER_WORKOUT_ASSIGN = 188;
 

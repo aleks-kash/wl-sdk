@@ -1,10 +1,10 @@
 openapi: 3.1.0
 info:
   title: 'WellnessLiving public API'
-  version: 1.1.20250714194843
+  version: 1.1.20250729134915
   description: |
     WellnessLiving API is a RESTful way to access and manage your business data.
-    Last updated at: 2025-07-14 19:48:43
+    Last updated at: 2025-07-29 13:49:15
 servers:
   - url: https://us.wellnessliving.com
     description: 'WellnessLiving server for businesses served from the United States data center'
@@ -1076,10 +1076,10 @@ paths:
                   description: 'Last name of the user.'
                 text_mail:
                   type: string
-                  description: 'Email of the user.'
+                  description: 'Email of the user. Required if {@link ProfileCreateApi::$text_phone} not provided.'
                 text_phone:
                   type: string
-                  description: 'Phone of the user.'
+                  description: 'Phone of the user. Required if {@link ProfileCreateApi::$text_mail} not provided.'
       responses:
         200:
           description: 'Response always comes with status 200. Inspect the rest of the response body to determine the result.'
@@ -2605,6 +2605,11 @@ paths:
         - name: a_location
           in: query
           description: 'A list of locations to show videos from.'
+          schema:
+            type: array
+        - name: a_source
+          in: query
+          description: 'A list of video sources.'
           schema:
             type: array
         - name: a_staff
@@ -6115,12 +6120,17 @@ paths:
       parameters:
         - name: a_class
           in: query
-          description: 'The list of classes keys to filter. Primary keys in {@link \RsClassSql} table. Return sessions with matching class IDs. If it''s empty, all classes/events will be returned.'
+          description: 'The list of classes keys to filter. Primary keys in {@link \RsClassSql} table. Return sessions with matching class IDs. If it''s empty, all classes will be returned.'
           schema:
             type: array
         - name: a_day
           in: query
           description: 'Class filter by day of the week. Array of number representing the days of the week. Return sessions matching the given weekdays. (7 = Sunday, 1 = Monday, ..., 6 = Saturday) Empty array means no filtering.'
+          schema:
+            type: array
+        - name: a_event
+          in: query
+          description: 'The list of classes keys to filter. Primary keys in {@link \RsClassSql} table. Return sessions with matching class IDs. If it''s empty, all events will be returned.'
           schema:
             type: array
         - name: a_location
@@ -6143,6 +6153,11 @@ paths:
           description: 'The list end date in UTC and in MySQL format. <no-sdk> If left empty, the default duration is {@link ClassListApi::DEFAULT_PERIOD} days after {@link ClassListApi::$dt_date}. </no-sdk>'
           schema:
             type: string
+        - name: id_class_tab
+          in: query
+          description: 'ID of tab. One of {@link TabSid} constants. `null` if no filtering by Tab is required.'
+          schema:
+            type: [number, "null"]
         - name: is_response_short
           in: query
           description: '`true` means to not generate {@link ClassListApi::$a_session} result. Can be used, if you do not need full information about existing classes and result in {@link ClassListApi::$a_calendar} is enough.'
@@ -6170,7 +6185,7 @@ paths:
             type: string
         - name: s_staff
           in: query
-          description: 'The list of staff members to filter. A comma seperated list of staff keys. Primary keys in {@link \RsStaffSql} table.'
+          description: ''
           schema:
             type: string
         - name: show_cancel
@@ -6205,16 +6220,66 @@ paths:
                     properties:
                       a_calendar:
                         type: array
-                        description: 'Keys are dates of the days inside requested date range, when there is at least one class in the business. If, locations are sent as a parameter, then at least one class in the given locations. Values are empty arrays for now. This is done to make possible to add some information about certain dates, if we need this.'
+                        description: ''
                       a_session:
                         type: array
-                        description: 'A list of classes sessions starting with the date {@link ClassListApi::$dt_date} and in the 62 days ahead (or up to {@link ClassListApi::$dt_end}). Every element has the following keys: <dl> <dt> string[] <var>a_class_tab</var> </dt> <dd> Keys of class tab. Primary keys in {@link \Wl\Classes\Tab\Sql\ClassTab\Sql} table. </dd> <dt> string[] <var>a_image</var> </dt> <dd> The class image. Empty array if there is no image. </dd> <dt> string[] <var>a_search_tag</var> </dt> <dd> Tags associated with an individual class. </dd> <dt> string[] <var>a_staff</var> </dt> <dd> The list of staff keys for the staff member conducting the session. Primary keys in {@link \RsStaffSql} table. </dd> <dt> string[] <var>a_virtual_location</var> </dt> <dd> The list of virtual locations keys. Each value is a location key. Primary keys in {@link \RsLocationSql} table. </dd> <dt> string <var>dt_date</var> </dt> <dd> The date/time of the session start in UTC. </dd> <dt> string <var>dt_time</var> </dt> <dd> The time of the session start in the local time zone. </dd> <dt> string <var>dtl_date</var> </dt> <dd> The date/time of session start in the location''s time zone. </dd> <dt> bool <var>hide_application</var> </dt> <dd> Specifies whether the class will be hidden in the White Label Achieve Client App. If `true`, it means that the class won''t be displayed. Otherwise, this will be `false` to indicate that the class will be displayed. </dd> <dt> string <var>html_description</var> </dt> <dd> The class description. </dd> <dt> int <var>i_book</var> </dt> <dd> Count of visits on this class. </dd> <dt> int|null <var>i_capacity</var> </dt> <dd> The capacity of the service. ''null'' indicates that the capacity is not set. </dd> <dt> int <var>i_day</var> </dt> <dd> The day of the week when session is occurred. Constant from {@link \ADateWeekSid}. </dd> <dt> int <var>i_duration</var> </dt> <dd> The duration of the session in minutes. </dd> <dt> int <var>i_wait</var> </dt> <dd> Number of clients in wait list. </dd> <dt> bool <var>is_cancel</var> </dt> <dd> If `true`, this class period was canceled. Otherwise, this will be `false`. </dd> <dt> bool <var>is_event</var> </dt> <dd> If `true`, this is an event. Otherwise, this will be `false`. </dd> <dt> bool <var>is_virtual</var> </dt> <dd> If `true`, this class is virtual. Otherwise, this will be `false`. </dd> <dt> bool <var>is_wait_list_enabled</var> </dt> <dd> This will be `true` if user is only on the wait-list. Otherwise, this will be `false`. </dd> <dt> string <var>k_class</var> </dt> <dd> The class key. Primary key in {@link \RsClassSql} table. </dd> <dt> string <var>k_class_period</var> </dt> <dd> The class period key. Primary key in {@link \RsClassPeriodSql} table. </dd> <dt> string <var>k_location</var> </dt> <dd> The key of the session''s location. Primary key in {@link \RsLocationSql} table. </dd> <dt> string <var>s_title</var> </dt> <dd> The title of the session. </dd> <dt> string <var>url_book</var> </dt> <dd> The direct link to start booking on the WellnessLiving website. </dd> </dl>'
+                        description: ''
                       is_timezone_different:
                         type: boolean
-                        description: 'If `true`, the list of sessions contains sessions from different time zones. Otherwise, this will be `false`.'
+                        description: ''
                       is_virtual_service:
                         type: boolean
-                        description: 'If `true`, there exists at least one virtual service by a specified {@link ClassListApi::$k_business} and {@link ClassListApi::$k_class_tab}, Otherwise, this will be `false`.'
+                        description: ''
+      tags:
+        - ClassList-ClassList68
+    post:
+      summary: ''
+      parameters:
+        - name: a_class
+          in: query
+          description: 'The list of classes keys to filter. Primary keys in {@link \RsClassSql} table. Return sessions with matching class IDs. If it''s empty, all classes will be returned.'
+          schema:
+            type: array
+        - name: a_event
+          in: query
+          description: 'The list of classes keys to filter. Primary keys in {@link \RsClassSql} table. Return sessions with matching class IDs. If it''s empty, all events will be returned.'
+          schema:
+            type: array
+        - name: s_staff
+          in: query
+          description: ''
+          schema:
+            type: string
+        - name: show_quick_filter
+          in: query
+          description: 'Whether to generate a quick filter. If `true`, a quick filter will be generated. `false` otherwise.'
+          schema:
+            type: boolean
+      responses:
+        200:
+          description: 'Response always comes with status 200. Inspect the rest of the response body to determine the result.'
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - type: object
+                    description: 'Successful response.'
+                    properties:
+                      a_calendar:
+                        type: array
+                        description: ''
+                      a_quick:
+                        type: array
+                        description: 'Information about classes/events for quick filter. Every element has the following keys: <ul> <li>string <var>text_type</var> Type of class ("class" || "event")</li> <li>string <var>k_class</var> Type of the error.</li> <li>string <var>s_class</var> Stack backtrace.</li> <li>int <var>i_class</var> Total items found.</li> </ul>'
+                      a_session:
+                        type: array
+                        description: ''
+                      is_timezone_different:
+                        type: boolean
+                        description: ''
+                      is_virtual_service:
+                        type: boolean
+                        description: ''
       tags:
         - ClassList-ClassList68
   '/Wl/Schedule/Page/PageElement.json':
@@ -14912,6 +14977,9 @@ paths:
                       a_staff_logo:
                         type: array
                         description: 'Photos of staff members. Keys are the keys of staff members. The values are the following: <dl> <dt>int <var>i_height</var></dt> <dd>Image height.</dd> <dt>int <var>i_width</var></dt> <dd>Image width.</dd> <dt>string <var>uid</var></dt> <dd>Key of the user. Primary key from {@link \PassportLoginSql} table.</dd> <dt>string <var>url_logo</var></dt> <dd>URL to image.</dd> </dl>'
+                      a_timezone_info:
+                        type: array
+                        description: 'Information about timezones. Key is timezone key, value is array with timezone information.'
                       a_visits_required:
                         type: array
                         description: 'A list of classes and events that clients should attend before this one. <dl> <dt>int <var>i_count</var></dt> <dd>The number of visits required.</dd> <dt>int <var>i_has</var></dt> <dd>The number of visits the client has already attended.</dd> <dt>bool <var>is_event</var></dt> <dd>`true` if this is an event, `false` if this is a class.</dd> <dt>string <var>k_class</var></dt> <dd>The key of the class or event.</dd> <dt>string <var>text_title</var></dt> <dd>The name of the class or event.</dd> </dl>'
@@ -17388,7 +17456,7 @@ paths:
                         description: 'Week days available for recurring booking. Constants of {@link \ADateWeekSid} class. `null` if recurring booking is not available.'
                       a_session_all:
                         type: array
-                        description: 'A list of all class sessions that can be booked together. Every element has the next structure: <dl> <dt> string[] <var>a_staff</var> </dt> <dd> List of staff names that are leading this session. </dd> <dt> string[] <var>a_virtual_location</var> </dt> <dd> List of virtual locations. </dd> <dt> string <var>dt_date</var> </dt> <dd> The date/time when session starts in MySQL format and in GMT. </dd> <dt> boolean <var>is_select</var> </dt> <dd> <tt>true</tt> if this session should be selected when page is initialized; <tt>false</tt> if otherwise. </dd> <dt> bool <var>is_wait</var> </dt> <dd> `true` if client is added to a wait list, `false` - to an active list. </dd> <dt> bool <var>is_wait_list_unpaid</var> </dt> <dd> Allow clients to join the wait list unpaid. </dd> <dt> string <var>k_class_period</var> </dt> <dd> The key of the session. Primary keys in {@link \RsClassPeriodSql} table. </dd> <dt> string <var>k_location</var> </dt> <dd> Location key. Primary key in {@link \RsLocationSql} table. </dd> <dt> bool <var>m_price</var> </dt> <dd> Price of the session. </dd> <dt> string <var>s_location</var> </dt> <dd> The name of the location where the session occurred. </dd> <dt> string <var>s_start</var> </dt> <dd> The date/time when the session starts in human-readable format. Returned in the time zone of the location. </dd> <dt> string <var>text_duration</var> </dt> <dd> String representation of session duration. Duration formatting method {@link InfoApi::_classDurationFormat()}. </dd> </dl>'
+                        description: 'A list of all class sessions that can be booked together. Every element has the next structure: <dl> <dt> string[] <var>a_staff</var> </dt> <dd> List of staff names that are leading this session. </dd> <dt> string[] <var>a_virtual_location</var> </dt> <dd> List of virtual locations. </dd> <dt> string <var>dt_date</var> </dt> <dd> The date/time when session starts in MySQL format and in GMT. </dd> <dt>int `i_active`</dt> <dd>Total number of clients on the active list.</dd> <dt>int `i_active_limit`</dt> <dd>Total capacity of the active list.</dd> <dt>int `i_wait`</dt> <dd>Total number of clients on the wait list.</dd> <dt>int|null `i_wait_limit`</dt> <dd>Total capacity the wait list. `null` if wail list in unlimited.</dd> <dt> boolean <var>is_select</var> </dt> <dd> <tt>true</tt> if this session should be selected when page is initialized; <tt>false</tt> if otherwise. </dd> <dt> bool <var>is_wait</var> </dt> <dd> `true` if client is added to a wait list, `false` - to an active list. </dd> <dt> bool <var>is_wait_list_unpaid</var> </dt> <dd> Allow clients to join the wait list unpaid. </dd> <dt> string <var>k_class_period</var> </dt> <dd> The key of the session. Primary keys in {@link \RsClassPeriodSql} table. </dd> <dt> string <var>k_location</var> </dt> <dd> Location key. Primary key in {@link \RsLocationSql} table. </dd> <dt> bool <var>m_price</var> </dt> <dd> Price of the session. </dd> <dt> string <var>s_location</var> </dt> <dd> The name of the location where the session occurred. </dd> <dt> string <var>s_start</var> </dt> <dd> The date/time when the session starts in human-readable format. Returned in the time zone of the location. </dd> <dt> string <var>text_duration</var> </dt> <dd> String representation of session duration. Duration formatting method {@link InfoApi::_classDurationFormat()}. </dd> </dl>'
                       a_session_free:
                         type: array
                         description: 'List of sessions that can be paid without new purchases. Such as previously prepaid or free sessions. A result of the {@link \RsBookProcess::sessionFreeGet()} method execution. Each its item has the key of following format: <dl> <dt>string <var>dt_date::k_class_period</var></dt><dd>Composite key of the array.</dd> </dl> and the value of following structure: <dl> <dt>string <var>dt_date</var></dt><dd>Session date.</dd> <dt>string <var>k_class_period</var></dt><dd>Class period key for the session.</dd> </dl>'
@@ -17643,7 +17711,7 @@ paths:
                         description: 'Week days available for recurring booking. Constants of {@link \ADateWeekSid} class. `null` if recurring booking is not available.'
                       a_session_all:
                         type: array
-                        description: 'A list of all class sessions that can be booked together. Every element has the next structure: <dl> <dt> string[] <var>a_staff</var> </dt> <dd> List of staff names that are leading this session. </dd> <dt> string[] <var>a_virtual_location</var> </dt> <dd> List of virtual locations. </dd> <dt> string <var>dt_date</var> </dt> <dd> The date/time when session starts in MySQL format and in GMT. </dd> <dt> boolean <var>is_select</var> </dt> <dd> <tt>true</tt> if this session should be selected when page is initialized; <tt>false</tt> if otherwise. </dd> <dt> bool <var>is_wait</var> </dt> <dd> `true` if client is added to a wait list, `false` - to an active list. </dd> <dt> bool <var>is_wait_list_unpaid</var> </dt> <dd> Allow clients to join the wait list unpaid. </dd> <dt> string <var>k_class_period</var> </dt> <dd> The key of the session. Primary keys in {@link \RsClassPeriodSql} table. </dd> <dt> string <var>k_location</var> </dt> <dd> Location key. Primary key in {@link \RsLocationSql} table. </dd> <dt> bool <var>m_price</var> </dt> <dd> Price of the session. </dd> <dt> string <var>s_location</var> </dt> <dd> The name of the location where the session occurred. </dd> <dt> string <var>s_start</var> </dt> <dd> The date/time when the session starts in human-readable format. Returned in the time zone of the location. </dd> <dt> string <var>text_duration</var> </dt> <dd> String representation of session duration. Duration formatting method {@link InfoApi::_classDurationFormat()}. </dd> </dl>'
+                        description: 'A list of all class sessions that can be booked together. Every element has the next structure: <dl> <dt> string[] <var>a_staff</var> </dt> <dd> List of staff names that are leading this session. </dd> <dt> string[] <var>a_virtual_location</var> </dt> <dd> List of virtual locations. </dd> <dt> string <var>dt_date</var> </dt> <dd> The date/time when session starts in MySQL format and in GMT. </dd> <dt>int `i_active`</dt> <dd>Total number of clients on the active list.</dd> <dt>int `i_active_limit`</dt> <dd>Total capacity of the active list.</dd> <dt>int `i_wait`</dt> <dd>Total number of clients on the wait list.</dd> <dt>int|null `i_wait_limit`</dt> <dd>Total capacity the wait list. `null` if wail list in unlimited.</dd> <dt> boolean <var>is_select</var> </dt> <dd> <tt>true</tt> if this session should be selected when page is initialized; <tt>false</tt> if otherwise. </dd> <dt> bool <var>is_wait</var> </dt> <dd> `true` if client is added to a wait list, `false` - to an active list. </dd> <dt> bool <var>is_wait_list_unpaid</var> </dt> <dd> Allow clients to join the wait list unpaid. </dd> <dt> string <var>k_class_period</var> </dt> <dd> The key of the session. Primary keys in {@link \RsClassPeriodSql} table. </dd> <dt> string <var>k_location</var> </dt> <dd> Location key. Primary key in {@link \RsLocationSql} table. </dd> <dt> bool <var>m_price</var> </dt> <dd> Price of the session. </dd> <dt> string <var>s_location</var> </dt> <dd> The name of the location where the session occurred. </dd> <dt> string <var>s_start</var> </dt> <dd> The date/time when the session starts in human-readable format. Returned in the time zone of the location. </dd> <dt> string <var>text_duration</var> </dt> <dd> String representation of session duration. Duration formatting method {@link InfoApi::_classDurationFormat()}. </dd> </dl>'
                       a_session_free:
                         type: array
                         description: 'List of sessions that can be paid without new purchases. Such as previously prepaid or free sessions. A result of the {@link \RsBookProcess::sessionFreeGet()} method execution. Each its item has the key of following format: <dl> <dt>string <var>dt_date::k_class_period</var></dt><dd>Composite key of the array.</dd> </dl> and the value of following structure: <dl> <dt>string <var>dt_date</var></dt><dd>Session date.</dd> <dt>string <var>k_class_period</var></dt><dd>Class period key for the session.</dd> </dl>'
@@ -18731,6 +18799,77 @@ paths:
                         description: 'The default Purchase Option key. Primary key in {@link \RsPromotionSql} table. This will be empty if the class has no default Purchase Option.'
       tags:
         - Purchase-Purchase56
+  '/Wl/Book/Process/Purchase/PurchaseElementGroup.json':
+    get:
+      summary: ''
+      parameters:
+        - name: a_purchase_item
+          in: query
+          description: 'A list of purchase items. Each item is an associative array with the following keys: <dl> <dt>int `id_purchase_item`</dt> <dd>The ID of the purchase item type. One of {@link \RsPurchaseItemSid}.</dd> <dt>string `k_id`</dt> <dd>The key of the purchase item in the database.</dd> <dt>string [`k_login_prize`]</dt> <dd>The key of the user''s prize. Not empty only if the user wants to make a free visit from the prize.</dd> <dt>string [`k_pay_installment_template`]</dt> <dd>Installment template key. Primary key in {@link \Thoth\WlPay\Installment\Template\Sql} table. This property is optional. * can only be set for the purchase option which supports installment plan, see {@link PurchaseItemAbstract::INSTALLMENT_ALLOW_USER} property; * `null` if installment plan doesn''t exist for bought item; * `0` if installment plan doesn''t selected for bought item from the list of installment plans. NOTE: * Calculations of discounts and taxes for installment plans are for demonstration purposes only! * Installment is not an independent purchase item and has no discounts or taxes. * Installment is a division of the final amount (with taxes and discounts), of some purchase option, into N parts.</dd> <dt>string [`k_reward_prize`]</dt> <dd>The key of the reward prize. Not empty only if the user wants to redeem prize and use it to pay for a visit.</dd> </dl>'
+          schema:
+            type: array
+        - name: dtu_date
+          in: query
+          description: 'Date/time of session is booking. `null` until initialized.'
+          schema:
+            type: [string, "null"]
+        - name: i_session
+          in: query
+          description: 'The number of sessions which are booked simultaneously.'
+          schema:
+            type: number
+            format: int32
+        - name: k_location
+          in: query
+          description: 'The key of the location in which the purchase is made. This is also the booking process location.'
+          schema:
+            type: string
+        - name: text_discount_code
+          in: query
+          description: 'The discount code.'
+          schema:
+            type: string
+        - name: uid
+          in: query
+          description: 'The key of the current user.'
+          schema:
+            type: string
+      responses:
+        200:
+          description: 'Response always comes with status 200. Inspect the rest of the response body to determine the result.'
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - type: object
+                    description: 'Successful response.'
+                    properties:
+                      a_tax:
+                        type: array
+                        description: 'A list of taxes for one purchase item. Keys - tax keys. Primary key in {@link \RsTaxSql} table. Values - tax amount.'
+                      m_cost:
+                        type: string
+                        description: 'The cost of one purchase item (with taxes).'
+                      m_discount:
+                        type: string
+                        description: 'The amount of the whole discount of one purchase item.'
+                      m_discount_code:
+                        type: string
+                        description: 'Amount of discount for discount code of 1 purchase item.'
+                      m_discount_login:
+                        type: string
+                        description: 'The discount amount for the client type of one purchase item.'
+                      m_price:
+                        type: string
+                        description: 'The price of the purchase item (with or without taxes, depending on regional standards).'
+                      m_subtotal:
+                        type: string
+                        description: 'Amount of subtotal for 1 purchase item.'
+                      m_tax:
+                        type: string
+                        description: 'The amount of taxes for the one purchase item.'
+      tags:
+        - Purchase-PurchaseElementGroup
   '/Wl/Book/Process/Quiz/Quiz.json':
     get:
       summary: 'Defines list of required quizzes.'
@@ -18930,7 +19069,7 @@ paths:
                     properties:
                       a_resource_all:
                         type: array
-                        description: 'A list of asset categories which are available for specified session. Every element has next keys: <dl> <dt> array <var>a_client</var> </dt> <dd> A list of clients who have already occupied assets for this session. 1st level keys - asset keys; 2nd level keys - asset number. For example, if you want to check if 10th asset with key ''125'' is free, you have to check if <tt>a_client[''125''][''10'']</tt> is empty. </dd> <dt> array[] <var>a_resource_list</var> </dt> <dd> A list of available assets. Every element has next keys: <dl> <dt> array <var>a_image</var> </dt> <dd> Asset image data. See {@link \RsResourceImage::data()} for details. </dd> <dt> int <var>i_index</var> </dt> <dd> The asset number. Actual for assets with a quantity more than <tt>1</tt>. </dd> <dt> bool <var>is_current</var> </dt> <dd> <tt>true</tt> means that this asset is selected by client, <tt>false</tt> - otherwise. </dd> <dt> string <var>k_resource</var> </dt> <dd> The key of the asset in database. Primary key {@link \RsResourceSql} table. </dd> <dt> string <var>s_resource</var> </dt> <dd> The title of the asset. </dd> </dl> </dd> <dt> bool <var>has_current</var> </dt> <dd> <tt>true</tt> - has current resource in the list of available assets; <tt>false</tt> - otherwise. </dd> <dt> bool <var>is_client_select</var> </dt> <dd> <tt>true</tt> - the client selected the resource from the current group; <tt>false</tt> otherwise. </dd> <dt> bool <var>is_select</var> </dt> <dd> <tt>true</tt> - has selected resources; <tt>false</tt> - otherwise. </dd> <dt> bool <var>is_share</var> </dt> <dd> <tt>true</tt> resources in this category don''t belong to certain users, but to the entire session. <tt>false</tt> belong to specific users. </dd> <dt> string <var>k_resource_layout</var> </dt> <dd> The key of the asset layout. Primary key in {@link \Wl\Resource\Layout\Sql} table. </dd> <dt> string <var>k_resource_type</var> </dt> <dd> The key of the asset category. Primary key in {@link \RsResourceTypeSql} table. </dd> <dt> string <var>s_resource_type</var> </dt> <dd> The title of the asset category. </dd> </dl>'
+                        description: 'A list of asset categories which are available for specified session. Every element has next keys: <dl> <dt> array <var>a_client</var> </dt> <dd> A list of clients who have already occupied assets for this session. 1st level keys - asset keys; 2nd level keys - asset number. For example, if you want to check if 10th asset with key ''125'' is free, you have to check if <tt>a_client[''125''][''10'']</tt> is empty. </dd> <dt> array[] <var>a_resource_list</var> </dt> <dd> A list of available assets. Every element has next keys: <dl> <dt> array [`a_class_period`] </dt> <dd> List of class/event sessions that occupies the resource. The field structure is `Session_key => Session_UTC_date_and_time => Quantity_of_occupied_spots`. This field is present only if the resource is occupied by any class/event sessions. </dd> <dt> array <var>a_image</var> </dt> <dd> Asset image data. See {@link \RsResourceImage::data()} for details. </dd> <dt> int <var>i_index</var> </dt> <dd> The asset number. Actual for assets with a quantity more than <tt>1</tt>. </dd> <dt> int `i_quantity` </dt> <dd> Total number of the asset spots. </dd> <dt> bool <var>is_current</var> </dt> <dd> <tt>true</tt> means that this asset is selected by client, <tt>false</tt> - otherwise. </dd> <dt> string <var>k_resource</var> </dt> <dd> The key of the asset in database. Primary key {@link \RsResourceSql} table. </dd> <dt> string <var>s_resource</var> </dt> <dd> The title of the asset. </dd> </dl> </dd> <dt> bool <var>has_current</var> </dt> <dd> <tt>true</tt> - has current resource in the list of available assets; <tt>false</tt> - otherwise. </dd> <dt> bool <var>is_client_select</var> </dt> <dd> <tt>true</tt> - the client selected the resource from the current group; <tt>false</tt> otherwise. </dd> <dt> bool <var>is_select</var> </dt> <dd> <tt>true</tt> - has selected resources; <tt>false</tt> - otherwise. </dd> <dt> bool <var>is_share</var> </dt> <dd> <tt>true</tt> resources in this category don''t belong to certain users, but to the entire session. <tt>false</tt> belong to specific users. </dd> <dt> string <var>k_resource_layout</var> </dt> <dd> The key of the asset layout. Primary key in {@link \Wl\Resource\Layout\Sql} table. </dd> <dt> string <var>k_resource_type</var> </dt> <dd> The key of the asset category. Primary key in {@link \RsResourceTypeSql} table. </dd> <dt> string <var>s_resource_type</var> </dt> <dd> The title of the asset category. </dd> </dl>'
       tags:
         - Resource-Resource
     post:
@@ -19081,7 +19220,7 @@ paths:
                     properties:
                       a_resource_all:
                         type: array
-                        description: 'A list of asset categories which are available for specified session. Every element has next keys: <dl> <dt> array <var>a_client</var> </dt> <dd> A list of clients who have already occupied assets for this session. 1st level keys - asset keys; 2nd level keys - asset number. For example, if you want to check if 10th asset with key ''125'' is free, you have to check if <tt>a_client[''125''][''10'']</tt> is empty. </dd> <dt> array[] <var>a_resource_list</var> </dt> <dd> A list of available assets. Every element has next keys: <dl> <dt> array <var>a_image</var> </dt> <dd> Asset image data. See {@link \RsResourceImage::data()} for details. </dd> <dt> int <var>i_index</var> </dt> <dd> The asset number. Actual for assets with a quantity more than <tt>1</tt>. </dd> <dt> bool <var>is_current</var> </dt> <dd> <tt>true</tt> means that this asset is selected by client, <tt>false</tt> - otherwise. </dd> <dt> string <var>k_resource</var> </dt> <dd> The key of the asset in database. Primary key {@link \RsResourceSql} table. </dd> <dt> string <var>s_resource</var> </dt> <dd> The title of the asset. </dd> </dl> </dd> <dt> bool <var>has_current</var> </dt> <dd> <tt>true</tt> - has current resource in the list of available assets; <tt>false</tt> - otherwise. </dd> <dt> bool <var>is_client_select</var> </dt> <dd> <tt>true</tt> - the client selected the resource from the current group; <tt>false</tt> otherwise. </dd> <dt> bool <var>is_select</var> </dt> <dd> <tt>true</tt> - has selected resources; <tt>false</tt> - otherwise. </dd> <dt> bool <var>is_share</var> </dt> <dd> <tt>true</tt> resources in this category don''t belong to certain users, but to the entire session. <tt>false</tt> belong to specific users. </dd> <dt> string <var>k_resource_layout</var> </dt> <dd> The key of the asset layout. Primary key in {@link \Wl\Resource\Layout\Sql} table. </dd> <dt> string <var>k_resource_type</var> </dt> <dd> The key of the asset category. Primary key in {@link \RsResourceTypeSql} table. </dd> <dt> string <var>s_resource_type</var> </dt> <dd> The title of the asset category. </dd> </dl>'
+                        description: 'A list of asset categories which are available for specified session. Every element has next keys: <dl> <dt> array <var>a_client</var> </dt> <dd> A list of clients who have already occupied assets for this session. 1st level keys - asset keys; 2nd level keys - asset number. For example, if you want to check if 10th asset with key ''125'' is free, you have to check if <tt>a_client[''125''][''10'']</tt> is empty. </dd> <dt> array[] <var>a_resource_list</var> </dt> <dd> A list of available assets. Every element has next keys: <dl> <dt> array [`a_class_period`] </dt> <dd> List of class/event sessions that occupies the resource. The field structure is `Session_key => Session_UTC_date_and_time => Quantity_of_occupied_spots`. This field is present only if the resource is occupied by any class/event sessions. </dd> <dt> array <var>a_image</var> </dt> <dd> Asset image data. See {@link \RsResourceImage::data()} for details. </dd> <dt> int <var>i_index</var> </dt> <dd> The asset number. Actual for assets with a quantity more than <tt>1</tt>. </dd> <dt> int `i_quantity` </dt> <dd> Total number of the asset spots. </dd> <dt> bool <var>is_current</var> </dt> <dd> <tt>true</tt> means that this asset is selected by client, <tt>false</tt> - otherwise. </dd> <dt> string <var>k_resource</var> </dt> <dd> The key of the asset in database. Primary key {@link \RsResourceSql} table. </dd> <dt> string <var>s_resource</var> </dt> <dd> The title of the asset. </dd> </dl> </dd> <dt> bool <var>has_current</var> </dt> <dd> <tt>true</tt> - has current resource in the list of available assets; <tt>false</tt> - otherwise. </dd> <dt> bool <var>is_client_select</var> </dt> <dd> <tt>true</tt> - the client selected the resource from the current group; <tt>false</tt> otherwise. </dd> <dt> bool <var>is_select</var> </dt> <dd> <tt>true</tt> - has selected resources; <tt>false</tt> - otherwise. </dd> <dt> bool <var>is_share</var> </dt> <dd> <tt>true</tt> resources in this category don''t belong to certain users, but to the entire session. <tt>false</tt> belong to specific users. </dd> <dt> string <var>k_resource_layout</var> </dt> <dd> The key of the asset layout. Primary key in {@link \Wl\Resource\Layout\Sql} table. </dd> <dt> string <var>k_resource_type</var> </dt> <dd> The key of the asset category. Primary key in {@link \RsResourceTypeSql} table. </dd> <dt> string <var>s_resource_type</var> </dt> <dd> The title of the asset category. </dd> </dl>'
       tags:
         - Resource-Resource54
     post:
@@ -21458,6 +21597,9 @@ tags:
     description: 'Displays information about Purchase Options that can book specified session(s). Note that the terms "Purchase Option" and "promotion" are used interchangeably.'
   -
     name: Purchase-PurchaseElement
+    description: 'A model of the purchase item.'
+  -
+    name: Purchase-PurchaseElementGroup
     description: 'A model of the purchase item.'
   -
     name: Purchase-PurchaseElementList

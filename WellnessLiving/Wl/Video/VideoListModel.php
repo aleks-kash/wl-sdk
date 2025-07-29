@@ -85,6 +85,14 @@ class VideoListModel extends WlModelAbstract
   public $a_page = [];
 
   /**
+   * A list of video sources.
+   *
+   * @get get
+   * @var string[]
+   */
+  public $a_source = [];
+
+  /**
    * TODO wl-72248: remove this property when external developers confirm that they do not use it.
    * A list of staff members who appear in videos.
    *
