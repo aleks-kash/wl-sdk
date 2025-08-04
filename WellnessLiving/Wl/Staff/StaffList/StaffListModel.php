@@ -10,6 +10,17 @@ use WellnessLiving\WlModelAbstract;
 class StaffListModel extends WlModelAbstract
 {
   /**
+   * A list of privileges to filter staff members by.
+   *
+   * This property acts as a filter.
+   * Only staff members possessing all the privileges specified in this list will be included in the result.
+   *
+   * @get get
+   * @var int[]
+   */
+  public $a_privilege = [];
+
+  /**
    * Information about staff members.
    * Each array index is the staff member keys.
    * Each array element is an array containing the following fields:

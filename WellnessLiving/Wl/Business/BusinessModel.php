@@ -93,6 +93,15 @@ class BusinessModel extends WlModelAbstract
   public $k_office_city = '0';
 
   /**
+   * Microsoft Clarity session ID associated with the business claim session.
+   *
+   * @post post
+   * @put post
+   * @var string
+   */
+  public $s_clarity_session_id = '';
+
+  /**
    * The email address of the location.
    * Optional.
    *

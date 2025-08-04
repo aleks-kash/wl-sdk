@@ -12,8 +12,11 @@ use WellnessLiving\Wl\Classes\Tab\TabSid;
 class ClassList68Model extends WlModelAbstract
 {
   /**
-   * @inheritDoc
-   * @get result
+   * Keys are dates of the days inside requested date range, when there is at least one class in the business.
+   * If, locations are sent as a parameter, then at least one class in the given locations.
+   *
+   * Values are empty arrays for now. This is done to make possible to add some information about certain dates, if we need this.
+   *
    * @post result
    * @var array[]
    */
@@ -26,8 +29,7 @@ class ClassList68Model extends WlModelAbstract
    *
    * If it's empty, all classes will be returned.
    *
-   * @get get
-   * @post get
+   * @post post
    * @var string[]
    */
   public $a_class = [];
@@ -40,7 +42,7 @@ class ClassList68Model extends WlModelAbstract
    *
    * Empty array means no filtering.
    *
-   * @get get
+   * @post post
    * @var int[]
    * @see ADateWeekSid
    */
@@ -53,8 +55,7 @@ class ClassList68Model extends WlModelAbstract
    *
    * If it's empty, all events will be returned.
    *
-   * @get get
-   * @post get
+   * @post post
    * @var string[]
    */
   public $a_event = [];
@@ -64,7 +65,7 @@ class ClassList68Model extends WlModelAbstract
    * If it's empty, schedule for all locations will be returned.
    * All given locations should be from the same business, which is sent in {@link ClassListModel::$k_business}.
    *
-   * @get get
+   * @post post
    * @var string[]
    */
   public $a_location = [];
@@ -86,8 +87,159 @@ class ClassList68Model extends WlModelAbstract
   public $a_quick = [];
 
   /**
-   * @inheritDoc
-   * @get result
+   * A list of classes sessions starting with the date {@link ClassListModel::$dt_date}
+   * and in the 62 days ahead (or up to {@link ClassListModel::$dt_end}).
+   * Every element has the following keys:
+   * <dl>
+   *   <dt>
+   *     string[] <var>a_class_tab</var>
+   *   </dt>
+   *   <dd>
+   *     Keys of class tab.
+   *   </dd>
+   *   <dt>
+   *     string[] <var>a_image</var>
+   *    </dt>
+   *    <dd>
+   *     The class image. Empty array if there is no image.
+   *   </dd>
+   *   <dt>
+   *     string[] <var>a_search_tag</var>
+   *   </dt>
+   *   <dd>
+   *     Tags associated with an individual class.
+   *   </dd>
+   *   <dt>
+   *     string[] <var>a_staff</var>
+   *   </dt>
+   *   <dd>
+   *     The list of staff keys for the staff member conducting the session.
+   *
+   *   </dd>
+   *   <dt>
+   *     string[] <var>a_virtual_location</var>
+   *   </dt>
+   *   <dd>
+   *     The list of virtual locations keys. Each value is a location key.
+   *
+   *   </dd>
+   *   <dt>
+   *     string <var>dt_date</var>
+   *   </dt>
+   *   <dd>
+   *     The date/time of the session start in UTC.
+   *   </dd>
+   *   <dt>
+   *     string <var>dt_time</var>
+   *   </dt>
+   *   <dd>
+   *     The time of the session start in the local time zone.
+   *   </dd>
+   *   <dt>
+   *     string <var>dtl_date</var>
+   *   </dt>
+   *   <dd>
+   *     The date/time of session start in the location's time zone.
+   *   </dd>
+   *   <dt>
+   *     bool <var>hide_application</var>
+   *   </dt>
+   *   <dd>
+   *      Specifies whether the class will be hidden in the White Label Achieve Client App. If `true`, it means that the
+   *      class won't be displayed. Otherwise, this will be `false` to indicate that the class will be displayed.
+   *   </dd>
+   *   <dt>
+   *     string <var>html_description</var>
+   *   </dt>
+   *   <dd>
+   *     The class description.
+   *   </dd>
+   *   <dt>
+   *     int <var>i_book</var>
+   *   </dt>
+   *   <dd>
+   *     Count of visits on this class.
+   *   </dd>
+   *   <dt>
+   *     int|null <var>i_capacity</var>
+   *   </dt>
+   *   <dd>
+   *     The capacity of the service. 'null' indicates that the capacity is not set.
+   *    </dd>
+   *   <dt>
+   *     int <var>i_day</var>
+   *   </dt>
+   *   <dd>
+   *     The day of the week when session is occurred. Constant from {@link ADateWeekSid}.
+   *   </dd>
+   *   <dt>
+   *     int <var>i_duration</var>
+   *   </dt>
+   *   <dd>
+   *     The duration of the session in minutes.
+   *   </dd>
+   *   <dt>
+   *     int <var>i_wait</var>
+   *   </dt>
+   *   <dd>
+   *     Number of clients in wait list.
+   *   </dd>
+   *   <dt>
+   *     bool <var>is_cancel</var>
+   *   </dt>
+   *   <dd>
+   *     If `true`, this class period was canceled. Otherwise, this will be `false`.
+   *   </dd>
+   *    <dt>
+   *      bool <var>is_event</var>
+   *    </dt>
+   *    <dd>
+   *      If `true`, this is an event. Otherwise, this will be `false`.
+   *    </dd>
+   *   <dt>
+   *     bool <var>is_virtual</var>
+   *   </dt>
+   *   <dd>
+   *     If `true`, this class is virtual. Otherwise, this will be `false`.
+   *   </dd>
+   *   <dt>
+   *     bool <var>is_wait_list_enabled</var>
+   *   </dt>
+   *   <dd>
+   *     This will be `true` if user is only on the wait-list. Otherwise, this will be `false`.
+   *   </dd>
+   *   <dt>
+   *     string <var>k_class</var>
+   *   </dt>
+   *   <dd>
+   *     The class key.
+   *   </dd>
+   *   <dt>
+   *     string <var>k_class_period</var>
+   *   </dt>
+   *   <dd>
+   *     The class period key.
+   *   </dd>
+   *   <dt>
+   *     string <var>k_location</var>
+   *   </dt>
+   *   <dd>
+   *     The key of the session's location.
+   *   </dd>
+   *   <dt>
+   *     string <var>s_title</var>
+   *   </dt>
+   *   <dd>
+   *     The title of the session.
+   *   </dd>
+   *   <dt>
+   *     string <var>url_book</var>
+   *   </dt>
+   *   <dd>
+   *     The direct link to start booking on the WellnessLiving website.
+   *   </dd>
+   * </dl>
+   *
    * @post result
    * @var array[]
    */
@@ -108,7 +260,7 @@ class ClassList68Model extends WlModelAbstract
    *
    * Empty array means no filtering.
    *
-   * @get get
+   * @post post
    * @var array[]
    */
   public $a_time = [];
@@ -116,7 +268,7 @@ class ClassList68Model extends WlModelAbstract
   /**
    * The list start date in UTC and in MySQL format.
    *
-   * @get get
+   * @post post
    * @var string
    */
   public $dt_date = '';
@@ -124,7 +276,7 @@ class ClassList68Model extends WlModelAbstract
   /**
    * The list end date in UTC and in MySQL format.
    *
-   * @get get
+   * @post post
    * @var string
    */
   public $dt_end = '';
@@ -134,7 +286,7 @@ class ClassList68Model extends WlModelAbstract
    *
    * `null` if no filtering by Tab is required.
    *
-   * @get get
+   * @post post
    * @var int|null
    */
   public $id_class_tab = null;
@@ -143,7 +295,7 @@ class ClassList68Model extends WlModelAbstract
    * `true` means to not generate {@link ClassListModel::$a_session} result.
    * Can be used, if you do not need full information about existing classes and result in {@link ClassListModel::$a_calendar} is enough.
    *
-   * @get get
+   * @post post
    * @var bool
    */
   public $is_response_short = false;
@@ -152,14 +304,14 @@ class ClassList68Model extends WlModelAbstract
    * If `true`, sessions from every class tab are returned. If `false`, use the
    * {@link ClassListModel::$k_class_tab} value.
    *
-   * @get get
+   * @post post
    * @var bool
    */
   public $is_tab_all = false;
 
   /**
-   * @inheritDoc
-   * @get result
+   * If `true`, the list of sessions contains sessions from different time zones. Otherwise, this will be `false`.
+   *
    * @post result
    * @var bool
    */
@@ -173,14 +325,16 @@ class ClassList68Model extends WlModelAbstract
    * `false`: Only in-person.
    * `null` or not set: No filtering.
    *
-   * @get get
+   * @post post
    * @var bool|null
    */
   public $is_virtual = null;
 
   /**
-   * @inheritDoc
-   * @get result
+   * If `true`, there exists at least one virtual service by a specified
+   * {@link ClassListModel::$k_business} and {@link ClassListModel::$k_class_tab},
+   * Otherwise, this will be `false`.
+   *
    * @post result
    * @var bool
    */
@@ -189,7 +343,7 @@ class ClassList68Model extends WlModelAbstract
   /**
    * The business key.
    *
-   * @get get
+   * @post post
    * @var string
    */
   public $k_business = '0';
@@ -200,15 +354,16 @@ class ClassList68Model extends WlModelAbstract
    * This will be `null` if not set yet.
    * This will be ignored if {@link ClassListModel::$is_tab_all} is `true`.
    *
-   * @get get
+   * @post post
    * @var string
    */
   public $k_class_tab = '0';
 
   /**
-   * @inheritDoc
-   * @get get
-   * @post get
+   * The list of staff members to filter.
+   * A comma seperated list of staff keys.
+   *
+   * @post post
    * @var string
    */
   public $s_staff = '';
@@ -216,7 +371,7 @@ class ClassList68Model extends WlModelAbstract
   /**
    * If `true`, canceled sessions will be returned. If `false`, canceled sessions won't be returned.
    *
-   * @get get
+   * @post post
    * @var bool
    */
   public $show_cancel = false;
@@ -224,7 +379,7 @@ class ClassList68Model extends WlModelAbstract
   /**
    * If `true`, classes will be included in the response. `false` - otherwise.
    *
-   * @get get
+   * @post post
    * @var bool
    */
   public $show_class = true;
@@ -232,7 +387,7 @@ class ClassList68Model extends WlModelAbstract
   /**
    * If `true`, events are also returned. If `false`, only classes are returned.
    *
-   * @get get
+   * @post post
    * @var bool
    */
   public $show_event = false;
@@ -241,7 +396,7 @@ class ClassList68Model extends WlModelAbstract
    * Whether to generate a quick filter.
    * If `true`, a quick filter will be generated. `false` otherwise.
    *
-   * @post get
+   * @post post
    * @var bool
    */
   public $show_quick_filter = false;
@@ -249,7 +404,7 @@ class ClassList68Model extends WlModelAbstract
   /**
    * The user key.
    *
-   * @get get
+   * @post post
    * @var string
    */
   public $uid = '';

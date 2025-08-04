@@ -5,6 +5,7 @@ namespace WellnessLiving\Wl\Book\Process\Relation;
 use WellnessLiving\WlModelAbstract;
 use WellnessLiving\Wl\Book\Process\ProcessCheckSid;
 use WellnessLiving\Wl\Family\Relation\WlFamilyRelationSid;
+use WellnessLiving\Wl\Mode\ModeSid;
 
 /**
  * Adds a relative during the booking process.
@@ -54,6 +55,15 @@ class RelationModel extends WlModelAbstract
    * @var int|null
    */
   public $i_year = null;
+
+  /**
+   * The mode type.
+   * One of the {@link ModeSid} constants.
+   *
+   * @post post
+   * @var int
+   */
+  public $id_mode = 0;
 
   /**
    * The relation type.
