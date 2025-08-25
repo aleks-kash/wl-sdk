@@ -18,7 +18,7 @@ class Product62Model extends WlModelAbstract
    * @get result
    * @var array[]
    */
-  public $a_product = null;
+  public $a_product;
 
   /**
    * The key of a location where appointment is going to be booked.

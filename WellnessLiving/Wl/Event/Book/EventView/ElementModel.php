@@ -134,6 +134,8 @@ class ElementModel extends WlModelAbstract
    *       <dd>The staff member name.</dd>
    *       <dt>string <var>s_surname</var></dt>
    *       <dd>The first letter of staff member's surname.</dd>
+   *       <dt>int <var>uid_staff</var></dt>
+   *       <dd>The user key of the staff member.</dd>
    *     </dl>
    *   </dd>
    *   <dt>

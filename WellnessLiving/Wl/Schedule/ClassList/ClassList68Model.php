@@ -27,7 +27,7 @@ class ClassList68Model extends WlModelAbstract
    *
    * Return sessions with matching class IDs.
    *
-   * If it's empty, all classes will be returned.
+   * If it's empty and {@link ClassList68Model::$show_class} is `true`, all classes will be returned.
    *
    * @post post
    * @var string[]
@@ -49,11 +49,11 @@ class ClassList68Model extends WlModelAbstract
   public $a_day = [];
 
   /**
-   * The list of classes keys to filter.
+   * The list of event keys to filter.
    *
-   * Return sessions with matching class IDs.
+   * Return sessions with matching event keys.
    *
-   * If it's empty, all events will be returned.
+   * If it's empty and {@link ClassList68Model::$show_event} is `true`, all events will be returned.
    *
    * @post post
    * @var string[]
@@ -74,12 +74,18 @@ class ClassList68Model extends WlModelAbstract
    * Information about classes/events for quick filter.
    *
    * Every element has the following keys:
-   * <ul>
-   *   <li>string <var>text_type</var> Type of class ("class" || "event")</li>
-   *   <li>string <var>k_class</var> Type of the error.</li>
-   *   <li>string <var>s_class</var> Stack backtrace.</li>
-   *   <li>int <var>i_class</var> Total items found.</li>
-   * </ul>
+   * <dl>
+   *   <dt>string <var>text_type</var></dt> <dd>Type of class ("class" || "event")</dd>
+   *   <dt>string <var>k_class</var></dt> <dd>Class/event key.</dd>
+   *   <dt>string <var>s_class</var></dt> <dd>Class/event title.</dd>
+   *   <dt>int <var>i_class</var></dt> <dd>Total sessions found.</dd>
+   * </dl>
+   *
+   * For generating this filter, all filters are applied except:
+   * - {@link ClassList68Model::$a_class};
+   * - {@link ClassList68Model::$a_event};
+   * - {@link ClassList68Model::$show_class};
+   * - {@link ClassList68Model::$show_event}.
    *
    * @post result
    * @var array
@@ -266,7 +272,7 @@ class ClassList68Model extends WlModelAbstract
   public $a_time = [];
 
   /**
-   * The list start date in UTC and in MySQL format.
+   * The list start date in MySQL format.
    *
    * @post post
    * @var string
@@ -274,7 +280,7 @@ class ClassList68Model extends WlModelAbstract
   public $dt_date = '';
 
   /**
-   * The list end date in UTC and in MySQL format.
+   * The list end date in MySQL format.
    *
    * @post post
    * @var string
@@ -283,8 +289,9 @@ class ClassList68Model extends WlModelAbstract
 
   /**
    * ID of tab. One of {@link TabSid} constants.
+   * This will be ignored if {@link ClassList68Model::$is_tab_all} is `true`.
    *
-   * `null` if no filtering by Tab is required.
+   * `null` if no filtering by tab is required.
    *
    * @post post
    * @var int|null
@@ -292,8 +299,8 @@ class ClassList68Model extends WlModelAbstract
   public $id_class_tab = null;
 
   /**
-   * `true` means to not generate {@link ClassListModel::$a_session} result.
-   * Can be used, if you do not need full information about existing classes and result in {@link ClassListModel::$a_calendar} is enough.
+   * `true` means to not generate {@link ClassList68Model::$a_session} result.
+   * Can be used, if you do not need full information about existing classes and result in {@link ClassList68Model::$a_calendar} is enough.
    *
    * @post post
    * @var bool
@@ -302,7 +309,7 @@ class ClassList68Model extends WlModelAbstract
 
   /**
    * If `true`, sessions from every class tab are returned. If `false`, use the
-   * {@link ClassListModel::$k_class_tab} value.
+   * {@link ClassList68Model::$k_class_tab} or {@link ClassList68Model::$id_class_tab} to filter sessions by class tab.
    *
    * @post post
    * @var bool
@@ -332,7 +339,7 @@ class ClassList68Model extends WlModelAbstract
 
   /**
    * If `true`, there exists at least one virtual service by a specified
-   * {@link ClassListModel::$k_business} and {@link ClassListModel::$k_class_tab},
+   * {@link ClassList68Model::$k_business} and {@link ClassList68Model::$k_class_tab},
    * Otherwise, this will be `false`.
    *
    * @post result
@@ -349,10 +356,8 @@ class ClassList68Model extends WlModelAbstract
   public $k_business = '0';
 
   /**
-   * The category tab key.
-   *
-   * This will be `null` if not set yet.
-   * This will be ignored if {@link ClassListModel::$is_tab_all} is `true`.
+   * The tab key.
+   * This will be ignored if {@link ClassList68Model::$is_tab_all} is `true`.
    *
    * @post post
    * @var string
@@ -393,7 +398,6 @@ class ClassList68Model extends WlModelAbstract
   public $show_event = false;
 
   /**
-   * Whether to generate a quick filter.
    * If `true`, a quick filter will be generated. `false` otherwise.
    *
    * @post post

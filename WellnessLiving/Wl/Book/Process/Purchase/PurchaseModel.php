@@ -65,6 +65,11 @@ class PurchaseModel extends WlModelAbstract
    *        <dd>The number of minutes left in the Purchase Option.</dd>
    *      </dl>
    *   </dd>
+   *   <dt>string[] <var>a_uid_share</var></dt>
+   *   <dd>
+   *     List of uids of users who share this promotion.
+   *     List of those passed in the {@link PurchaseModel::$a_login_promotion_select} array.
+   *   </dd>
    *   <dt>string[] <var>a_visit_limit</var></dt>
    *   <dd>The list of calendar restrictions of the promotion (for example, 4 per week).</dd>
    *   <dt>array <var>a_restrict</var></dt>
@@ -132,8 +137,33 @@ class PurchaseModel extends WlModelAbstract
   public $a_login_promotion = [];
 
   /**
-   * A list of Purchase Options that are available for the session(s) being booked. Keys refer to unique string IDs, and
-   * values refer arrays with the next fields: <dl>
+   * A list of existing purchase options that were selected for previous users.
+   *
+   * Note:
+   * * It makes sense if for all clients the list is loaded within
+   *      the same pair {@link PurchaseModel::$dt_date_gmt} and {@link PurchaseModel::$k_class_period}.
+   * * If promotions are shared, the system will try to determine if there are enough sessions left for the next
+   *      client who has the same promotion.
+   * * Can affect the list of available login promotions {@link PurchaseModel::$a_login_promotion}.
+   *
+   * Each element has the following structure:
+   * <dl>
+   *   <dt>int <var>[i_session = 1]</var></dt>
+   *   <dd>Number of sessions of the same class|event that were selected for the previous user.</dd>
+   *   <dt>string <var>k_login_promotion</var></dt>
+   *   <dd>Selected purchase option.</dd>
+   *   <dt>string <var>uid</var></dt>
+   *   <dd>UID of the previous user.</dd>
+   * </dl>
+   *
+   * @get get
+   * @var array[]
+   */
+  public $a_login_promotion_select = [];
+
+  /**
+   * A list of Purchase Options that are available for the session(s) being booked. Keys refer to unique string IDs,
+   * and values refer arrays with the next fields: <dl>
    *   <dt>array[] <var>a_installment_template</var>.</dt>
    *   <dd>A list of installment plans. Every element has the next keys:<dl>
    *     <dt>int <var>i_count</var></dt>
@@ -149,7 +179,13 @@ class PurchaseModel extends WlModelAbstract
    *     <dt>string <var>m_amount</var></dt>
    *     <dd>The amount of the installment plan.</dd>
    *     <dt>string <var>s_duration</var></dt>
-   *     <dd>The title of the installment plan.</dd></dl></dd>
+   *     <dd>The title of the installment plan.</dd></dl>
+   *   </dd>
+   *   <dt>string[] [<var>a_uid_share</var>]</dt>
+   *   <dd>
+   *       List of uids of users who share this promotion.
+   *       List of those passed in the {@link PurchaseModel::$a_purchase_select} array.
+   *   </dd>
    *   <dt>array[] [<var>a_visit_limit</var>]</dt>
    *   <dd>This is only set for Purchase Options. A list of limits on booking by the Purchase Option. Every element has the next keys:<dl>
    *     <dt>string <var>s_title</var></dt>
@@ -208,6 +244,35 @@ class PurchaseModel extends WlModelAbstract
    * @var array[]
    */
   public $a_purchase = [];
+
+  /**
+   * A list of purchase options that were selected for previous users.
+   *
+   * Note:
+   * * It makes sense if for all clients the list is loaded within
+   *      the same pair {@link PurchaseModel::$dt_date_gmt} and {@link PurchaseModel::$k_class_period}.
+   * * If promotions are shared, the system will try to determine if there are enough sessions left for the next
+   *      client who has the same promotion.
+   * * Can affect the list of available login promotions {@link PurchaseModel::$a_login_promotion}.
+   * * The list of promotions built for the client will be based on the principle that the owner of this promotion
+   *      will be the client for whom this list is requested.
+   *
+   * Each element has the following structure:
+   * <dl>
+   *   <dt>int <var>[i_session = 1]</var></dt>
+   *   <dd>Number of sessions of the same class|event that were selected for the previous user.</dd>
+   *   <dt>int <var>id_purchase_item</var></dt>
+   *   <dd>ID of purchase item type. One of {@link WlPurchaseItemSid}.</dd>
+   *   <dt>string <var>k_id</var></dt>
+   *   <dd>Key of certain purchase item in database. Name of table in database depends on <var>id_purchase_item</var></dd>
+   *   <dt>string <var>uid</var></dt>
+   *   <dd>UID of the previous user.</dd>
+   * </dl>
+   *
+   * @get get
+   * @var array[]
+   */
+  public $a_purchase_select = [];
 
   /**
    * Information about the recurring booking:
@@ -277,7 +342,8 @@ class PurchaseModel extends WlModelAbstract
    *   <dd>The price, always '0'.</dd>
    *   <dt>int <var>i_limit</var></dt>
    *   <dd>The limit of sessions that can be booked with reward prize.</dd>
-   *   <dt>int <var>i_score</var></dt><dd>Prize price in points.</dd>
+   *   <dt>int <var>i_score</var></dt>
+   *   <dd>Prize price in points.</dd>
    *   <dt>int <var>id_purchase_item</var></dt>
    *   <dd>The ID of Purchase Option type. One of the {@link WlPurchaseItemSid} constants.</dd>
    *   <dt>string <var>k_id</var></dt>

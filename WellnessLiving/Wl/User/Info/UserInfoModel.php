@@ -133,6 +133,16 @@ class UserInfoModel extends WlModelAbstract
   public $a_user_list;
 
   /**
+   * Whether the user can purchase introductory offers.
+   *
+   * `true` if user can purchase introductory offers, `false` otherwise.
+   *
+   * @get result
+   * @var bool
+   */
+  public $can_introductory = false;
+
+  /**
    * The date the user was added, given in UTC time.
    *
    * @get result

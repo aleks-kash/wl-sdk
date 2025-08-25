@@ -178,7 +178,7 @@ class PaymentPostModel extends WlModelAbstract
    * @get result
    * @var array[]
    */
-  public $a_promotion_data = null;
+  public $a_promotion_data;
 
   /**
    * Information about selected purchase items.
@@ -222,7 +222,7 @@ class PaymentPostModel extends WlModelAbstract
    * @get result
    * @var array[]
    */
-  public $a_purchase = null;
+  public $a_purchase;
 
   /**
    * The purchase item keys from the database.
@@ -232,7 +232,7 @@ class PaymentPostModel extends WlModelAbstract
    * @post result
    * @var string[]|null
    */
-  public $a_purchase_item = null;
+  public $a_purchase_item;
 
   /**
    * List of quiz response keys.
@@ -267,7 +267,7 @@ class PaymentPostModel extends WlModelAbstract
    * @post result
    * @var int
    */
-  public $id_pay = null;
+  public $id_pay;
 
   /**
    * The purchase item ID. A constant of {@link WlPurchaseItemSid}.
@@ -320,7 +320,7 @@ class PaymentPostModel extends WlModelAbstract
    * @post result
    * @var string
    */
-  public $k_login_activity_purchase = null;
+  public $k_login_activity_purchase;
 
   /**
    * Login prize key. In case when appointment paid by reward prize, there is the key of redeemed login prize. Empty otherwise.
@@ -392,7 +392,7 @@ class PaymentPostModel extends WlModelAbstract
    * @get result
    * @var string
    */
-  public $m_total = null;
+  public $m_total;
 
   /**
    * Variable price. Is set only during booking an appointment with variable type of the price

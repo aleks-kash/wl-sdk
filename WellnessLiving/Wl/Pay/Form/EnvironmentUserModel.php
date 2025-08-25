@@ -57,6 +57,7 @@ class EnvironmentUserModel extends WlModelAbstract
   /**
    * The configuration array that's sent to mobile card reader plugin.
    * The structure of this array depends on the payment processor being used.
+   * `null` when mobile card readers are not supported, or when actor has no access to them.
    *
    * @get result
    * @var array|null

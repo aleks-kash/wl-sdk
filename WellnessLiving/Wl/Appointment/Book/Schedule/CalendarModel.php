@@ -56,7 +56,7 @@ class CalendarModel extends WlModelAbstract
    *   <dd>Whether the appointment can be booked only in a wait list.</dd>
    *   <dt>string <var>k_staff</var></dt>
    *   <dd>If this time is already occupied by any client and staff member (but service capacity is not exhausted),
-   *       this key contains key of staff member. Otherwise `0`.</dd>
+   * Otherwise - `0`.</dd>
    *   <dt>string <var>s_title</var></dt>
    *   <dd>String representation of appointment schedule time.</dd>
    * </dl>

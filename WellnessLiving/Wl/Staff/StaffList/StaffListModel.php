@@ -3,6 +3,7 @@
 namespace WellnessLiving\Wl\Staff\StaffList;
 
 use WellnessLiving\WlModelAbstract;
+use WellnessLiving\Wl\WlPrivilegeSid;
 
 /**
  * Returns a list of all staff members working for a business.
@@ -14,6 +15,7 @@ class StaffListModel extends WlModelAbstract
    *
    * This property acts as a filter.
    * Only staff members possessing all the privileges specified in this list will be included in the result.
+   * Each element in the array represents a privilege ID, and should be one of {@link WlPrivilegeSid} constants.
    *
    * @get get
    * @var int[]

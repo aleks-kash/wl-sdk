@@ -101,6 +101,15 @@ class QuizElementModel extends WlModelAbstract
   public $is_imported;
 
   /**
+   * Whether form can be edited by franchisee.
+   * `true` prevent franchisees from editing this form, `false` - otherwise.
+   *
+   * @get result
+   * @var bool
+   */
+  public $is_prevent_franchisee = false;
+
+  /**
    * Whether quiz response received by kiosk or direct mode link.
    *
    * `true` quiz response received by kiosk mode.

@@ -26,6 +26,8 @@ class ElementModel extends WlModelAbstract
    *       </dd>
    *       <dt>string[] <var>a_staff_key</var></dt>
    *       <dd>A list of staff member keys that provide sessions for this schedule.</dd>
+   *       <dt>string[] <var>a_uid_staff_key</var></dt>
+   *       <dd>A list of staff member keys UID that provide sessions for this schedule.</dd>
    *       <dt>string <var>dl_end</var></dt>
    *       <dd>
    *         The end date of the schedule in the location's time zone.

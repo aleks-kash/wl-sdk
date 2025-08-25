@@ -6,7 +6,7 @@ use WellnessLiving\WlModelAbstract;
 use WellnessLiving\Wl\Purchase\Item\WlPurchaseItemSid;
 
 /**
- * A model of the purchase item.
+ * API point to get information about a list of purchase options wile booking process.
  */
 class PurchaseElementGroupModel extends WlModelAbstract
 {
@@ -20,7 +20,7 @@ class PurchaseElementGroupModel extends WlModelAbstract
    *      <dt>string [`k_login_prize`]</dt>
    *      <dd>The key of the user's prize.
    *      Not empty only if the user wants to make a free visit from the prize.</dd>
-   *      <dt>string [`k_pay_installment_template`]</dt>
+   *      <dt>string|null [`k_pay_installment_template`]</dt>
    *      <dd>Installment template key.
    *      This property is optional.
    *    * can only be set for the purchase option which supports installment plan, see {@link PurchaseItemAbstract::INSTALLMENT_ALLOW_USER} property;
@@ -41,9 +41,9 @@ class PurchaseElementGroupModel extends WlModelAbstract
   public $a_purchase_item = [];
 
   /**
-   * A list of taxes for one purchase item.
+   * A list of taxes for the given purchase options.
    * Keys - tax keys.
-   * Values - tax amount.
+   * Values - tax amounts.
    *
    * @get result
    * @var array
@@ -78,7 +78,7 @@ class PurchaseElementGroupModel extends WlModelAbstract
   public $k_location = '0';
 
   /**
-   * The cost of one purchase item (with taxes).
+   * The total cost of the given purchase options.
    *
    * @get result
    * @var string
@@ -86,7 +86,7 @@ class PurchaseElementGroupModel extends WlModelAbstract
   public $m_cost;
 
   /**
-   * The amount of the whole discount of one purchase item.
+   * The amount of the whole discount for the given purchase options.
    *
    * @get result
    * @var string
@@ -94,7 +94,7 @@ class PurchaseElementGroupModel extends WlModelAbstract
   public $m_discount;
 
   /**
-   * Amount of discount for discount code of 1 purchase item.
+   * The discount amount provided by a discount code for the given purchase options.
    *
    * @get result
    * @var string
@@ -102,7 +102,7 @@ class PurchaseElementGroupModel extends WlModelAbstract
   public $m_discount_code;
 
   /**
-   * The discount amount for the client type of one purchase item.
+   * The discount amount for the client type for the given purchase options.
    *
    * @get result
    * @var string
@@ -110,7 +110,7 @@ class PurchaseElementGroupModel extends WlModelAbstract
   public $m_discount_login;
 
   /**
-   * The price of the purchase item (with or without taxes, depending on regional standards).
+   * The price of the given purchase options (with or without taxes, depending on regional standards).
    *
    * @get result
    * @var string
@@ -118,7 +118,7 @@ class PurchaseElementGroupModel extends WlModelAbstract
   public $m_price;
 
   /**
-   * Amount of subtotal for 1 purchase item.
+   * The amount of subtotal for the given purchase options.
    *
    * @get result
    * @var string
@@ -126,7 +126,7 @@ class PurchaseElementGroupModel extends WlModelAbstract
   public $m_subtotal;
 
   /**
-   * The amount of taxes for the one purchase item.
+   * The amount of taxes for the given purchase options.
    *
    * @get result
    * @var string

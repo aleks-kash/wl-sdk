@@ -9,7 +9,7 @@ namespace WellnessLiving\Core\Locale;
  *
  * @link https://docs.1010data.com/1010dataReferenceManual/DataTypesAndFormats/currencyUnitCodes.html
  *
- * Last used ID: 17
+ * Last used ID: 18
  */
 abstract class CurrencySid
 {
@@ -22,6 +22,11 @@ abstract class CurrencySid
    * Australian dollar.
    */
   const AUD = 6;
+
+  /**
+   * Bermudian Dollar.
+   */
+  const BMD = 18;
 
   /**
    * Canadian dollar.

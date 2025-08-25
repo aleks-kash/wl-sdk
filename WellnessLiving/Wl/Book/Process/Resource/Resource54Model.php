@@ -103,12 +103,12 @@ class Resource54Model extends WlModelAbstract
    *     A list of available assets. Every element has next keys:
    *     <dl>
    *       <dt>
-   *           array [`a_class_period`]
+   *           array `a_class_period`
    *       </dt>
    *       <dd>
    *           List of class/event sessions that occupies the resource.
-   *           The field structure is `Session_key => Session_UTC_date_and_time => Quantity_of_occupied_spots`.
-   *           This field is present only if the resource is occupied by any class/event sessions.
+   *           The field structure is `[k_class_period][dtu_session] => i_quantity`.
+   *           This field is not empty only if the resource is occupied by any class/event sessions.
    *       </dd>
    *       <dt>
    *         array <var>a_image</var>
@@ -128,6 +128,8 @@ class Resource54Model extends WlModelAbstract
    *       <dd>
    *         Total number of the asset spots.
    *       </dd>
+   *       <dt>int `i_use`</dt>
+   *       <dd>Number of already used asset units.</dd>
    *       <dt>
    *         bool <var>is_current</var>
    *       </dt>

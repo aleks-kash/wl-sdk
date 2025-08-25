@@ -96,7 +96,7 @@ class RelationModel extends WlModelAbstract
   public $is_mail_inherit = false;
 
   /**
-   * `true` - the new relative pays for themself.
+   * `true` - the new relative pays for themselves.
    *
    * `false` - <var>uid_from</var> pays for the new relative.
    *

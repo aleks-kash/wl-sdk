@@ -5,7 +5,7 @@ namespace WellnessLiving\Core\Locale;
 /**
  * A list of locales.
  *
- * Last used ID: 18
+ * Last used ID: 19
  */
 abstract class LocaleSid
 {
@@ -13,6 +13,11 @@ abstract class LocaleSid
    * Australia.
    */
   const AUSTRALIA = 4;
+
+  /**
+   * Bermuda.
+   */
+  const BERMUDA = 19;
 
   /**
    * Canada.

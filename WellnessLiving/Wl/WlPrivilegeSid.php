@@ -5,7 +5,7 @@ namespace WellnessLiving\Wl;
 /**
  * Wellnessliving-wide privileges.
  *
- * Last Used ID: 214.
+ * Last Used ID: 224.
  */
 abstract class WlPrivilegeSid
 {
@@ -360,6 +360,11 @@ abstract class WlPrivilegeSid
   const HOLIDAY = 7;
 
   /**
+   * Allows to import clients from a CSV file.
+   */
+  const IMPORT_CLIENT = 215;
+
+  /**
    * Set up and modify Autymate integration.
    */
   const INTEGRATION_AUTYMATE = 163;
@@ -490,6 +495,11 @@ abstract class WlPrivilegeSid
   const NOTIFICATION_APPOINTMENT_BOOK = 60;
 
   /**
+   * Receive Appointment Booked (AI Agent) notification.
+   */
+  const NOTIFICATION_APPOINTMENT_BOOKED_AI = 218;
+
+  /**
    * Receive appointment cancellation notification.
    */
   const NOTIFICATION_APPOINTMENT_CANCEL = 61;
@@ -500,6 +510,21 @@ abstract class WlPrivilegeSid
   const NOTIFICATION_APPOINTMENT_CHANGE = 59;
 
   /**
+   * Receive Appointment Requested (AI Agent) notification.
+   */
+  const NOTIFICATION_APPOINTMENT_REQUEST_AI = 220;
+
+  /**
+   * Receive Billing Related Query notification.
+   */
+  const NOTIFICATION_BILLING_RELATED_QUERY = 224;
+
+  /**
+   * Receive Cancellation Requested (AI Agent) notification.
+   */
+  const NOTIFICATION_CANCELLATION_REQUEST_AI = 222;
+
+  /**
    * Receive class attendance list.
    */
   const NOTIFICATION_CLASS_ATTENDANCE = 56;
@@ -508,6 +533,16 @@ abstract class WlPrivilegeSid
    * Receive client class booking notification.
    */
   const NOTIFICATION_CLASS_BOOK = 57;
+
+  /**
+   * Receive Class Booked (AI Agent) notification.
+   */
+  const NOTIFICATION_CLASS_BOOKED_AI = 219;
+
+  /**
+   * Receive Class Booking Requested (AI Agent) notification.
+   */
+  const NOTIFICATION_CLASS_BOOK_AI = 221;
 
   /**
    * Receive client class cancellation notification.
@@ -540,9 +575,19 @@ abstract class WlPrivilegeSid
   const NOTIFICATION_LEAD_CAPTURE = 159;
 
   /**
+   * Receive Lead Capture (AI Agent) notification.
+   */
+  const NOTIFICATION_LEAD_CAPTURE_AI = 217;
+
+  /**
    * Staff with this role will receive the membership cancel mails.
    */
   const NOTIFICATION_MEMBERSHIP_CANCEL = 214;
+
+  /**
+   * Receive Membership or Purchase Options Query notification.
+   */
+  const NOTIFICATION_MEMBERSHIP_QUERY = 223;
 
   /**
    * Staff with this role will receive emails about reward prizes.
@@ -568,6 +613,11 @@ abstract class WlPrivilegeSid
    * Staff with this role will receive the sale receipts mails.
    */
   const NOTIFICATION_SALE_STAFF = 136;
+
+  /**
+   * Receive Staff Callback Request notification.
+   */
+  const NOTIFICATION_STAFF_CALLBACK_REQUEST = 216;
 
   /**
    * Override late cancel and no show fees.

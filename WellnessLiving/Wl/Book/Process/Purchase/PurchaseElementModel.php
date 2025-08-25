@@ -11,9 +11,9 @@ use WellnessLiving\Wl\Purchase\Item\WlPurchaseItemSid;
 class PurchaseElementModel extends WlModelAbstract
 {
   /**
-   * A list of taxes for one purchase item.
+   * A list of taxes for the given purchase options.
    * Keys - tax keys.
-   * Values - tax amount.
+   * Values - tax amounts.
    *
    * @get result
    * @var array
@@ -100,7 +100,7 @@ class PurchaseElementModel extends WlModelAbstract
   public $k_reward_prize = '0';
 
   /**
-   * The cost of one purchase item (with taxes).
+   * The total cost of the given purchase options.
    *
    * @get result
    * @var string
@@ -108,7 +108,7 @@ class PurchaseElementModel extends WlModelAbstract
   public $m_cost;
 
   /**
-   * The amount of the whole discount of one purchase item.
+   * The amount of the whole discount for the given purchase options.
    *
    * @get result
    * @var string
@@ -116,7 +116,7 @@ class PurchaseElementModel extends WlModelAbstract
   public $m_discount;
 
   /**
-   * Amount of discount for discount code of 1 purchase item.
+   * The discount amount provided by a discount code for the given purchase options.
    *
    * @get result
    * @var string
@@ -124,7 +124,7 @@ class PurchaseElementModel extends WlModelAbstract
   public $m_discount_code;
 
   /**
-   * The discount amount for the client type of one purchase item.
+   * The discount amount for the client type for the given purchase options.
    *
    * @get result
    * @var string
@@ -132,7 +132,7 @@ class PurchaseElementModel extends WlModelAbstract
   public $m_discount_login;
 
   /**
-   * The price of the purchase item (with or without taxes, depending on regional standards).
+   * The price of the given purchase options (with or without taxes, depending on regional standards).
    *
    * @get result
    * @var string
@@ -140,7 +140,7 @@ class PurchaseElementModel extends WlModelAbstract
   public $m_price;
 
   /**
-   * Amount of subtotal for 1 purchase item.
+   * The amount of subtotal for the given purchase options.
    *
    * @get result
    * @var string
@@ -148,7 +148,7 @@ class PurchaseElementModel extends WlModelAbstract
   public $m_subtotal;
 
   /**
-   * The amount of taxes for the one purchase item.
+   * The amount of taxes for the given purchase options.
    *
    * @get result
    * @var string

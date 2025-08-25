@@ -548,10 +548,10 @@ class PurchaseModel extends WlModelAbstract
    * This will be `null` if the client doesn't have a suitable Purchase Option.
    *
    * @get get,result
-   * @var string
+   * @var string|null
    * @see PurchaseModel::$text_login_promotion
    */
-  public $k_login_promotion;
+  public $k_login_promotion = null;
 
   /**
    * Default promotion key.

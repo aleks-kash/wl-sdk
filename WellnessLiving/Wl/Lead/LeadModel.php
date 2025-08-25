@@ -5,6 +5,7 @@ namespace WellnessLiving\Wl\Lead;
 use WellnessLiving\WlModelAbstract;
 use WellnessLiving\Wl\Field\WlFieldGeneralSid;
 use WellnessLiving\Wl\Field\WlFieldTypeSid;
+use WellnessLiving\Wl\Mode\ModeSid;
 
 /**
  * Gets information from the Lead Capture widget and saves a new user’s information.
@@ -137,6 +138,7 @@ class LeadModel extends WlModelAbstract
    * Key of the lead source.
    *
    * Must be `null` if <var>text_lead_source</var> is set.
+   * If both parameters are empty, the {@link ModeSid::API} lead source will be used.
    *
    * @post post,result
    * @var string|null
@@ -170,6 +172,7 @@ class LeadModel extends WlModelAbstract
    *
    * A new lead source will be created if it does not exist.
    * Must be `null` if <var>k_lead_source</var> is set.
+   * If both parameters are empty, the {@link ModeSid::API} lead source will be used.
    *
    * @post post
    * @var string|null
